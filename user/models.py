@@ -7,3 +7,6 @@ class Book(models.Model):
     BookName = models.CharField(max_length=100)
     BookDesc = models.CharField(max_length=1000)
     ISBN = models.BigIntegerField()
+
+    def __str__(self):
+        return self.BookName + str(self.ISBN)
