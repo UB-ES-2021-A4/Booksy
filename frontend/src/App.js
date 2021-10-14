@@ -1,16 +1,18 @@
-import logo from './logo.svg';
-// eslint-disable-next-line no-unused-vars
 import React from 'react';
+
 import './App.css';
-import Navigation from "./components/Navigation";
+import Header from "./components/layout/Header";
+import Footer from "./components/layout/Footer";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <Navigation title = "Booksy"/>
-        <img src={logo} className="App-logo" alt="logo" />
-      </header>
+        <div className="App-header">
+            <Header />
+        </div>
+        <div className='App-footer'>
+            <Footer />
+        </div>
     </div>
   );
 }

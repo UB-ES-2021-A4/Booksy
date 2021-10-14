@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  font-family: "Source Code Pro", serif;
 }
 
 .App-logo {
@@ -24,6 +25,66 @@
 
 .App-link {
   color: #61dafb;
+}
+
+#align_left {
+  text-align: left;
+}
+
+#align_right {
+  text-align: right;
+}
+
+#align_center {
+  text-align: center;
+}
+
+#float_left {
+   float: left;
+}
+
+#float_right {
+  float: right;
+}
+
+.footer_title {
+  text-align: left;
+  float: right;
+  padding-top: 15px;
+  padding-right: 125px;
+}
+
+.box {
+  position: relative;
+}
+
+.box select {
+  background-color: floralwhite;
+  color: #004B23;
+  padding: 12px;
+  width: 120px;
+  border: none;
+  font-size: 15px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+  -webkit-appearance: button;
+  outline: none;
+}
+
+.box::before {
+  text-align: center;
+  line-height: 45px;
+  color: floralwhite;
+  background-color: #C6E7D8;
+  pointer-events: none;
+}
+
+.box:hover::before {
+  color: #C6E7D8;
+  background-color: #C6E7D8;
+}
+
+.box select option {
+  padding: 20px;
 }
 
 @keyframes App-logo-spin {
