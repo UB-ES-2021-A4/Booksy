@@ -39,6 +39,7 @@
   },
   "devDependencies": {
     "@material-ui/core": "^4.12.3",
-    "react-router-dom": "^5.3.0"
+    "react-router-dom": "^5.3.0",
+    "reactstrap": "^8.10.0"
   }
 }

@@ -1,0 +1,29 @@
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #C6E7D8;
+    color: #004B23;
+    text-align: center;
+}
+
+.row-title {
+    font-family: 'Teko', sans-serif;
+    font-size: 14px;
+    padding-bottom: 10px;
+}
+/* Create three equal columns that floats next to each other */
+.column_big {
+    float: left;
+    width: 35%;
+    padding: 10px;
+}
+
+.column_small {
+    float: left;
+    width: 10.0%;
+    padding: 10px;
+    padding-top: 20px;
+}
