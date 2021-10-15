@@ -140,6 +140,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'accounts.UserProfile'
 
+# White listing the localhost:3000 port
+# for React
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:3000'
+)
+
 # EMAIL
 
 EMAIL_USE_TLS = True
