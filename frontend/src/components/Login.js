@@ -34,7 +34,7 @@ const Login = () => {
                                 <label htmlFor="password">Password</label>
                             </div>
                         </form>
-                        <button className="button_login">LOG IN</button>
+                        <button className="button_login" id="button_login">LOG IN</button>
                     </Col>
                     <Col md={"auto"}>
                         <br/><br/>
@@ -58,7 +58,7 @@ const Login = () => {
                         <section style={{fontSize: 20}}>
                             <ClassIcon style={{fill: "#004B23"}}/> Gran variedad de autores para escoger.
                         </section>
-                        <button className="button_signup" type="button" onClick={handleClick}>CRÉATE UNA CUENTA</button>
+                        <button className="button_signup" type="button" id="button_to_signup" onClick={handleClick}>CRÉATE UNA CUENTA</button>
                     </Col>
                 </Row>
             </Container>

@@ -51,7 +51,7 @@ const Signup = () => {
                                 <label htmlFor="Repeatpassword">Repetir Contraseña</label>
                             </div>
                         </form>
-                        <button className="button_signup" onClick={handleClick}>REGÍSTRATE</button>
+                        <button className="button_signup" id="button_signup" onClick={handleClick}>REGÍSTRATE</button>
                         <br/><br/>
                     </Col>
                     <Col md={"auto"}>
