@@ -47,8 +47,8 @@ const Signup = () => {
                             </div>
                             <br/>
                             <div className="input-field">
-                                <input type="password" id="password" required/>
-                                <label htmlFor="password">Repetir Contraseña</label>
+                                <input type="password" id="Repeatpassword" required/>
+                                <label htmlFor="Repeatpassword">Repetir Contraseña</label>
                             </div>
                         </form>
                         <button className="button_signup" onClick={handleClick}>REGÍSTRATE</button>
