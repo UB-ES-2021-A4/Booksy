@@ -32,7 +32,7 @@ class UserProfileManager(BaseUserManager):
 
 class UserProfile(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True)
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=15, unique=True)
 
     first_name = models.CharField(max_length=50, default="John")
     last_name = models.CharField(max_length=50, default="Doe")
@@ -52,4 +52,4 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
         return self.name
 
     def __str__(self):
-        return self.email
+        return self.first_name + " " + self.last_name

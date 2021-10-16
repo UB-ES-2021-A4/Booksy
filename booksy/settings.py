@@ -38,8 +38,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'booksy',
-    'accounts'
-    'corsheaders'
+    'accounts',
+    #'corsheaders'
 ]
 
 MIDDLEWARE = [
