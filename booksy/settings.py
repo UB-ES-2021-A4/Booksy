@@ -35,6 +35,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'booksy',
+    'accounts',
     'corsheaders',
     'rest_framework',
 ]
@@ -80,6 +84,21 @@ DATABASES = {
     }
 }
 
+# Deployment database
+# TODO change 'HOST' to correct Heroku address
+"""
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'booksy',
+        'USER': 'admin',
+        'PASSWORD': '1234',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
+    }
+}
+"""
+
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
@@ -103,7 +122,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Madrid'
 
 USE_I18N = True
 
@@ -121,6 +140,18 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+AUTH_USER_MODEL = 'accounts.UserProfile'
+
+# EMAIL
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'booksynoreply@gmail.com'
+EMAIL_HOST_PASSWORD = 'Wanpise2021'
+EMAIL_PORT = 587
+
+# White listing the localhost:3000 port
+# for React
 CORS_ORIGIN_WHITELIST = [
      'http://localhost:3000'
 ]
