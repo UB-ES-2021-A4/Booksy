@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'booksy',
     'accounts',
     'corsheaders',
-    'rest_framework',
 ]
 
 MIDDLEWARE = [
