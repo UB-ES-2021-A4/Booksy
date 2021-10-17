@@ -1,0 +1,55 @@
+.header {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    font-family: "Source Code Pro", serif;
+    margin-left: 10px;
+}
+.header-top {
+    display: flex;
+    width: 100%;
+    height: 60px;
+}
+
+.header-top__logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.img-logo {
+    padding-left: 10px;
+    margin-right: 10px;
+    padding-bottom: 10px;
+}
+
+.header-logo {
+    color: inherit;
+    text-decoration: inherit;
+    font-family: RobotoThin, serif;
+    font-size: 45px;
+}
+
+.header-top__navbar {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+}
+
+.header-top__seperator {
+    width: 100%;
+    margin-left: 0px;
+    border: none;
+    height: 2px;
+    margin-top: 2px;
+    background-color: #004B23;
+}
+
+.header-top__navigation {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-right: 55px;
+}

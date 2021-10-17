@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'booksy',
     'accounts',
-    #'corsheaders'
+    'corsheaders',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -50,7 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware'
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'booksy.urls'
@@ -82,6 +83,7 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
 # Deployment database
 # TODO change 'HOST' to correct Heroku address
 """
@@ -140,12 +142,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'accounts.UserProfile'
 
-# White listing the localhost:3000 port
-# for React
-CORS_ORIGIN_WHITELIST = (
-    'http://localhost:3000'
-)
-
 # EMAIL
 
 EMAIL_USE_TLS = True
@@ -153,3 +149,9 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'booksynoreply@gmail.com'
 EMAIL_HOST_PASSWORD = 'Wanpise2021'
 EMAIL_PORT = 587
+
+# White listing the localhost:3000 port
+# for React
+CORS_ORIGIN_WHITELIST = [
+     'http://localhost:3000'
+]
