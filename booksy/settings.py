@@ -81,10 +81,10 @@ WSGI_APPLICATION = 'booksy.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'd65tmc6ari7ok9',
-        'USER': 'fcttpehgspvplr',
-        'PASSWORD': '6aa062d85c852b3c647aa86f534efc3ee3646cb2bfbd5b055f812027427a0126',
-        'HOST': 'ec2-52-6-77-239.compute-1.amazonaws.com',
+        'NAME': 'd7cm11lo9q6vmh',
+        'USER': 'bothhazwmejtql',
+        'PASSWORD': 'ad8187e88a803ad5c9605928d68f9967f657fecee39dc70773a06628aca9aa76',
+        'HOST': 'ec2-54-195-76-73.eu-west-1.compute.amazonaws.com',
         'PORT': '5432',
     }
 }
