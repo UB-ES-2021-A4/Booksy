@@ -21,8 +21,12 @@ import accounts.views
 from accounts import views
 
 urlpatterns = [
+    # FRONTEND URLS
     path('', accounts.views.index, name='index'),
+    path('login', accounts.views.login_page),
     path('admin/', admin.site.urls),
-    path('acc/', include('accounts.urls')),
-    path('login/', views.UserLoginApiView.as_view()),
+    path('signup', accounts.views.signup_page),
+    # BACKEND URLS
+    path('api/', include('accounts.urls')),
+    path('api/login/', views.UserLoginApiView.as_view()),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -6,7 +6,6 @@ from rest_framework import status, viewsets, filters
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
-
 from accounts import serializers, models, permissions
 
 
@@ -24,5 +23,13 @@ class UserLoginApiView(ObtainAuthToken):
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
     http_method_names = ['get', 'post']
 
+
 def index(request):
     return render(request, 'index.html')
+
+
+def login_page(request):
+    return render(request, 'Login.js')
+
+def signup_page(request):
+    return render(request, 'Signup.js')
