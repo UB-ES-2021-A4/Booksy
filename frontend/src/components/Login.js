@@ -47,16 +47,16 @@ const Login = () => {
                             Regístrate</h1>
                         <h5>¡Serán 30 segundos!</h5>
                         <br/>
-                        <section style={{fontSize: 20, paddingTop: 10}}>
-                            <PaymentIcon style={{fill: "#004B23"}}/> Haz el seguimiento de tus pedidos.
+                        <section>
+                            <PaymentIcon/> Haz el seguimiento de tus pedidos.
                         </section>
                         <br/>
-                        <section style={{fontSize: 20}}>
-                            <LocalLibraryIcon style={{fill: "#004B23"}}/> Encuentra buenos libros a precios increíbles.
+                        <section>
+                            <LocalLibraryIcon/> Encuentra buenos libros a precios increíbles.
                         </section>
                         <br/>
-                        <section style={{fontSize: 20}}>
-                            <ClassIcon style={{fill: "#004B23"}}/> Gran variedad de autores para escoger.
+                        <section>
+                            <ClassIcon/> Gran variedad de autores para escoger.
                         </section>
                         <button className="button_signup" type="button" id="button_to_signup" onClick={handleClick}>CRÉATE UNA CUENTA</button>
                     </Col>

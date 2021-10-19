@@ -20,7 +20,7 @@ const Signup = () => {
                         <h1>Escribe tus datos de registro</h1>
                         <h5>Rellena todos los campos, por favor.</h5>
                         <br/>
-                        <form method="post" action="" style={{paddingTop: 10}}>
+                        <form method="post" action="">
                             <div className="input-field">
                                 <input type="text" id="name" required/>
                                 <label htmlFor="name">Nombre</label>
