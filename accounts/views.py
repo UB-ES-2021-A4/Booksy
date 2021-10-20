@@ -22,14 +22,3 @@ class UserProfileViewSet(viewsets.ModelViewSet):  # Viewset has DEFAULT_RENDERER
 class UserLoginApiView(ObtainAuthToken):
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
     http_method_names = ['get', 'post']
-
-
-def index(request):
-    return render(request, 'index.html')
-
-
-def login_page(request):
-    return render(request, 'Login.js')
-
-def signup_page(request):
-    return render(request, 'Signup.js')
