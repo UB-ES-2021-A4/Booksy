@@ -32,11 +32,9 @@ class Signup extends Component {
         });
     };
 
-
-
     accountCreatedAlert () {
         // Use sweetalert2
-       swal('Success', 'Account created successfully.', 'success');
+       swal('Success', 'Account created successfully. Check your email for verification.', 'success');
     };
 
     accountErrorAlert () {
@@ -46,13 +44,9 @@ class Signup extends Component {
 
     pswErrorAlert () {
         // Use sweetalert2
-        swal('Error', 'Passwords do not match. Try again, please.', 'error');
+        swal('Error', 'Passwords do not match. Try again, please.', 'warning');
     };
 
-    duplicatedAccountAlert () {
-        // Use sweetalert2
-        swal('Warning', 'This account already exists.', 'warning');
-    };
 
     createUser = (event) => {
         event.preventDefault()
