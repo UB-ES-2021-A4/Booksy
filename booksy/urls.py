@@ -24,5 +24,5 @@ urlpatterns = [
     path('', accounts.views.index, name='index'),
     path('admin/', admin.site.urls),
     path('api/', include('accounts.urls')),
-    path('api/login/', views.UserLoginApiView.as_view(template_name='index.html')),
+    path('api/login/', views.UserLoginApiView.as_view()),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
