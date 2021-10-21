@@ -76,6 +76,13 @@ WSGI_APPLICATION = 'booksy.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+""" LOCAL USE DATABASE
+'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+"""
+
 
 DATABASES = {
     'default': {
