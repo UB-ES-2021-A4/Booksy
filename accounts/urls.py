@@ -8,5 +8,5 @@ router = DefaultRouter()
 router.register('account', views.UserProfileViewSet)
 
 urlpatterns = [
-    path('', include(router.urls))
+    path('signUp', include(router.urls))
 ]

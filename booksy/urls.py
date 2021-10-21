@@ -21,8 +21,7 @@ import accounts.views
 from accounts import views
 
 urlpatterns = [
-    path('', accounts.views.index, name='index'),
     path('admin/', admin.site.urls),
-    path('acc/', include('accounts.urls')),
-    path('login/', views.UserLoginApiView.as_view()),
+    path('api/', include('accounts.urls')),
+    path('api/login/', views.UserLoginApiView.as_view()),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
