@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-p@0-v6re#72)$=g1f11s6$aa(%(icqj2&h52jm720vmq82+*s7
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['booksy-es2021.herokuapp.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'booksy-es2021.herokuapp.com']
 
 # Application definition
 
@@ -76,6 +76,13 @@ WSGI_APPLICATION = 'booksy.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+""" LOCAL USE DATABASE
+'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+"""
+
 
 DATABASES = {
     'default': {
