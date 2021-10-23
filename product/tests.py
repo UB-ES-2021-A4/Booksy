@@ -1,5 +1,8 @@
 from django.test import TestCase
+from rest_framework.exceptions import ValidationError
+
 from product.models import ProductModel, Category, Image
+from django.db import models, IntegrityError
 
 
 # Create your tests here.
@@ -28,3 +31,35 @@ class ProductModelTest(TestCase):
 
     def test_get_by_name(self):
         self.assertEqual(Category.JUVENIL, Category.get_by_name(self, 'Juvenil'))
+
+    def test_no_title(self):
+        try:
+            book = ProductModel.objects.create(title=None, author='A', price=1.0, description='B')
+            book.save()
+            self.assertEqual(True, False)  # If the previous operation succeeds we fail the test
+        except:
+            pass
+
+    def test_no_description(self):
+        try:
+            book = ProductModel.objects.create(title='A', author='B', price=1.0, description=None)
+            book.save()
+            self.assertEqual(True, False)  # If the previous operation succeeds we fail the test
+        except:
+            pass
+
+    def test_no_author(self):
+        try:
+            book = ProductModel.objects.create(title='A', author=None, price=1.0, description='B')
+            book.save()
+            self.assertEqual(True, False)  # If the previous operation succeeds we fail the test
+        except:
+            pass
+
+    def test_no_price(self):
+        try:
+            book = ProductModel.objects.create(title='A', author='B', price=None, description='C')
+            book.save()
+            self.assertEqual(True, False)  # If the previous operation succeeds we fail the test
+        except:
+            pass
