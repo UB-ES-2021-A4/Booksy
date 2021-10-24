@@ -1,15 +1,16 @@
 from django.test import TestCase
 from rest_framework.exceptions import ValidationError
-
-from product.models import ProductModelTest, Category, Image
-from django.db import models, IntegrityError
+from django.db import models
+from product.models import ProductModel, Category, Image, get_category_by_name
+from accounts.models import UserProfile
+from rest_framework.test import APIClient
 
 
 # Create your tests here.
 
 class ProductModelTest(TestCase):
     def setUp(self):
-        book = ProductModelTest.objects.create(title='Donde los árboles cantan',
+        book = ProductModel.objects.create(title='Donde los árboles cantan',
                                            author='Laura Gallego',
                                            price=14.9,
                                            description='Viana, la única hija del duque de Rocagrís, está prometida al '
@@ -22,7 +23,12 @@ class ProductModelTest(TestCase):
                                                        'circunstancias, una doncella como Viana no puede hacer otra '
                                                        'cosa que esperar su regreso... y, tal vez, prestar atención a '
                                                        'las leyendas que se cuentan sobre el Gran Bosque... el lugar '
-                                                       'donde los árboles cantan.')
+                                                       'donde los árboles cantan.',
+                                           seller=UserProfile.objects.create(email='testerAdmin@test.es',
+                                                                             name='TestAdmin',
+                                                                             password='123fsfsfaha4213',
+                                                                             first_name='Admin',
+                                                                             last_name='User'))
         book_cat = Category.objects.create(product=book,
                                            category='JU')
         book_image = Image.objects.create(product=book,
@@ -32,8 +38,8 @@ class ProductModelTest(TestCase):
         self.tittle = 'Te pasas Nico, te pasas'
         self.price = 3
         self.char_256 = "Lorem ipsum dolor sit amet, nonummy ligula volutpat hac integer nonummy. Suspendisse ultricies, " \
-                         "congue etiam tellus, erat libero, nulla eleifend, mauris pellentesque. Suspendisse integer praesent vel, " \
-                         "integer gravida mauris, fringilla vehicula lacinia non y unos mas por si acaso"
+                        "congue etiam tellus, erat libero, nulla eleifend, mauris pellentesque. Suspendisse integer praesent vel, " \
+                        "integer gravida mauris, fringilla vehicula lacinia non y unos mas por si acaso"
         self.char_1001 = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. " \
                          "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, " \
                          "ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa " \
@@ -48,11 +54,11 @@ class ProductModelTest(TestCase):
         # TODO we have to look how to store images correctly, right now they're in local.
 
     def test_get_by_name(self):
-        self.assertEqual(Category.JUVENIL, Category.get_by_name(self, 'Juvenil'))
+        self.assertEqual(Category.JUVENIL, get_category_by_name('Juvenil'))
 
     def test_no_title(self):
         try:
-            book = ProductModelTest.objects.create(title=None, author='A', price=1.0, description='B')
+            book = ProductModel.objects.create(title=None, author='A', price=1.0, description='B', seller=APIClient)
             book.save()
             self.assertEqual(True, False)  # If the previous operation succeeds we fail the test
         except:
@@ -60,7 +66,7 @@ class ProductModelTest(TestCase):
 
     def test_no_description(self):
         try:
-            book = ProductModelTest.objects.create(title='A', author='B', price=1.0, description=None)
+            book = ProductModel.objects.create(title='A', author='B', price=1.0, description=None, seller=APIClient)
             book.save()
             self.assertEqual(True, False)  # If the previous operation succeeds we fail the test
         except:
@@ -68,7 +74,7 @@ class ProductModelTest(TestCase):
 
     def test_no_author(self):
         try:
-            book = ProductModelTest.objects.create(title='A', author=None, price=1.0, description='B')
+            book = ProductModel.objects.create(title='A', author=None, price=1.0, description='B', seller=APIClient)
             book.save()
             self.assertEqual(True, False)  # If the previous operation succeeds we fail the test
         except:
@@ -76,7 +82,7 @@ class ProductModelTest(TestCase):
 
     def test_no_price(self):
         try:
-            book = ProductModelTest.objects.create(title='A', author='B', price=None, description='C')
+            book = ProductModel.objects.create(title='A', author='B', price=None, description='C', seller=APIClient)
             book.save()
             self.assertEqual(True, False)  # If the previous operation succeeds we fail the test
         except:
@@ -84,16 +90,17 @@ class ProductModelTest(TestCase):
 
     def test_max_tittle_length(self):
         try:
-            book = ProductModelTest.objects.create(title=self.char_256, author=self.author, price=self.price, description=self.description)
+            book = ProductModel.objects.create(title=self.char_256, author=self.author, price=self.price,
+                                               description=self.description, seller=APIClient)
             book.save()
-            self.assertEqual(True, False) # If the previous operation succeeds we fail the test
+            self.assertEqual(True, False)  # If the previous operation succeeds we fail the test
         except:
             pass
 
     def test_max_author_length(self):
         try:
-            book = ProductModelTest.objects.create(title=self.tittle, author=self.char_256, price=self.price,
-                                                   description=self.description)
+            book = ProductModel.objects.create(title=self.tittle, author=self.char_256, price=self.price,
+                                               description=self.description, seller=APIClient)
             book.save()
             self.assertEqual(True, False)  # If the previous operation succeeds we fail the test
         except:
@@ -101,8 +108,8 @@ class ProductModelTest(TestCase):
 
     def test_max_description_length(self):
         try:
-            book = ProductModelTest.objects.create(title=self.tittle, author=self.char_1001, price=self.price,
-                                                   description=self.description)
+            book = ProductModel.objects.create(title=self.tittle, author=self.char_1001, price=self.price,
+                                               description=self.description, seller=APIClient)
             book.save()
             self.assertEqual(True, False)  # If the previous operation succeeds we fail the test
         except:
@@ -110,8 +117,9 @@ class ProductModelTest(TestCase):
 
     def test_type_price(self):
         try:
-            book = ProductModelTest.objects.create(title=self.tittle, author=self.char_1001, price="Esto no es un number",
-                                                   description=self.description)
+            book = ProductModel.objects.create(title=self.tittle, author=self.char_1001,
+                                               price="Esto no es un number",
+                                               description=self.description, seller=APIClient)
             book.save()
             self.assertEqual(True, False)
         except:
