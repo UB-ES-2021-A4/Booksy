@@ -41,7 +41,7 @@ class Signup extends Component {
             last_name: this.state.apellidos
         }
         if (this.state.Repeatpassword === this.state.password) {
-            axios.post('http://127.0.0.1:8000/api/signUpaccount/', user)
+            axios.post('https://booksy-es2021.herokuapp.com/api/signUpaccount/', user)
                 .then((res) => this.handleClick())
                 .catch((error) => {
                     console.error(error)
