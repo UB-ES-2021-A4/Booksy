@@ -37,6 +37,8 @@ class Category(models.Model):
     FILOLOGIA = 'FI'
     OCIO = 'OC'
     COCINA = 'CO'
+    FANTASIA = 'FA'
+    MISTERIO_THRILLER = 'MT'
     CATEGORY_CHOICES = [
         (HUMANIDADES, 'Humanidades'),
         (TECNICO_FORMACION, 'Técnico y formación'),
@@ -47,7 +49,9 @@ class Category(models.Model):
         (ARTES, 'Artes'),
         (FILOLOGIA, ' Filología'),
         (OCIO, 'Ocio'),
-        (COCINA, 'Cocina')
+        (COCINA, 'Cocina'),
+        (FANTASIA, 'Fantasía'),
+        (MISTERIO_THRILLER, 'Misterio y thriller')
     ]
     category = models.CharField(max_length=2, choices=CATEGORY_CHOICES, default=COCINA)  # Max_length = 2 porque es
     # lo que ocupará cada categoría
