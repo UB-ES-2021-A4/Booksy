@@ -15,11 +15,12 @@
 
 
 
+
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
   <a href="https://github.com/UB-ES-2021-A4/Booksy">
-    <img src="![android-chrome-512x512](https://user-images.githubusercontent.com/57969201/138897865-7ef61d66-b78a-468b-8895-8790bc6d29dc.png)" alt="Logo" width="80" height="80">
+    <img src="https://user-images.githubusercontent.com/57969201/138897865-7ef61d66-b78a-468b-8895-8790bc6d29dc.png" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">BOOKSY</h3>
@@ -30,7 +31,7 @@
     <a href="https://github.com/UB-ES-2021-A4/Booksy/wiki"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/github_username/repo_name">View Demo</a>
+    <a href="https://github.com/UB-ES-2021-A4/Booksy">View Demo</a>
     ·
     <a href="https://github.com/UB-ES-2021-A4/Booksy/issues">Report Bug</a>
     ·
@@ -71,7 +72,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](![image](https://user-images.githubusercontent.com/57969201/138900905-cbf9f44b-27bd-43a4-b30b-9baedfdf83e3.png))
+[![Product Name Screen Shot][product-screenshot]](https://user-images.githubusercontent.com/57969201/138903406-bef79f12-fb9a-46bb-87ce-48af8ef7c6a8.png)
 
 Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email`, `email_client`, `project_title`, `project_description`
 
@@ -211,4 +212,4 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 [issues-url]: https://github.com/UB-ES-2021-A4/Booksy/issues
 [license-shield]: https://img.shields.io/github/license/UB-ES-2021-A4/Booksy.svg?style=for-the-badge
 [license-url]: https://github.com/UB-ES-2021-A4/Booksy/blob/master/LICENSE.txt
-[product-screenshot]: ![image](https://user-images.githubusercontent.com/57969201/138900905-cbf9f44b-27bd-43a4-b30b-9baedfdf83e3.png)
+[product-screenshot]: https://user-images.githubusercontent.com/57969201/138903406-bef79f12-fb9a-46bb-87ce-48af8ef7c6a8.png
