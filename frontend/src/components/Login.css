@@ -79,3 +79,15 @@ input:valid~label {
     cursor: pointer;
     margin-top: 25px;
 }
+.a_color {
+    color: whitesmoke;
+    text-decoration: none;
+}
+.a_color:visited {
+    color: whitesmoke;
+    text-decoration: none;
+}
+.a_color:hover {
+    color: white;
+    text-decoration: underline;
+}
