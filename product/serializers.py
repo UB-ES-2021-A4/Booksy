@@ -3,28 +3,31 @@ from product.models import ProductModel, Image, Category
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    seller = serializers.SerializerMethodField('get_seller_from_username')
+    title = serializers.CharField(max_length=255, allow_blank=True)
+    author = serializers.CharField(max_length=50, allow_blank=True)
+    description = serializers.CharField(max_length=1000, allow_blank=True)
+    price = serializers.FloatField(default=0.)
+    category = serializers.CharField(source="category.category_name")
 
     class Meta:
         model = ProductModel
-        fields = ['title', 'author', 'description', 'price', 'seller', ]
+        fields = ['id', 'title', 'author', 'description', 'price', 'seller', 'category']
 
-    def get_seller_from_username(self, product_model):
-        # Coge el name de la tabla UserProfile a través del seller de ProductModel
-        seller = product_model.seller.name
-        return seller
+    def update(self, instance, validated_data):
+        instance.title = validated_data.get('title', instance.title)
+        instance.author = validated_data.get('author', instance.author)
+        instance.description = validated_data.get('description', instance.description)
+        instance.price = validated_data.get('price', instance.price)
+        instance.seller = validated_data.get('seller', instance.seller)
+        instance.category = validated_data.get('category', instance.category)
+        instance.save()
+        return instance
 
 
 class CategorySerializer(serializers.ModelSerializer):
-    product = serializers.SerializerMethodField('get_product_from_title')
-
     class Meta:
         model = Category
-        fields = ['category']
-
-    def get_product_from_title(self, categoryModel):
-        product = categoryModel.product.id
-        return product
+        fields = ['category_name']
 
 
 class ImageSerializer(serializers.ModelSerializer):
@@ -34,7 +37,6 @@ class ImageSerializer(serializers.ModelSerializer):
         model = Image
         fields = ['image']
 
-    # Not sure if this code duplication is needed, but just in case...
-    def get_product_from_title(self, categoryModel):
+    def get_product_from_id(self, categoryModel):
         product = categoryModel.product.id
         return product
