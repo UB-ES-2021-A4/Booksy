@@ -19,7 +19,7 @@ export default class CheckOut extends Component {
             pais: '',
             codigoPostal: 0,
             nombreTarjeta: '',
-            numerotarjeta: 0,
+            numeroTarjeta: 0,
             expMonth: 0,
             expYear: 0,
             CVV: 0,
