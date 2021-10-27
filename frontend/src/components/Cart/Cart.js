@@ -1,0 +1,110 @@
+import React, {Component} from "react";
+import Review from "./Review";
+import Confirmation from "./Confirmation";
+import Payment from "./Payment";
+import Shipping from "./Shipping";
+import Checkout from "./Checkout";
+import emptyCart from '../pictures/empty_cart.png'
+
+export default class CheckOut extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            step: 1,
+            nombre: '',
+            apellidos: '',
+            email: '',
+            direccion: '',
+            ciudad: '',
+            pais: '',
+            codigoPostal: 0,
+            nombreTarjeta: '',
+            numerotarjeta: 0,
+            expMonth: 0,
+            expYear: 0,
+            CVV: 0,
+        };
+
+    }
+
+
+    // Proceed to next step
+    nextStep = () => {
+        const { step } = this.state;
+        this.setState({
+            step: step + 1
+        });
+    };
+
+    // Go back to prev step
+    prevStep = () => {
+        const { step } = this.state;
+        this.setState({
+            step: step - 1
+        });
+    };
+
+    // Handle fields change
+    handleChange = input => e => {
+        this.setState({ [input]: e.target.value });
+    };
+
+    render() {
+        const { step } = this.state;
+        const { nombre, apellidos, email, direccion, ciudad, pais, codigoPostal, nombreTarjeta, numerotarjeta, expMonth, expYear, CVV } = this.state;
+        const values = { nombre, apellidos, email, direccion, ciudad, pais, codigoPostal, nombreTarjeta, numerotarjeta, expMonth, expYear, CVV };
+
+        switch (step) {
+            case 1:
+                console.log(this.props.items)
+                if (!this.props.items){
+                    return (
+                            <Checkout
+                                nextStep={this.nextStep}
+                                handleChange={this.handleChange}
+                                values={values}
+                            />
+                    );
+                } else {
+                    return (
+                        <div>
+                            <center>
+                                <img className="align-content-center" style={{width:'450px', height:'375px'}} src={emptyCart} alt="emptyCart" /><br/>
+                                <br/>
+                                <a href='/home_page'><b>Shop for items now!</b></a>
+                            </center>
+                        </div>
+                    );
+                }
+            case 2:
+                return (
+                    <Shipping
+                        nextStep={this.nextStep}
+                        prevStep={this.prevStep}
+                        handleChange={this.handleChange}
+                        values={values}
+                    />
+                );
+            case 3:
+                return (
+                    <Payment
+                        nextStep={this.nextStep}
+                        prevStep={this.prevStep}
+                        values={values}
+                    />
+                );
+            case 4:
+                return (
+                    <Review
+                        nextStep={this.nextStep}
+                        prevStep={this.prevStep}
+                        values={values}
+                    />
+                );
+            case 5:
+                return <Confirmation />;
+            default:
+                (console.log('This is a multi-step form built with React.'))
+        }
+    }
+}

@@ -6,6 +6,7 @@ import First_Page from "./components/First_Page"
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import Login from "./components/Login";
 import Signup from "./components/SignUp";
+import Cart from "./components/Cart/Cart";
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
                 <Route path='/signup' component={Signup}/>
                 {/*<Route exact path='/home_page' render={()=><HomePage />}/>*/}
                 {/*<Route exact path='/books' render={()=><Books />}/>*/}
-                {/*<Route exact path='/cart' render={()=><Cart />}/>*/}
+                <Route exact path='/cart' render={()=><Cart />}/>
             </Switch>
         </BrowserRouter>
         <Footer />
