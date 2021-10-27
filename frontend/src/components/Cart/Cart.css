@@ -17,6 +17,31 @@ div {
     width: 355px;
     transition: all 0.5s;
 }
+.button-changeToPayment {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 4px;
+    background-color: #004B23;
+    border: none;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 15px;
+    width: 375px;
+    transition: all 0.5s;
+}
+
+#button- {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 4px;
+    background-color: #004B23;
+    border: none;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 15px;
+    width: fit-content;
+    transition: all 0.5s;
+}
 .button-erase {
     padding-top: 10px;
     padding-bottom: 10px;
@@ -32,3 +57,11 @@ div {
 }
 .button-changeStep:hover {background-color: #013D1D}
 .button-erase:hover {background-color: #013D1D}
+
+.arrowBack {
+    margin-top: 10px;
+}
+
+.img-shipping {
+    margin-top: 40px;
+}
