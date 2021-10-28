@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import {Card} from "@material-ui/core";
 import { Col, Row,  Container } from 'react-bootstrap';
 import './Cart.css'
+import './wizard-stepper.css'
 import Book1 from '../pictures/book1.png'
 
 
@@ -17,6 +17,18 @@ export default class Checkout extends Component {
         const { values, handleChange } = this.props;
         return (
             <div className="checkout">
+                <div className="card">
+                    <div className="card-header">
+                        <div className="steps">
+                            <div className="step-active"><span className="step-active-span">Check-out</span></div>
+                            <div className="step"><span className="step-span">Shipping</span></div>
+                            <div className="step"><span className="step-span">Payment</span></div>
+                            <div className="step"><span className="step-span">Review</span></div>
+                            <div className="step"><span className="step-span">Confirmation</span></div>
+                        </div>
+                    </div>
+                </div>
+                <br/>
                 <h1 className="centered_title"> Check-out Information </h1> <br/>
                 <section className="subHeader">
                     <Container>

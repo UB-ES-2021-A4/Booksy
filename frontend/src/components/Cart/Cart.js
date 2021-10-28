@@ -6,6 +6,8 @@ import Shipping from "./Shipping";
 import Checkout from "./Checkout";
 import emptyCart from '../pictures/empty_cart.png'
 
+
+
 export default class CheckOut extends Component {
     constructor(props) {
         super(props);
@@ -24,9 +26,7 @@ export default class CheckOut extends Component {
             expYear: 0,
             CVV: 0,
         };
-
     }
-
 
     // Proceed to next step
     nextStep = () => {
@@ -56,6 +56,7 @@ export default class CheckOut extends Component {
         this.setState({ [input]: e.target.value });
     };
 
+
     render() {
         const { step } = this.state;
         const { nombre, apellidos, email, direccion, ciudad, pais, codigoPostal, nombreTarjeta, numerotarjeta, expMonth, expYear, CVV } = this.state;
@@ -66,11 +67,11 @@ export default class CheckOut extends Component {
                 console.log(this.props.items)
                 if (!this.props.items){
                     return (
-                            <Checkout
-                                nextStep={this.nextStep}
-                                handleChange={this.handleChange}
-                                values={values}
-                            />
+                        <Checkout
+                            nextStep={this.nextStep}
+                            handleChange={this.handleChange}
+                            values={values}
+                        />
                     );
                 } else {
                     return (

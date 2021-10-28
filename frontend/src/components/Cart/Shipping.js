@@ -29,6 +29,18 @@ export default class Shipping extends Component {
         const { values, handleChange } = this.props;
         return (
             <div>
+                <div className="card">
+                    <div className="card-header">
+                        <div className="steps">
+                            <div className="step-done"><span className="step-done-span">Check-out</span></div>
+                            <div className="step-active"><span className="step-active-span">Shipping</span></div>
+                            <div className="step"><span className="step-span">Payment</span></div>
+                            <div className="step"><span className="step-span">Review</span></div>
+                            <div className="step"><span className="step-span">Confirmation</span></div>
+                        </div>
+                    </div>
+                </div>
+                <br/>
                 <Container>
                     <Row>
                         <Col md={"auto"}>

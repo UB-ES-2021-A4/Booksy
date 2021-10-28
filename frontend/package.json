@@ -24,6 +24,7 @@
     "react-validation-mixin": "^5.4.0",
     "sweetalert": "^2.1.2",
     "web-vitals": "^1.1.2",
+    "wizard": "^2.0.0",
     "yup": "^0.32.11"
   },
   "scripts": {
