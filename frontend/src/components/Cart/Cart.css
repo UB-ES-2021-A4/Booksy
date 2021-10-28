@@ -7,8 +7,6 @@ div {
 }
 
 .button {
-    padding: 0;
-    margin: 0;
 }
 
 .button-changeStep {
@@ -49,8 +47,8 @@ div {
     margin-top: 150px;
 }
 .button-order {
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding: 10px 0;
+    margin: 0;
     background-color: #004B23;
     color: #FFFFFF;
     text-align: center;
@@ -62,8 +60,6 @@ div {
 }
 
 .button-editar {
-    padding-top: 10px;
-    padding-bottom: 10px;
     background-color: #004B23;
     color: #FFFFFF;
     text-align: center;
@@ -72,6 +68,8 @@ div {
     display:block;
     float:bottom;
     transition: all 0.5s;
+    padding: 10px 0;
+    margin: 0;
 }
 
 .button-changeStep:hover {background-color: #013D1D}

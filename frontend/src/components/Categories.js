@@ -15,20 +15,28 @@ export default class Categories extends Component {
                 <Container >
                     <Row>
                         <Col>
-                            <img src={Autor} width={175} height={250} alt="img1"/>
-                            <p id="text_imgs">Por autores</p>
+                            <center>
+                                <img src={Autor} width={175} height={250} alt="img1"/>
+                                <p id="text_imgs">Por autores</p>
+                            </center>
                         </Col>
                         <Col>
-                            <img src={Genero} width={175} height={250} alt="img2"/>
-                            <p id="text_imgs">Por generos</p>
+                            <center>
+                                <img src={Genero} width={175} height={250} alt="img2"/>
+                                <p id="text_imgs">Por generos</p>
+                            </center>
                         </Col>
                         <Col>
-                            <img src={Rating} width={175} height={250} alt="img3"/>
-                            <p id="text_imgs">Por precios</p>
+                            <center>
+                                <img src={Rating} width={175} height={250} alt="img3"/>
+                                <p id="text_imgs">Por precios</p>
+                            </center>
                         </Col>
                         <Col>
-                            <img src={Cercania} width={175} height={250} alt="img3"/>
-                            <p id="text_imgs">Por distancia</p>
+                            <center>
+                                <img src={Cercania} width={175} height={250} alt="img3"/>
+                                <p id="text_imgs">Por distancia</p>
+                            </center>
                         </Col>
                     </Row>
                     <br/>
