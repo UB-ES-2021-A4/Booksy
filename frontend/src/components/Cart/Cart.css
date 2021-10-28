@@ -44,7 +44,7 @@ div {
     color: #FFFFFF;
     text-align: center;
     font-size: 10px;
-    width: fit-content;
+    width: 50%;
     transition: all 0.5s;
     margin-top: 150px;
 }
@@ -102,4 +102,9 @@ div {
 
 .spaces {
     line-height : 37px;
+}
+
+.subtext-confirmation {
+    margin-top: 50px;
+    size: 20px;
 }
