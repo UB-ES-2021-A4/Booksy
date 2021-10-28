@@ -1,8 +1,14 @@
 button.color {
     background-color: #004B23;
 }
+
 div {
     font-family: "Source Code Pro", serif;
+}
+
+.button {
+    padding: 0;
+    margin: 0;
 }
 
 .button-changeStep {
@@ -29,19 +35,6 @@ div {
     width: 375px;
     transition: all 0.5s;
 }
-
-#button- {
-    padding-top: 10px;
-    padding-bottom: 10px;
-    border-radius: 4px;
-    background-color: #004B23;
-    border: none;
-    color: #FFFFFF;
-    text-align: center;
-    font-size: 15px;
-    width: fit-content;
-    transition: all 0.5s;
-}
 .button-erase {
     padding-top: 10px;
     padding-bottom: 10px;
@@ -55,8 +48,36 @@ div {
     transition: all 0.5s;
     margin-top: 150px;
 }
+.button-order {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: #004B23;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 15px;
+    width: 100%;
+    display:block;
+    float:bottom;
+    transition: all 0.5s;
+}
+
+.button-editar {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: #004B23;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 15px;
+    width: 100%;
+    display:block;
+    float:bottom;
+    transition: all 0.5s;
+}
+
 .button-changeStep:hover {background-color: #013D1D}
 .button-erase:hover {background-color: #013D1D}
+.button-order:hover {background-color: #013D1D}
+.button-editar:hover {background-color: #013D1D}
 
 .arrowBack {
     margin-top: 10px;
@@ -64,4 +85,21 @@ div {
 
 .img-shipping {
     margin-top: 40px;
+}
+
+.container-order {
+    width: 600px;
+}
+
+.review-card-title {
+    margin-top: 10px;
+}
+
+.review-body {
+    font-family: "Source Code Pro", serif;
+    margin-left: 10px;
+}
+
+.spaces {
+    line-height : 37px;
 }

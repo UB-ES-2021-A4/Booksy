@@ -44,6 +44,13 @@ export default class CheckOut extends Component {
         });
     };
 
+    prev2Steps = () => {
+        const { step } = this.state;
+        this.setState({
+            step: step - 2
+        });
+    };
+
     // Handle fields change
     handleChange = input => e => {
         this.setState({ [input]: e.target.value });
@@ -98,6 +105,7 @@ export default class CheckOut extends Component {
                     <Review
                         nextStep={this.nextStep}
                         prevStep={this.prevStep}
+                        prev2Steps={this.prev2Steps}
                         values={values}
                     />
                 );
