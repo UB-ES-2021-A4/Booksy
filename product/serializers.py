@@ -31,12 +31,6 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class ImageSerializer(serializers.ModelSerializer):
-    product = serializers.SerializerMethodField('get_product_from_title')
-
     class Meta:
         model = Image
-        fields = ['image']
-
-    def get_product_from_id(self, categoryModel):
-        product = categoryModel.product.id
-        return product
+        fields = ['id', 'product', 'image']
