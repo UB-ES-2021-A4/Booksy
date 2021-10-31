@@ -44,12 +44,15 @@ class ProductView(APIView):
         # TODO get seller with auth
         seller = UserProfile.objects.get(id=request.POST.get('seller'))
         category = Category.objects.get(category_name=request.POST.get('category'))
-        ProductModel.objects.create(title=request.POST.get('title'), author=request.POST.get('author'),
-                                    description=request.POST.get('description'), price=request.POST.get('price'),
-                                    seller=seller, category=category)
+        a = ProductModel.objects.create(title=request.POST.get('title'), author=request.POST.get('author'),
+                                        description=request.POST.get('description'), price=request.POST.get('price'),
+                                        seller=seller, category=category)
         # TODO check if object has been created
-
-        return Response(status=status.HTTP_501_NOT_IMPLEMENTED)
+        try:
+            product = ProductModel.objects.get(id=a.id)
+            return Response(status=status.HTTP_200_OK if product else status.HTTP_400_BAD_REQUEST)
+        except:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def delete(self, request, product_id):
         try:
@@ -74,6 +77,7 @@ class CategoriesView(APIView):
 
 
 class ImageView(APIView):
+    # TODO user token
     permission_classes = ""
     authentication_classes = ""
 

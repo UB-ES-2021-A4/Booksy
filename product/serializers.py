@@ -31,6 +31,14 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class ImageSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(allow_null=False)
+
     class Meta:
         model = Image
         fields = ['id', 'product', 'image']
+
+    def update(self, instance, validated_data):
+        instance.image = validated_data.get('image', instance.image)
+        instance.product = validated_data.get('product', instance.product)
+        instance.save()
+        return instance
