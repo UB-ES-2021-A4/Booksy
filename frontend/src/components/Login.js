@@ -48,7 +48,9 @@ class Login extends Component {
 
         axios.post('http://127.0.0.1:8000/api/login/', parameters)
             .then((res) => {
-                this.getAccount()
+                //this.getAccount()
+                this.successAlert()
+                this.handleClick()
             })
             .catch((error) => {
                 this.errorInLogInAlert()
@@ -56,9 +58,9 @@ class Login extends Component {
             })
 
     };
-
+    /*
     getAccount () {
-        const path = 'http://127.0.0.1:8000/api/login/' + this.state.username
+        const path = `http://127.0.0.1:8000/api/login/${this.state.username}`
         axios.get(path)
             .then((res) => {
                 this.successAlert()
@@ -69,7 +71,7 @@ class Login extends Component {
                 console.error(error)
             })
     };
-
+    */
     render () {
         return (
             <section>
