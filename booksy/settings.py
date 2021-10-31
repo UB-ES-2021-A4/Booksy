@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'booksy',
     'accounts',
+    'product',
     'corsheaders',
 ]
 
@@ -76,7 +77,16 @@ WSGI_APPLICATION = 'booksy.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-"""
+
+""" LOCAL USE DATABASE
+'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+    
+    HEROKU DATABASE
+=======
+
 'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'd7cm11lo9q6vmh',
@@ -156,7 +166,7 @@ EMAIL_PORT = 587
 # White listing the localhost:3000 port
 # for React
 CORS_ORIGIN_WHITELIST = [
-     'http://localhost:3000'
+    'http://localhost:3000'
 ]
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
