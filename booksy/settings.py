@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-p@0-v6re#72)$=g1f11s6$aa(%(icqj2&h52jm720vmq82+*s7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'booksy-es2021.herokuapp.com']
 
@@ -77,6 +77,7 @@ WSGI_APPLICATION = 'booksy.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+
 """ LOCAL USE DATABASE
 'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -84,6 +85,8 @@ WSGI_APPLICATION = 'booksy.wsgi.application'
     }
     
     HEROKU DATABASE
+=======
+
 'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'd7cm11lo9q6vmh',
@@ -93,6 +96,7 @@ WSGI_APPLICATION = 'booksy.wsgi.application'
         'PORT': '5432',
     }
 """
+
 
 DATABASES = {
     'default': {
