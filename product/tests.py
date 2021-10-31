@@ -1,10 +1,3 @@
-from django.test import TestCase
-from rest_framework.exceptions import ValidationError
-
-from product.models import Category, Image, ProductModel
-from django.db import models, IntegrityError
-from rest_framework.test import APIClient
-
 # Create your tests here.
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -20,6 +13,7 @@ from rest_framework.test import APIClient
 
 class ProductModelTest(TestCase):
     def setUp(self):
+        category = Category.objects.create(category_name='JU')
         book = ProductModel.objects.create(title='Donde los árboles cantan',
                                            author='Laura Gallego',
                                            price=14.9,
@@ -38,9 +32,8 @@ class ProductModelTest(TestCase):
                                                                              name='TestAdmin',
                                                                              password='123fsfsfaha4213',
                                                                              first_name='Admin',
-                                                                             last_name='User'))
-        book_cat = Category.objects.create(product=book,
-                                           category='JU')
+                                                                             last_name='User'),
+                                           category_id=category.id)
         book_image = Image.objects.create(product=book,
                                           image='a')
         self.description = 'Description is a Char Field'
