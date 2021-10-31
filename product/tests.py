@@ -1,7 +1,17 @@
 from django.test import TestCase
 from rest_framework.exceptions import ValidationError
+
+from product.models import Category, Image, ProductModel
+from django.db import models, IntegrityError
+from rest_framework.test import APIClient
+
+# Create your tests here.
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from django.test import TestCase
+from rest_framework.exceptions import ValidationError
 from django.db import models
-from product.models import ProductModel, Category, Image, get_category_by_name
+from product.models import ProductModel, Category, Image
 from accounts.models import UserProfile
 from rest_framework.test import APIClient
 
@@ -52,9 +62,6 @@ class ProductModelTest(TestCase):
                          "Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, " \
                          "sit amet adipiscing sem neque sed ipsum. Na y algo mas por si acaso"
         # TODO we have to look how to store images correctly, right now they're in local.
-
-    def test_get_by_name(self):
-        self.assertEqual(Category.JUVENIL, get_category_by_name('Juvenil'))
 
     def test_no_title(self):
         try:
@@ -124,3 +131,12 @@ class ProductModelTest(TestCase):
             self.assertEqual(True, False)
         except:
             pass
+
+class CategoryModelTest(TestCase):
+    def test_category_matched(self):
+        cat = Category.get_by_name(self,'Humanidades')
+        self.assertEqual(cat, 'HM')
+
+    def test_category_unmatched(self):
+        cat = Category.get_by_name(self,'Inventado')
+        self.assertEqual(None,cat)
