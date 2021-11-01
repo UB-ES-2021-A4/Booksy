@@ -48,26 +48,16 @@ class Login extends Component {
 
         axios.post('http://127.0.0.1:8000/api/login/', parameters)
             .then((res) => {
-                this.getAccount()
-            })
-            .catch((error) => {
-                this.errorInLogInAlert()
-                console.error(error)
-            })
-
-    };
-
-    getAccount () {
-        const path = 'http://127.0.0.1:8000/api/login/' + this.state.username
-        axios.get(path)
-            .then((res) => {
                 this.successAlert()
+                // We are saving the token in the localStorage(not very secure), django's token do not expire.
+                localStorage.setItem('token', res.data.token)
                 this.handleClick()
             })
             .catch((error) => {
                 this.errorInLogInAlert()
                 console.error(error)
             })
+
     };
 
     render () {
