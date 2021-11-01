@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from rest_framework import status
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -12,9 +14,8 @@ from product.serializers import ProductSerializer, CategorySerializer, ImageSeri
 
 class ProductView(APIView):
     serializer_class = ProductSerializer
-    # TODO user token
-    permission_classes = ""
-    authentication_classes = ""
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    authentication_classes = (TokenAuthentication,)
 
     def get(self, request):
         """
@@ -41,8 +42,7 @@ class ProductView(APIView):
             return Response(status=status.HTTP_418_IM_A_TEAPOT)
 
     def post(self, request):
-        # TODO get seller with auth
-        seller = UserProfile.objects.get(id=request.POST.get('seller'))
+        seller = request.user
         category = Category.objects.get(category_name=request.POST.get('category'))
         a = ProductModel.objects.create(title=request.POST.get('title'), author=request.POST.get('author'),
                                         description=request.POST.get('description'), price=request.POST.get('price'),
@@ -63,9 +63,7 @@ class ProductView(APIView):
 
 
 class CategoriesView(APIView):
-    # TODO TOKEEEEENENENENENNENNENNN
-    permission_classes = ""
-    authentication_classes = ""
+    permission_classes = (AllowAny,)
 
     def get(self, request):
         categories = list(Category.objects.all())
@@ -77,9 +75,8 @@ class CategoriesView(APIView):
 
 
 class ImageView(APIView):
-    # TODO user token
-    permission_classes = ""
-    authentication_classes = ""
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    authentication_classes = (TokenAuthentication,)
 
     def get(self, request):
         try:
@@ -99,7 +96,8 @@ class ImageView(APIView):
     def post(self, request):
         try:
             product = ProductModel.objects.get(id=request.POST.get('id'))  # Front end should have the product id
-            # TODO Authenticate that product is from user
+            if product.seller != request.user:
+                return Response(status=status.HTTP_401_UNAUTHORIZED)
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
