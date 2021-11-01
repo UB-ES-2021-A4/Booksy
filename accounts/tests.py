@@ -15,10 +15,10 @@ import selenium
 from rest_framework.test import APIClient
 from accounts.models import UserProfile
 
+
 class Test_SignUp(TestCase):
 
     def setUp(self):
-
         ### Deberíamos tener una url intermedia para que el usuario confirmase su cuenta a traves del correo.
         # self.url_verify = '/verify#IdUser
         self.url = '/api/signUpaccount/'
@@ -39,11 +39,11 @@ class Test_SignUp(TestCase):
             first_name='Admin',
             last_name='User')
 
-    #No Reverse Match
+    # No Reverse Match
     ###def test_SignUp_url(self):
-        ###response = self.client.post(self.url)
-        ###self.assertEqual(response.status_code, 200)
-        ###self.assertTemplateUsed(response, template_name='SignUp.js')
+    ###response = self.client.post(self.url)
+    ###self.assertEqual(response.status_code, 200)
+    ###self.assertTemplateUsed(response, template_name='SignUp.js')
 
     ## No se si he de hacer el Post con el nombre del atributo de la BBDD o con el del Model
     def test_SignUp_form(self):
@@ -51,32 +51,32 @@ class Test_SignUp(TestCase):
                                     data={
                                         'name': self.name,
                                         'email': self.email,
-                                        'first_name':self.first_name,
-                                        'last_name':self.last_name,
-                                        'is_active':self.is_active,
-                                        'is_staff':self.is_staff,
-                                        'password':self.password
+                                        'first_name': self.first_name,
+                                        'last_name': self.last_name,
+                                        'is_active': self.is_active,
+                                        'is_staff': self.is_staff,
+                                        'password': self.password
                                     })
-        self.assertEqual(response.status_code,201)
+        self.assertEqual(response.status_code, 201)
 
     ## Comprobación de RequiredValues Username
     def test_SignUp_requiredUsername(self):
         response = self.client.post((self.url),
                                     data={
                                         'email': self.email,
-                                        'first_name':self.first_name,
-                                        'last_name':self.last_name,
-                                        'is_active':self.is_active,
-                                        'is_staff':self.is_staff,
-                                        'password':self.password
+                                        'first_name': self.first_name,
+                                        'last_name': self.last_name,
+                                        'is_active': self.is_active,
+                                        'is_staff': self.is_staff,
+                                        'password': self.password
                                     })
-        self.assertEqual(response.status_code,400)
+        self.assertEqual(response.status_code, 400)
 
     ### Comprobación de RequiredValues Email
     def test_SignUp_requiredEmail(self):
         response = self.client.post((self.url),
                                     data={
-                                        'name':self.name,
+                                        'name': self.name,
                                         'first_name': self.first_name,
                                         'last_name': self.last_name,
                                         'is_active': self.is_active,
@@ -90,7 +90,7 @@ class Test_SignUp(TestCase):
         response = self.client.post((self.url),
                                     data={
                                         'name': self.name,
-                                        'email':'EstoNoEsUnEmail',
+                                        'email': 'EstoNoEsUnEmail',
                                         'first_name': self.first_name,
                                         'last_name': self.last_name,
                                         'is_active': self.is_active,
@@ -102,31 +102,31 @@ class Test_SignUp(TestCase):
     ### Comprobación de Username length < 15
     def test_SignUp_username15(self):
         response = self.client.post((self.url),
-                               data={
-                                   'name': 'EstoEsUnNombreDemasiadoLargoBADREQUEST',
-                                   'email': self.email,
-                                   'first_name': self.first_name,
-                                   'last_name': self.last_name,
-                                   'is_active': self.is_active,
-                                   'is_staff': self.is_staff,
-                                   'password': self.password
-                               })
-        #El código de Error debería ser el 406.
+                                    data={
+                                        'name': 'EstoEsUnNombreDemasiadoLargoBADREQUEST',
+                                        'email': self.email,
+                                        'first_name': self.first_name,
+                                        'last_name': self.last_name,
+                                        'is_active': self.is_active,
+                                        'is_staff': self.is_staff,
+                                        'password': self.password
+                                    })
+        # El código de Error debería ser el 406.
         self.assertEqual(response.status_code, 400)
 
     ### La contraseña es debe cumplir unas reglas.
     ### https://docs.djangoproject.com/en/3.2/topics/auth/passwords/
     def test_SignUp_passwordStrength(self):
         response = self.client.post(self.url,
-                               data={
-                                   'name': self.name,
-                                   'email': self.email,
-                                   'first_name': self.first_name,
-                                   'last_name': self.last_name,
-                                   'is_active': self.is_active,
-                                   'is_staff': self.is_staff,
-                                   'password': '1'
-                               })
+                                    data={
+                                        'name': self.name,
+                                        'email': self.email,
+                                        'first_name': self.first_name,
+                                        'last_name': self.last_name,
+                                        'is_active': self.is_active,
+                                        'is_staff': self.is_staff,
+                                        'password': '1'
+                                    })
         # El código de Error debería ser el 201.
         self.assertEqual(response.status_code, 201)
 
@@ -145,6 +145,7 @@ class Test_SignUp(TestCase):
     def test_SignUp_lastNameValidation(self):
         self.assertEqual(self.user_bien.last_name.isalpha(), True)
         pass
+
 
 ### No se si el para hacer el Post el atributo es Username o Name.
 ### Esta puesto Name
@@ -167,7 +168,7 @@ class Test_Login(TestCase):
 
         client = Client()
         logged = client.login(name='Manolo', password='TestDjango1!')
-        self.assertEqual(logged,True)
+        self.assertEqual(logged, True)
 
     def test_LogIn_wrongPass(self):
         user = UserProfile.objects.create(name='Manolo')
@@ -181,30 +182,30 @@ class Test_Login(TestCase):
     def test_LogIn_url(self):
         response = self.client.post(self.url)
         self.assertEqual(response.status_code, 400)
-        #self.assertTemplateUsed(response, template_name='Login.js')
+        # self.assertTemplateUsed(response, template_name='Login.js')
 
     def test_logIn_noName(self):
         response = self.client.post(self.url,
                                     {
-                                        'password':'12334',
-                                        'name':''
+                                        'password': '12334',
+                                        'name': ''
                                     })
         self.assertEqual(response.status_code, 400)
 
     def test_logIn_noPass(self):
         response = self.client.post(self.url,
                                     {
-                                        'password':'',
-                                        'name':'Manolo'
+                                        'password': '',
+                                        'name': 'Manolo'
                                     })
         self.assertEqual(response.status_code, 400)
 
     def test_logIn_invalidName(self):
         response = self.client.post(self.url,
-                         {
-                             'password': '12345',
-                             'name': 'UsuarioInventado'
-                         })
+                                    {
+                                        'password': '12345',
+                                        'name': 'UsuarioInventado'
+                                    })
         self.assertEqual(response.status_code, 400)
 
     def tests_logIn_formCorrect(self):
@@ -216,11 +217,11 @@ class Test_Login(TestCase):
         print(response)
         self.assertEqual(response.status_code, 400)
         ### Se supone que se redireccionara a la Pagina Principal si el flujo es correcto.
-        #self.assertTemplateUsed(response, template_name='First_Page')
+        # self.assertTemplateUsed(response, template_name='First_Page')
+
 
 if __name__ == '__main__':
     TestCase.main()
-
 
 '''
     def test_SignUpHTML(self):

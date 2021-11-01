@@ -27,5 +27,8 @@ urlpatterns = [
 
     path('admin/', admin.site.urls),
     path('api/', include('accounts.urls')),
+
     path('api/login/', views.UserLoginApiView.as_view()), #TODO should be on accounts.urls
+    path('api/', include('product.urls')),
+
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
