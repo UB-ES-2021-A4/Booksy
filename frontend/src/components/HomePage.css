@@ -1,0 +1,37 @@
+* {
+    box-sizing: border-box;
+}
+
+/* Float four columns side by side */
+.column-HomePage {
+    float: left;
+    width: 25%;
+    padding: 0 10px;
+}
+
+/* Remove extra left and right margins, due to padding */
+.row-HomePage {margin: 0 -5px;}
+
+/* Clear floats after the columns */
+.row-HomePage:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Responsive columns */
+@media screen and (max-width: 600px) {
+    .column-HomePage {
+        width: 100%;
+        display: block;
+        margin-bottom: 20px;
+    }
+}
+
+/* Style the counter cards */
+.card-HomePage {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    padding: 16px;
+    background-color: #f1f1f1;
+    width: 15rem;
+}
