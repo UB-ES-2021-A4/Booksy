@@ -47,19 +47,43 @@ class ProductView(APIView):
         a = ProductModel.objects.create(title=request.POST.get('title'), author=request.POST.get('author'),
                                         description=request.POST.get('description'), price=request.POST.get('price'),
                                         seller=seller, category=category)
-        # TODO check if object has been created
         try:
             product = ProductModel.objects.get(id=a.id)
             return Response(status=status.HTTP_200_OK if product else status.HTTP_400_BAD_REQUEST)
         except:
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    def delete(self, request, product_id):
+    def delete(self, request):
+        product_id = request.GET.get('id')
+        seller = request.user
         try:
-            ProductModel.objects.filter(id=product_id).delete()
+            prod = ProductModel.objects.filter(id=product_id)
+            if getattr(prod, "seller") == seller:  # If same user can be deleted
+                ProductModel.objects.filter(id=product_id).delete()
             return Response(status=status.HTTP_200_OK)
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def patch(self, request):
+        product_id = request.data.get('id')
+        seller = request.user
+
+        try:
+            product = ProductModel.objects.get(id=product_id)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            if seller == getattr(product, 'seller'):
+                product_serialized = ProductSerializer(product, data=request.data)
+                if product_serialized.is_valid():
+                    product_serialized.save()
+                    return Response(status=status.HTTP_200_OK)
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response(status=status.HTTP_401_UNAUTHORIZED)
+        except:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class CategoriesView(APIView):
