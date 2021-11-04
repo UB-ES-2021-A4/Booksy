@@ -93,6 +93,7 @@ DATABASES = {
         'HOST': 'booksy.mysql.pythonanywhere-services.com',
         'PORT': '3306',
     }
+
 }
 
 # Deployment database
