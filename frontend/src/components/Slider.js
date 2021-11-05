@@ -6,7 +6,6 @@ import Main_2 from './pictures/mainPhoto2.jpg';
 import Main_3 from './pictures/mainPhoto3.jpg';
 
 export default class Slider extends Component {
-
     render() {
         return(
             <Container>
@@ -18,7 +17,7 @@ export default class Slider extends Component {
                         <h1>Encuentra el libro perfecto para ti.</h1>
                         <h5> Todo tipo de historias que os animarán a ser creativos.</h5>
                         <br/><br/>
-                        <button className="button" ><a href="/signup" className="a_color"><span>REGÍSTRATE</span></a></button>
+                        <button className="button"><span>REGÍSTRATE</span></button>
                     </Col>
                     <br/><br/>
                     <Col>

@@ -40,16 +40,3 @@
 #text_paddings {
     padding-top: 75px;
 }
-
-.a_color {
-    color: whitesmoke;
-    text-decoration: none;
-}
-.a_color:visited {
-    color: #C6E7D8;
-    text-decoration: none;
-}
-.a_color:hover {
-    color: #C6E7D8;
-    text-decoration: underline;
-}

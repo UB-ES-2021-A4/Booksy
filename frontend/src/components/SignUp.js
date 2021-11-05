@@ -4,8 +4,6 @@ import {Col, Container, Row} from "react-bootstrap";
 import './SignUp.css'
 import Libro_SignUp from "./pictures/theSunAndHerFlowers.jpg";
 import { withRouter } from "react-router-dom";
-import swal from 'sweetalert';
-
 
 class Signup extends Component {
     constructor(props) {
@@ -22,7 +20,7 @@ class Signup extends Component {
 
     }
     handleClick = () => {
-        this.accountCreatedAlert()
+        alert('SUCCESS!')
         this.props.history.push('/home')
     }
 
@@ -31,22 +29,6 @@ class Signup extends Component {
             [event.target.id]: event.target.value
         });
     };
-
-    accountCreatedAlert () {
-        // Use sweetalert2
-       swal('Success', 'Account created successfully. Check your email for verification.', 'success');
-    };
-
-    accountErrorAlert () {
-        // Use sweetalert2
-        swal('Error', 'Revise all your parameters, something went wrong.', 'error');
-    };
-
-    pswErrorAlert () {
-        // Use sweetalert2
-        swal('Error', 'Passwords do not match. Try again, please.', 'warning');
-    };
-
 
     createUser = (event) => {
         event.preventDefault()
@@ -59,14 +41,14 @@ class Signup extends Component {
             last_name: this.state.apellidos
         }
         if (this.state.Repeatpassword === this.state.password) {
-            axios.post('http://127.0.0.1:8000/api/signUpaccount/', user)
+            axios.post('https://booksy.pythonanywhere.com/api/signUpaccount/', user)
                 .then((res) => this.handleClick())
                 .catch((error) => {
                     console.error(error)
-                    this.accountErrorAlert();
+                    alert('FAILED')
                 })
         } else {
-            this.pswErrorAlert();
+            alert('PASSWORD DOES NOT MATCH!')
         }
     }
 
