@@ -8,6 +8,7 @@ import Login from "./components/Login";
 import Signup from "./components/SignUp";
 import Cart from "./components/Cart/Cart";
 import HomePage from "./components/HomePage";
+import AddItem from "./components/AddItem";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
                 <Route exact path='/login' render={()=><Login />}/>
                 <Route path='/signup' component={Signup}/>
                 <Route exact path='/home_page' render={()=><HomePage />}/>
+                <Route exact path='/additem' render={()=><AddItem />}/>
                 {/*<Route exact path='/books' render={()=><Books />}/>*/}
                 <Route exact path='/cart' render={()=><Cart />}/>
             </Switch>
