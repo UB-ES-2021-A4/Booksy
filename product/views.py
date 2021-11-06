@@ -1,3 +1,5 @@
+import os
+
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
@@ -6,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.models import UserProfile
+from booksy import settings
 from product.models import ProductModel, Category, Image
 from product.serializers import ProductSerializer, CategorySerializer, ImageSerializer
 
@@ -47,19 +50,43 @@ class ProductView(APIView):
         a = ProductModel.objects.create(title=request.POST.get('title'), author=request.POST.get('author'),
                                         description=request.POST.get('description'), price=request.POST.get('price'),
                                         seller=seller, category=category)
-        # TODO check if object has been created
         try:
             product = ProductModel.objects.get(id=a.id)
-            return Response(status=status.HTTP_200_OK if product else status.HTTP_400_BAD_REQUEST)
+            return Response(a.id, status=status.HTTP_200_OK if product else status.HTTP_400_BAD_REQUEST)
         except:
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    def delete(self, request, product_id):
+    def delete(self, request):
+        product_id = request.GET.get('id')
+        seller = request.user
         try:
-            ProductModel.objects.filter(id=product_id).delete()
+            prod = ProductModel.objects.filter(id=product_id)
+            if getattr(prod, "seller") == seller:  # If same user can be deleted
+                ProductModel.objects.filter(id=product_id).delete()
             return Response(status=status.HTTP_200_OK)
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def patch(self, request):
+        product_id = request.data.get('id')
+        seller = request.user
+
+        try:
+            product = ProductModel.objects.get(id=product_id)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            if seller == getattr(product, 'seller'):
+                product_serialized = ProductSerializer(product, data=request.data)
+                if product_serialized.is_valid():
+                    product_serialized.save()
+                    return Response(status=status.HTTP_200_OK)
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response(status=status.HTTP_401_UNAUTHORIZED)
+        except:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class CategoriesView(APIView):
@@ -82,16 +109,16 @@ class ImageView(APIView):
         try:
             product_id = request.GET.get('id')
             if product_id:
-                product = list(ProductModel.objects.filter(id=product_id))
-                images = list(Image.objects.filter(product=product))
+                product = ProductModel.objects.get(id=product_id)
+                image = Image.objects.get(product=product)
             else:
-                images = list(Image.objects.all())
+                return Response(status=status.HTTP_400_BAD_REQUEST)
 
-            serialized_images = [ImageSerializer(img).data for img in images]
+            serialized_images = ImageSerializer(image).data
             return Response(serialized_images,
                             status=status.HTTP_200_OK if serialized_images else status.HTTP_204_NO_CONTENT)
         except:
-            return Response(status=status.HTTP_418_IM_A_TEAPOT)
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
     def post(self, request):
         try:
@@ -101,13 +128,40 @@ class ImageView(APIView):
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        Image.objects.create(image=request.FILES,
-                             product=product)
-        return Response(status=status.HTTP_501_NOT_IMPLEMENTED)
-
-    def delete(self, request, image_id):
         try:
-            Image.objects.filter(id=image_id).delete()
+            if Image.objects.filter(product=request.POST.get('id')):
+                return Response(status=status.HTTP_409_CONFLICT)  # There's already an image
+            img = Image.objects.create(image=request.FILES['image'],
+                                       product=product)
+
+            if Image.objects.get(id=img.id):
+                return Response(status=status.HTTP_200_OK)
+            else:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def patch(self, request):
+        product_id = request.data.get('id')
+        try:
+            user = request.user
+            if ProductModel.objects.get(id=product_id).seller != user:
+                return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+            img = Image.objects.get(product=product_id)
+            orig_path = img.image.file.name
+            serial_img = ImageSerializer(img, data=request.data)
+            if serial_img.is_valid():
+                serial_img.save()
+                os.remove(orig_path)
+                return Response(status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def delete(self, request):
+        try:
+            image_id = request.GET.get('id')
+            Image.objects.filter(product=image_id).delete()
             return Response(status=status.HTTP_200_OK)
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)

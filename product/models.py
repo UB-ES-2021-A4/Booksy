@@ -1,3 +1,6 @@
+import os
+from uuid import uuid4
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from accounts.models import UserProfile
@@ -21,6 +24,7 @@ class Category(models.Model):
         MISTERIO_THRILLER = 'MT', _('Misterio y thriller')
 
     category_name = models.CharField(max_length=2, choices=CategoryValues.choices, default=CategoryValues.COCINA)
+
     # Max_length = 2 porque es lo que ocupará cada categoría
 
     def __str__(self):
@@ -40,8 +44,21 @@ class ProductModel(models.Model):
         return self.title
 
 
+def path_and_rename(instance, filename):
+    upload_to = 'images/'
+    ext = filename.split('.')[-1]
+    # get filename
+    if instance.pk:
+        filename = '{}.{}'.format(instance.pk, ext)
+    else:
+        # set filename as random string
+        filename = '{}.{}'.format(uuid4().hex, ext)
+    # return the whole path to the file
+    return os.path.join(upload_to, filename)
+
+
 # As it has a foreign key of product, we're stating that there can be more than one image
 class Image(models.Model):
-    image = models.ImageField(upload_to='product/images/', blank=True)
+    image = models.ImageField(upload_to=path_and_rename, blank=True)
     # The minimum image has to be controlled in the form or in Frontend
     product = models.ForeignKey(ProductModel, default=None, on_delete=models.CASCADE)
