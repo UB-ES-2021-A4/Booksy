@@ -11,7 +11,7 @@ export default class NavBar extends Component {
                 <a href="/home_page" className="navbar-item" style={{padding: 15}} id="home_page_link">Home page</a>
                 <a href="/books" className="navbar-item" style={{padding: 15}} id="books_link">Books</a>
                 <a href="/login" className="navbar-item" style={{padding: 15}} id="login_link">Log In</a>
-                <a href="/cart" className="navbar-item-right" style={{padding: 15}} id="cart_link"><StoreIcon/></a>
+                <a href="/cart" className="navbar-item-right" style={{padding: 15}} id="cartnpm_link"><StoreIcon/></a>
                 <a className="navbar-item-right" >
                     <div className="search-box">
                         <button className="btn-search"><SearchIcon/></button>
