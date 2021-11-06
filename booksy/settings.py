@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-p@0-v6re#72)$=g1f11s6$aa(%(icqj2&h52jm720vmq82+*s7
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'booksy-es2021.herokuapp.com', 'booksy.pythonanywhere.com/']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'booksy-es2021.herokuapp.com', 'booksy.pythonanywhere.com']
 
 # Application definition
 
@@ -84,7 +84,7 @@ WSGI_APPLICATION = 'booksy.wsgi.application'
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
-    
+
     HEROKU DATABASE
 
 'default': {
@@ -95,7 +95,7 @@ WSGI_APPLICATION = 'booksy.wsgi.application'
         'HOST': 'booksy.mysql.pythonanywhere-services.com',
         'PORT': '3306',
     }
-    
+
     Pythonanywhere
 
 
@@ -106,7 +106,7 @@ WSGI_APPLICATION = 'booksy.wsgi.application'
         'PASSWORD': 'z8feEEG@rnZzEYi',
         'HOST': 'booksy.mysql.pythonanywhere-services.com',
         'PORT': '3306',
-        }      
+        }
 """
 
 DATABASES = {
@@ -117,7 +117,7 @@ DATABASES = {
        'PASSWORD': 'z8feEEG@rnZzEYi',
        'HOST': 'booksy.mysql.pythonanywhere-services.com',
        'PORT': '3306',
-    } 
+    }
 }
 
 # Media folder
