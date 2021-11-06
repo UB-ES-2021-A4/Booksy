@@ -10,13 +10,17 @@ export default class HomePage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            card : null,
+            card: {
+                title: '',
+                price: 0,
+                image: '',
+            },
             cards:  null,
         }
 
     }
     /*Es una idea de como hacerlo dinamico*/
-    createCards (){
+    createCards () {
         for (let index = 0; index < 5; index++) {
             this.state.card = this.state.cards.get(index);
             return (
@@ -34,44 +38,57 @@ export default class HomePage extends Component {
     render () {
         return (
             <div>
-
                 <Container>
-                    <h2>Category</h2>
+                    <Row>
+                        <Col>
+                            <h2>Category</h2>
+                            <br/>
+                        </Col>
+                        <Col>
+                            <a href='/additem' className="a_color">
+                            <button className="button button-add-item">Add Item</button>
+                            </a>
+                        </Col>
+                    </Row>
                     <Row>
                         <Col>
                             <Card className="card-HomePage">
-                                <center>
-                                    <img src={Libro1} width={220} height={260} alt="img2"/>
-                                </center>
-                                <h3>A cout of mist and fury</h3>
-                                <p>15€</p>
+                                <img className="card-img-top image_100" src={Libro1} alt="Card image cap"/>
+                                <div className="card-body">
+                                    <h4 className="card-title">A cout of mist and fury</h4>
+                                    <p>15€</p>
+                                    <a href="/cart" className="btn button-add-to-cart button-add-item">Add to cart</a>
+                                </div>
                             </Card>
                         </Col>
                         <Col>
                             <Card className="card-HomePage">
-                                <center>
-                                    <img src={Libro2} width={220} height={260} alt="img2"/>
-                                </center>
-                                <h3>The Ballad of Songbirds and Snakes</h3>
-                                <p>16.20€</p>
+                                <img className="card-img-top image_100" src={Libro2} alt="Card image cap"/>
+                                <div className="card-body">
+                                    <h4 className="card-title">The Ballad of Songbirds and Snakes</h4>
+                                    <p>16.20€</p>
+                                    <a href="/cart" className="btn button-add-to-cart button-add-item">Add to cart</a>
+                                </div>
                             </Card>
                         </Col>
                         <Col>
                             <Card className="card-HomePage">
-                                <center>
-                                    <img src={Libro3} width={220} height={260} alt="img3"/>
-                                </center>
-                                <h3>The Hobbit</h3>
-                                <p>10€</p>
+                                <img className="card-img-top image_100" src={Libro3} alt="Card image cap"/>
+                                <div className="card-body">
+                                    <h4 className="card-title">The Hobbit</h4>
+                                    <p>10€</p>
+                                    <a href="/cart" className="btn button-add-to-cart button-add-item">Add to cart</a>
+                                </div>
                             </Card>
                         </Col>
                         <Col>
                             <Card className="card-HomePage">
-                                <center>
-                                    <img src={Libro4} width={220} height={260} alt="img4"/>
-                                </center>
-                                <h3>A Cruel Prince </h3>
-                                <p>15€</p>
+                                <img className="card-img-top image_100" src={Libro4} alt="Card image cap"/>
+                                <div className="card-body">
+                                    <h4 className="card-title">A Cruel Prince</h4>
+                                    <p>15€</p>
+                                    <a href="/cart" className="btn button-add-to-cart button-add-item">Add to cart</a>
+                                </div>
                             </Card>
                         </Col>
                     </Row>

@@ -31,7 +31,43 @@
 /* Style the counter cards */
 .card-HomePage {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    padding: 16px;
     background-color: #f1f1f1;
     width: 15rem;
+}
+
+.button-add-item {
+    float: right;
+    background-color: #004B23;
+    color: white;
+    padding: 10px;
+    margin: 5px;
+    width: 150px;
+}
+
+.button-add-item:hover {
+    background-color: #013D1D;
+}
+
+.button-add-to-cart {
+    float: end;
+    alignment: center;
+    background-color: #004B23;
+    color: white;
+    padding: 10px;
+    margin: 5px;
+    width: 100%;
+}
+.button-add-to-cart:hover {
+    float: end;
+    alignment: center;
+    background-color: #013D1D;
+    color: white;
+    padding: 10px;
+    margin: 5px;
+    width: 100%;
+}
+
+.image_100 {
+    width: 100%;
+    margin: 0;
 }
