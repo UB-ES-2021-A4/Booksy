@@ -18,7 +18,7 @@ export default class AddItem extends Component {
                 category: '',
                 description: '',
             },
-            categories: []
+            categories: {}
         }
         this.getCategories()
         this.handleChange = this.handleChange.bind(this);
@@ -82,18 +82,18 @@ export default class AddItem extends Component {
     }
 
     populateCategories = data => {
-        this.state.categories = []
-        let tmp=[]
+        this.state.categories = {}
+        let tmp={}
         for (let index = 0; index < data.length; index++) {
-            tmp.push(data[index]['category_name'])
+            tmp[data[index]['category_name']] = data[index]['category_description']
         }
         this.setState({categories: tmp});
     }
 
     renderCategories = () => {
-        const newCategories = this.state.categories;
+        const newCategories = Object.getOwnPropertyNames(this.state.categories);
         return newCategories.map((cat, i) => (
-            <option value={cat}>{cat}</option>
+            <option value={cat}>{this.state.categories[cat]}</option>
 
         ));
     };
