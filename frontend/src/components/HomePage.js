@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 import {Col, Container, Row, Card} from "react-bootstrap";
 import './HomePage.css'
-import Libro1 from './pictures/book1.png'
-import Libro2 from './pictures/book2.png'
-import Libro3 from './pictures/book3.png'
-import Libro4 from './pictures/book4.png'
 import axios from "axios";
 
 export default class HomePage extends Component {
