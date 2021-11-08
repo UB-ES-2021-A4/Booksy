@@ -5,6 +5,7 @@ import Libro1 from './pictures/book1.png'
 import Libro2 from './pictures/book2.png'
 import Libro3 from './pictures/book3.png'
 import Libro4 from './pictures/book4.png'
+import axios from "axios";
 
 export default class HomePage extends Component {
     constructor(props) {
@@ -15,28 +16,57 @@ export default class HomePage extends Component {
                 price: 0,
                 image: '',
             },
-            cards:  null,
+            cards: [],
         }
+        this.getCards = this.getCards.bind(this);
 
     }
-    /*Es una idea de como hacerlo dinamico*/
-    createCards () {
-        for (let index = 0; index < 5; index++) {
-            this.state.card = this.state.cards.get(index);
-            return (
-                <Card className="card-HomePage">
-                    <center>
-                        <img src={this.state.card.image} width={220} height={260} alt="img1"/>
-                    </center>
-                    <h3>{this.state.card.title}</h3>
-                    <p>{this.state.card.price}</p>
-                </Card>
-            )
+
+    componentDidMount() {
+        this.getCards()
+    }
+
+    getCards() {
+        axios.get('http://127.0.0.1:8000/api/product/')
+            .then((res)=> {
+                this.populateCards(res.data)
+            })
+    };
+
+    populateCards = async data => {
+        this.state.cards = []
+        let tmp = []
+        for (let index = 0; index < data.length; index++) {
+            data[index]['images'] = []
+            const axiosResult = await axios.get(`http://127.0.0.1:8000/api/image/?id=${data[index]['id']}`);
+            data[index]['images'].push(axiosResult.data['image'])
+            tmp.push(data[index])
+
         }
+        this.setState({cards: tmp});
+        //setState calls render() when used and is an asynchronous function, care headaches!
+    }
+
+    renderCards() {
+        const allCards = this.state.cards
+        return allCards.map(card => (
+            <Col>
+                <Card className="card-HomePage">
+                    <img className="card-img-top image_100" src={`..${card['images']}`} alt="Card image cap"/>
+                    <div className="card-body">
+                        <h4 className="card-title">{card['title']}</h4>
+                        <p>{`${card['price']} €`}</p>
+                        <a href="/cart" className="btn button-add-to-cart button-add-item">Add to cart</a>
+                    </div>
+                </Card>
+            </Col>
+        ));
     }
 
     render () {
+
         return (
+
             <div>
                 <Container>
                     <Row>
@@ -51,46 +81,7 @@ export default class HomePage extends Component {
                         </Col>
                     </Row>
                     <Row>
-                        <Col>
-                            <Card className="card-HomePage">
-                                <img className="card-img-top image_100" src={Libro1} alt="Card image cap"/>
-                                <div className="card-body">
-                                    <h4 className="card-title">A cout of mist and fury</h4>
-                                    <p>15€</p>
-                                    <a href="/cart" className="btn button-add-to-cart button-add-item">Add to cart</a>
-                                </div>
-                            </Card>
-                        </Col>
-                        <Col>
-                            <Card className="card-HomePage">
-                                <img className="card-img-top image_100" src={Libro2} alt="Card image cap"/>
-                                <div className="card-body">
-                                    <h4 className="card-title">The Ballad of Songbirds and Snakes</h4>
-                                    <p>16.20€</p>
-                                    <a href="/cart" className="btn button-add-to-cart button-add-item">Add to cart</a>
-                                </div>
-                            </Card>
-                        </Col>
-                        <Col>
-                            <Card className="card-HomePage">
-                                <img className="card-img-top image_100" src={Libro3} alt="Card image cap"/>
-                                <div className="card-body">
-                                    <h4 className="card-title">The Hobbit</h4>
-                                    <p>10€</p>
-                                    <a href="/cart" className="btn button-add-to-cart button-add-item">Add to cart</a>
-                                </div>
-                            </Card>
-                        </Col>
-                        <Col>
-                            <Card className="card-HomePage">
-                                <img className="card-img-top image_100" src={Libro4} alt="Card image cap"/>
-                                <div className="card-body">
-                                    <h4 className="card-title">A Cruel Prince</h4>
-                                    <p>15€</p>
-                                    <a href="/cart" className="btn button-add-to-cart button-add-item">Add to cart</a>
-                                </div>
-                            </Card>
-                        </Col>
+                        {this.renderCards()}
                     </Row>
                     <br/>
                 </Container>

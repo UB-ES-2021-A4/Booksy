@@ -133,7 +133,6 @@ class ImageView(APIView):
                 return Response(status=status.HTTP_409_CONFLICT)  # There's already an image
             img = Image.objects.create(image=request.FILES['image'],
                                        product=product)
-
             if Image.objects.get(id=img.id):
                 return Response(status=status.HTTP_200_OK)
             else:
