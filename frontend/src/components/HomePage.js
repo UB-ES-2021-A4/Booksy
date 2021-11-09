@@ -48,7 +48,7 @@ export default class HomePage extends Component {
         return allCards.map(card => (
             <Col>
                 <Card className="card-HomePage">
-                    <img className="card-img-top image_100" src={`..${card['images']}`} alt="Card image cap"/>
+                    <img className="card-img-top image_100" src={`http://127.0.0.1:8000${card['images']}`} alt="Card image cap"/>
                     <div className="card-body">
                         <h4 className="card-title">{card['title']}</h4>
                         <p>{`${card['price']} €`}</p>
