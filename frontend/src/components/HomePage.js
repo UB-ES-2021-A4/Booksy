@@ -3,6 +3,7 @@ import {Col, Container, Row, Card} from "react-bootstrap";
 import './HomePage.css'
 import axios from "axios";
 
+
 export default class HomePage extends Component {
     constructor(props) {
         super(props);
@@ -34,21 +35,32 @@ export default class HomePage extends Component {
         let tmp = []
         for (let index = 0; index < data.length; index++) {
             data[index]['images'] = []
-            const axiosResult = await axios.get(`http://127.0.0.1:8000/api/image/?id=${data[index]['id']}`);
-            data[index]['images'].push(axiosResult.data['image'])
+            await axios.get(`http://127.0.0.1:8000/api/image/?id=${data[index]['id']}`)
+                .then((res) => {
+                    data[index]['images'].push(res.data['image'])
+                })
+                .catch((error) => {
+                    data[index]['images'] = []
+                })
             tmp.push(data[index])
 
-        }
+            }
         this.setState({cards: tmp});
         //setState calls render() when used and is an asynchronous function, care headaches!
     }
 
+
     renderCards() {
         const allCards = this.state.cards
-        return allCards.map(card => (
+        console.error('Render')
+        return allCards.map(card =>
             <Col>
                 <Card className="card-HomePage">
-                    <img className="card-img-top image_100" src={`http://127.0.0.1:8000${card['images']}`} alt="Card image cap"/>
+
+                    <img className="card-img-top image_100"
+                         src={`http://127.0.0.1:8000${card['images']}`}
+                         alt="Card image cap"/>
+
                     <div className="card-body">
                         <h4 className="card-title">{card['title']}</h4>
                         <p>{`${card['price']} €`}</p>
@@ -56,7 +68,7 @@ export default class HomePage extends Component {
                     </div>
                 </Card>
             </Col>
-        ));
+        );
     }
 
     render () {
