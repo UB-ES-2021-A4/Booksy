@@ -13,12 +13,21 @@ class HomePage extends Component {
                 title: '',
                 price: 0,
                 image: '',
+                username: '',
             },
             cards: [],
         }
         this.getCards = this.getCards.bind(this);
 
     }
+    isOwner () {
+        let cardOwner = this.state.username;
+        if (cardOwner) {
+
+        }
+        return true
+    }
+
 
     handleClick = () => {
         this.props.history.push('/additem')
@@ -69,7 +78,11 @@ class HomePage extends Component {
                     <div className="card-body">
                         <h4 className="card-title">{card['title']}</h4>
                         <p>{`${card['price']} €`}</p>
-                        <a href="/cart" className="btn button-add-to-cart button-add-item" id="addToCartButton">Add to cart</a>
+                        {this.isOwner() ? (
+                            <a href="/updateItems" className="btn button-add-to-cart button-add-item" id="updateItemButton">Update item</a>
+                        ) : (
+                            <a href="/cart" className="btn button-add-to-cart button-add-item" id="addToCartButton">Add to cart</a>
+                        )}
                     </div>
                 </Card>
             </Col>
