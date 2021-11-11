@@ -40,7 +40,7 @@ class HomePage extends Component {
         let tmp = []
         for (let index = 0; index < data.length; index++) {
             data[index]['images'] = []
-            await axios.get(`http://127.0.0.1:8000/api/image/?id=${data[index]['id']}`)
+            await axios.get(`https://booksy.pythonanywhere.com/api/image/?id=${data[index]['id']}`)
                 .then((res) => {
                     data[index]['images'].push(res.data['image'])
                 })
@@ -63,7 +63,7 @@ class HomePage extends Component {
                 <Card className="card-HomePage">
 
                     <img className="card-img-top image_100"
-                         src={`http://127.0.0.1:8000${card['images']}`}
+                         src={`https://booksy.pythonanywhere.com${card['images']}`}
                          alt="Card image cap"/>
 
                     <div className="card-body">

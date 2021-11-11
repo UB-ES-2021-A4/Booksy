@@ -11,14 +11,14 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProductModel
-        fields = ['id', 'title', 'author', 'description', 'price', 'seller', 'category']
+        fields = ['id', 'title', 'author', 'description', 'price', 'category']
 
     def update(self, instance, validated_data):
         instance.title = validated_data.get('title', instance.title)
         instance.author = validated_data.get('author', instance.author)
         instance.description = validated_data.get('description', instance.description)
         instance.price = validated_data.get('price', instance.price)
-        instance.seller = validated_data.get('seller', instance.seller)
+        #instance.seller = validated_data.get('seller', instance.seller)
         instance.category = Category.objects.get(category_name=validated_data.get('category')['category_name'])
         instance.save()
         return instance

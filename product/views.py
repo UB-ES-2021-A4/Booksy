@@ -45,6 +45,7 @@ class ProductView(APIView):
             return Response(status=status.HTTP_418_IM_A_TEAPOT)
 
     def post(self, request):
+        print(request.data)
         seller = request.user
         category = Category.objects.get(category_name=request.POST.get('category'))
         product_serialized = ProductSerializer(data=request.data)
