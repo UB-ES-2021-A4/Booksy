@@ -29,7 +29,7 @@ class HomePage extends Component {
     }
 
     getCards() {
-        axios.get('http://127.0.0.1:8000/api/product/')
+        axios.get('https://booksy.pythonanywhere.com/api/product/')
             .then((res)=> {
                 this.populateCards(res.data)
             })

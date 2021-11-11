@@ -48,7 +48,7 @@ class AddItem extends Component {
         formItem.append('description',this.state.description)
 
         if (this.checkFormParams(formItem)) {
-            axios.post('http://127.0.0.1:8000/api/product/', formItem,
+            axios.post('https://booksy.pythonanywhere.com/api/product/', formItem,
                 {headers: {'Authorization': `Token ${window.localStorage.getItem('token')}`}})
                 .then((res) => {
                     console.error(res.data)
@@ -75,7 +75,7 @@ class AddItem extends Component {
         var imgs = new FormData()
         imgs.append('id', product_id)
         imgs.append('image', this.state.images)
-        axios.post('http://127.0.0.1:8000/api/image/', imgs,
+        axios.post('https://booksy.pythonanywhere.com/api/image/', imgs,
             {headers: {'Authorization': `Token ${window.localStorage.getItem('token')}`}})
             .then((res)=> {
                 this.successfulPostAlert()
@@ -88,7 +88,7 @@ class AddItem extends Component {
     }
 
     getCategories() {
-        axios.get('http://127.0.0.1:8000/api/category/')
+        axios.get('https://booksy.pythonanywhere.com/api/category/')
             .then((res)=> {
                 this.populateCategories(res.data)
             })
