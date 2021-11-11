@@ -93,6 +93,14 @@ class CategoriesView(APIView):
     permission_classes = (AllowAny,)
 
     def get(self, request):
+        category = request.GET.get('category')
+        if category:
+            try:
+                cat = CategorySerializer(Category.objects.get(category_name=category)).data
+            except:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+            return Response(cat, status=status.HTTP_200_OK if cat else status.HTTP_204_NO_CONTENT)
+
         categories = list(Category.objects.all())
         serialized_categories = [CategorySerializer(cat).data for cat in categories]
         return Response(serialized_categories,
