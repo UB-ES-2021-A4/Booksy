@@ -46,7 +46,7 @@ class Login extends Component {
             password: this.state.password
         }
 
-        axios.post('https://booksy.pythonanywhere.com/api/login/', parameters)
+        axios.post('https://booksy.pythonanywhere.com//api/login/', parameters)
             .then((res) => {
                 this.successAlert()
                 // We are saving the token in the localStorage(not very secure), django's token do not expire.
