@@ -19,7 +19,7 @@ class Login extends Component {
 
     }
     handleClick = () => {
-        this.props.history.push('/')
+        this.props.history.push('/home_page')
     }
 
     handleChange = event => {
