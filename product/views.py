@@ -47,14 +47,19 @@ class ProductView(APIView):
     def post(self, request):
         seller = request.user
         category = Category.objects.get(category_name=request.POST.get('category'))
-        a = ProductModel.objects.create(title=request.POST.get('title'), author=request.POST.get('author'),
-                                        description=request.POST.get('description'), price=request.POST.get('price'),
-                                        seller=seller, category=category)
-        try:
-            product = ProductModel.objects.get(id=a.id)
-            return Response(a.id, status=status.HTTP_200_OK if product else status.HTTP_400_BAD_REQUEST)
-        except:
-            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        product_serialized = ProductSerializer(data=request.data)
+        if (not product_serialized.is_valid()):
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        else:
+            a = ProductModel.objects.create(title=request.POST.get('title'), author=request.POST.get('author'),
+                                            description=request.POST.get('description'),
+                                            price=request.POST.get('price'),
+                                            seller=seller, category=category)
+            try:
+                product = ProductModel.objects.get(id=a.id)
+                return Response(a.id, status=status.HTTP_200_OK if product else status.HTTP_400_BAD_REQUEST)
+            except:
+                return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def delete(self, request):
         product_id = request.GET.get('id')
