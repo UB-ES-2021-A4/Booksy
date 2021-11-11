@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import {Col, Container, Row, Card} from "react-bootstrap";
 import './HomePage.css'
-import Libro1 from './pictures/book1.png'
-import Libro2 from './pictures/book2.png'
-import Libro3 from './pictures/book3.png'
-import Libro4 from './pictures/book4.png'
+import axios from "axios";
+import {withRouter} from "react-router-dom";
 
-export default class HomePage extends Component {
+
+class HomePage extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -15,28 +14,72 @@ export default class HomePage extends Component {
                 price: 0,
                 image: '',
             },
-            cards:  null,
+            cards: [],
         }
+        this.getCards = this.getCards.bind(this);
 
     }
-    /*Es una idea de como hacerlo dinamico*/
-    createCards () {
-        for (let index = 0; index < 5; index++) {
-            this.state.card = this.state.cards.get(index);
-            return (
+
+    handleClick = () => {
+        this.props.history.push('/additem')
+    }
+
+    componentDidMount() {
+        this.getCards()
+    }
+
+    getCards() {
+        axios.get('http://127.0.0.1:8000/api/product/')
+            .then((res)=> {
+                this.populateCards(res.data)
+            })
+    };
+
+    populateCards = async data => {
+        this.state.cards = []
+        let tmp = []
+        for (let index = 0; index < data.length; index++) {
+            data[index]['images'] = []
+            await axios.get(`http://127.0.0.1:8000/api/image/?id=${data[index]['id']}`)
+                .then((res) => {
+                    data[index]['images'].push(res.data['image'])
+                })
+                .catch((error) => {
+                    data[index]['images'] = []
+                })
+            tmp.push(data[index])
+
+            }
+        this.setState({cards: tmp});
+        //setState calls render() when used and is an asynchronous function, care headaches!
+    }
+
+
+    renderCards() {
+        const allCards = this.state.cards
+        console.error('Render')
+        return allCards.map(card =>
+            <Col>
                 <Card className="card-HomePage">
-                    <center>
-                        <img src={this.state.card.image} width={220} height={260} alt="img1"/>
-                    </center>
-                    <h3>{this.state.card.title}</h3>
-                    <p>{this.state.card.price}</p>
+
+                    <img className="card-img-top image_100"
+                         src={`http://127.0.0.1:8000${card['images']}`}
+                         alt="Card image cap"/>
+
+                    <div className="card-body">
+                        <h4 className="card-title">{card['title']}</h4>
+                        <p>{`${card['price']} €`}</p>
+                        <a href="/cart" className="btn button-add-to-cart button-add-item" id="addToCartButton">Add to cart</a>
+                    </div>
                 </Card>
-            )
-        }
+            </Col>
+        );
     }
 
     render () {
+
         return (
+
             <div>
                 <Container>
                     <Row>
@@ -45,52 +88,11 @@ export default class HomePage extends Component {
                             <br/>
                         </Col>
                         <Col>
-                            <a href='/additem' className="a_color">
-                            <button className="button button-add-item">Add Item</button>
-                            </a>
+                            <button className="button button-add-item" onClick={this.handleClick}>Add Item</button>
                         </Col>
                     </Row>
                     <Row>
-                        <Col>
-                            <Card className="card-HomePage">
-                                <img className="card-img-top image_100" src={Libro1} alt="Card image cap"/>
-                                <div className="card-body">
-                                    <h4 className="card-title">A cout of mist and fury</h4>
-                                    <p>15€</p>
-                                    <a href="/cart" className="btn button-add-to-cart button-add-item">Add to cart</a>
-                                </div>
-                            </Card>
-                        </Col>
-                        <Col>
-                            <Card className="card-HomePage">
-                                <img className="card-img-top image_100" src={Libro2} alt="Card image cap"/>
-                                <div className="card-body">
-                                    <h4 className="card-title">The Ballad of Songbirds and Snakes</h4>
-                                    <p>16.20€</p>
-                                    <a href="/cart" className="btn button-add-to-cart button-add-item">Add to cart</a>
-                                </div>
-                            </Card>
-                        </Col>
-                        <Col>
-                            <Card className="card-HomePage">
-                                <img className="card-img-top image_100" src={Libro3} alt="Card image cap"/>
-                                <div className="card-body">
-                                    <h4 className="card-title">The Hobbit</h4>
-                                    <p>10€</p>
-                                    <a href="/cart" className="btn button-add-to-cart button-add-item">Add to cart</a>
-                                </div>
-                            </Card>
-                        </Col>
-                        <Col>
-                            <Card className="card-HomePage">
-                                <img className="card-img-top image_100" src={Libro4} alt="Card image cap"/>
-                                <div className="card-body">
-                                    <h4 className="card-title">A Cruel Prince</h4>
-                                    <p>15€</p>
-                                    <a href="/cart" className="btn button-add-to-cart button-add-item">Add to cart</a>
-                                </div>
-                            </Card>
-                        </Col>
+                        {this.renderCards()}
                     </Row>
                     <br/>
                 </Container>
@@ -98,3 +100,5 @@ export default class HomePage extends Component {
         );
     }
 }
+
+export default withRouter(HomePage);

@@ -89,10 +89,7 @@ export default class Payment extends Component {
                                     </div>
                                 </form>
                                 <br/>
-                                <button
-                                    className="button-changeToPayment"
-                                    onClick={this.continue}
-                                >Proceed to Review</button>
+                                <button className="button-changeToPayment" onClick={this.continue} id="proceedReview">Proceed to Review</button>
                             </Col>
                             <Col md={"auto"}>
                                 <br/><br/>

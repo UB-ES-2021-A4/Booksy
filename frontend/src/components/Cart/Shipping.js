@@ -95,10 +95,7 @@ export default class Shipping extends Component {
                                     </div>
                                 </form>
                                 <br/>
-                                <button
-                                    className="button-changeToPayment"
-                                    onClick={this.continue}
-                                >Proceed to Payment</button>
+                                <button className="button-changeToPayment" onClick={this.continue} id="proceedPayment">Proceed to Payment</button>
                             </Col>
                             <Col md={"auto"}>
                                 <br/><br/>

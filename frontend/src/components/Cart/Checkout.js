@@ -38,7 +38,7 @@ export default class Checkout extends Component {
                                     <h5><b>Total items:</b> </h5>
                                 </Col>
                                 <Col>
-                                    <button className="button button-changeStep"  onClick={this.continue}>Proceed to Shipping</button>
+                                    <button className="button button-changeStep" id="proceedShipping" onClick={this.continue}>Proceed to Shipping</button>
                                 </Col>
                                 <Col>
                                     <h5><b>Subtotal:</b> </h5>
