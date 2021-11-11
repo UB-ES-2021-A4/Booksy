@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import {Col, Container, Row, Card} from "react-bootstrap";
 import './HomePage.css'
 import axios from "axios";
+import {withRouter} from "react-router-dom";
 
 
-export default class HomePage extends Component {
+class HomePage extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -17,6 +18,10 @@ export default class HomePage extends Component {
         }
         this.getCards = this.getCards.bind(this);
 
+    }
+
+    handleClick = () => {
+        this.props.history.push('/additem')
     }
 
     componentDidMount() {
@@ -83,9 +88,7 @@ export default class HomePage extends Component {
                             <br/>
                         </Col>
                         <Col>
-                            <a href='/additem' className="a_color">
-                            <button className="button button-add-item">Add Item</button>
-                            </a>
+                            <button className="button button-add-item" onClick={this.handleClick}>Add Item</button>
                         </Col>
                     </Row>
                     <Row>
@@ -97,3 +100,5 @@ export default class HomePage extends Component {
         );
     }
 }
+
+export default withRouter(HomePage);

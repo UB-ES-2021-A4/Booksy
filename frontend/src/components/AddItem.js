@@ -94,7 +94,6 @@ export default class AddItem extends Component {
         const newCategories = Object.getOwnPropertyNames(this.state.categories);
         return newCategories.map((cat, i) => (
             <option value={cat}>{this.state.categories[cat]}</option>
-
         ));
     };
 
