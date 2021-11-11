@@ -69,7 +69,7 @@ class HomePage extends Component {
                     <div className="card-body">
                         <h4 className="card-title">{card['title']}</h4>
                         <p>{`${card['price']} €`}</p>
-                        <a href="/cart" className="btn button-add-to-cart button-add-item">Add to cart</a>
+                        <a href="/cart" className="btn button-add-to-cart button-add-item" id="addToCartButton">Add to cart</a>
                     </div>
                 </Card>
             </Col>

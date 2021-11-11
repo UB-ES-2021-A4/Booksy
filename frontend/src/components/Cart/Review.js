@@ -59,7 +59,7 @@ export default class Review extends Component {
                         </Col>
                     </Row>
                     <Row>
-                        <button className="button button-order" onClick={this.continue}>Order</button>
+                        <button className="button button-order" id="order" onClick={this.continue}>Order</button>
                     </Row>
                 </Container>
                 <br/>
