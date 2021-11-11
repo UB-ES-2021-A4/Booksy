@@ -1,23 +1,27 @@
-import React, { Component } from 'react';
-import {Col, Container, Row, Card} from "react-bootstrap";
+import React, {Component} from 'react';
+import {Col, Container, Row} from "react-bootstrap";
 import './HomePage.css'
 import './AddItem.css'
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import axios from "axios";
 import swal from "sweetalert";
-import {withRouter} from "react-router-dom";
+import {useLocation, withRouter} from "react-router-dom";
+
 
 class UpdateItem extends Component {
     constructor(props) {
         super(props);
         this.state = {
             item: {
+                id: this.props.location.state.id,
                 title: '',
                 price: 0,
+                author: '',
                 category: '',
                 description: '',
             },
-            categories: {}
+            categories: {},
+            card_id: props.id
         }
         this.getCategories()
         this.handleChange = this.handleChange.bind(this);
@@ -36,9 +40,25 @@ class UpdateItem extends Component {
         });
     };
 
-    uploadItem = event => {
-        event.preventDefault() //?
+    getInfoToUpdate () {
+        console.log(this.state.item.id)
+        axios.get(`http://127.0.0.1:8000/api/product/?id=${this.state.item.id}`)
+            .then((res) => {
+                this.state.title = res.data[0].title
+                this.state.author = res.data[0].author
+                this.state.description = res.data[0].description
+                this.state.price = res.data[0].price
+                this.state.category = res.data[0].category
+                console.log(res.data)
+                console.log(this.state.title)
 
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }
+
+    updateItem = event => {
         //We are using FormData because the backend needs a form-encoded data (request.POST)
         let formItem = new FormData()
         formItem.append('title',this.state.title)
@@ -85,6 +105,9 @@ class UpdateItem extends Component {
                 console.error(error)
             })
 
+    }
+    componentDidMount() {
+        this.getInfoToUpdate()
     }
 
     getCategories() {
@@ -140,8 +163,8 @@ class UpdateItem extends Component {
                         </Col>
                         <Col  xs lg="5">
                             <br/>
-                            <h1>¡Pon a la venta tu libro!</h1>
-                            <h5>Por favor, rellena todos los campos expuestos.</h5>
+                            <h1>¡Actualiza tu libro!</h1>
+                            <h5>Por favor, cambia los campos que creas convenientes.</h5>
                             <br/>
                             <form action="">
                                 <div className="input-field">
@@ -166,7 +189,7 @@ class UpdateItem extends Component {
                                 </select>
                                 <br/>
                             </form>
-                            <button className="button_login" id="button_submit" onClick={this.uploadItem}>UPLOAD ITEM</button>
+                            <button className="button_login" id="button_submit" onClick={this.updateItem}>UPDATE ITEM</button>
                         </Col>
                         <Col md={"auto"}>
                             <br/><br/>
@@ -175,7 +198,7 @@ class UpdateItem extends Component {
                         </Col>
                         <Col xs lg={5}>
                             <br/><br/>
-                            <h5>Añade 1 fotografía y una descripción.</h5>
+                            <h5>Debe de tener 1 fotografía y una descripción.</h5>
                             <br/>
                             <form action="">
                                 <div className="input-field">

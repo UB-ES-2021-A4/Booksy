@@ -22,7 +22,7 @@ function App() {
                 <Route path='/signup' component={Signup}/>
                 <Route exact path='/home_page' render={()=><HomePage />}/>
                 <Route exact path='/additem' render={()=><AddItem />}/>
-                <Route exact path='/updateItem' render={()=><UpdateItem />}/>
+                <Route path='/updateItems/:id' render={()=><UpdateItem />}/>
                 {/*<Route exact path='/books' render={()=><Books />}/>*/}
                 <Route exact path='/cart' render={()=><Cart />}/>
             </Switch>

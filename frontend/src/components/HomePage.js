@@ -20,17 +20,21 @@ class HomePage extends Component {
         this.getCards = this.getCards.bind(this);
 
     }
-    isOwner () {
-        let cardOwner = this.state.username;
-        if (cardOwner) {
-
-        }
-        return true
+    isOwner (card) {
+        let owner = (window.localStorage.getItem('user_id')).toString()
+        return (card.seller).toString() === owner;
     }
 
 
     handleClick = () => {
         this.props.history.push('/additem')
+    }
+
+    handleClickUpdate = (id) => {
+        this.props.history.push({
+            pathname: `/updateItems/${id}`,
+            state: { id: id}
+        });
     }
 
     componentDidMount() {
@@ -47,8 +51,10 @@ class HomePage extends Component {
     populateCards = async data => {
         this.state.cards = []
         let tmp = []
+
         for (let index = 0; index < data.length; index++) {
             data[index]['images'] = []
+            this.stat = window.localStorage.getItem('user_id')
             await axios.get(`http://127.0.0.1:8000/api/image/?id=${data[index]['id']}`)
                 .then((res) => {
                     data[index]['images'].push(res.data['image'])
@@ -78,8 +84,8 @@ class HomePage extends Component {
                     <div className="card-body">
                         <h4 className="card-title">{card['title']}</h4>
                         <p>{`${card['price']} €`}</p>
-                        {this.isOwner() ? (
-                            <a href="/updateItems" className="btn button-add-to-cart button-add-item" id="updateItemButton">Update item</a>
+                        {this.isOwner(card) ? (
+                            <a className="btn button-add-to-cart button-add-item" id="updateItemButton" onClick={() => this.handleClickUpdate(card['id'])}>Update item</a>
                         ) : (
                             <a href="/cart" className="btn button-add-to-cart button-add-item" id="addToCartButton">Add to cart</a>
                         )}

@@ -51,6 +51,7 @@ class Login extends Component {
                 this.successAlert()
                 // We are saving the token in the localStorage(not very secure), django's token do not expire.
                 localStorage.setItem('token', res.data.token)
+                localStorage.setItem('user_id', res.data.user_id)
                 this.handleClick()
             })
             .catch((error) => {
