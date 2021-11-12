@@ -49,11 +49,13 @@ class HomePage extends Component {
         })
             .then((willDelete) => {
                 if (willDelete) {
-                    axios.delete(`http://127.0.0.1:8000/api/product/?id=${id}`)
+                    axios.delete(`http://127.0.0.1:8000/api/product/?id=${id}`,
+                        {headers: {'Authorization': `Token ${window.localStorage.getItem('token')}`}})
                         .then((res) => {
                             swal("Poof! Your item has been deleted!", {
                                 icon: "success",
                             });
+                            this.refreshPage();
                         }).catch((error) => {
                         console.error(error)
                         swal('Error', 'Item couldn`t be deleted due to some internal errors.', 'error')
@@ -67,6 +69,9 @@ class HomePage extends Component {
 
     componentDidMount() {
         this.getCards()
+    }
+    refreshPage() {
+        window.location.reload(false);
     }
 
     getCards() {
@@ -108,7 +113,11 @@ class HomePage extends Component {
                     <img className="card-img-top image_100 "
                          src={`http://127.0.0.1:8000${card['images']}`}
                          alt="Card image cap"/>
-                    <button className="btn-delete"><CancelRoundedIcon onClick={() => this.handleDelete(card['id'])}/></button>
+                    {this.isOwner(card) ? (
+                        <button className="btn-delete"><CancelRoundedIcon onClick={() => this.handleDelete(card['id'])}/></button>
+                    ) : (
+                        <button className="btn-delete visually-hidden"><CancelRoundedIcon onClick={() => this.handleDelete(card['id'])}/></button>
+                    )}
                     <div className="card-body">
                         <h4 className="card-title">{card['title']}</h4>
                         <p>{`${card['price']} €`}</p>
