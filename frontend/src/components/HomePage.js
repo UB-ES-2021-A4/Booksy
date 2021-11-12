@@ -85,7 +85,7 @@ class HomePage extends Component {
                         <h4 className="card-title">{card['title']}</h4>
                         <p>{`${card['price']} €`}</p>
                         {this.isOwner(card) ? (
-                            <a className="btn button-add-to-cart button-add-item" id="updateItemButton" onClick={() => this.handleClickUpdate(card['id'])}>Update item</a>
+                            <a className="btn button_update button-add-item" id="updateItemButton" onClick={() => this.handleClickUpdate(card['id'])}>Update item</a>
                         ) : (
                             <a href="/cart" className="btn button-add-to-cart button-add-item" id="addToCartButton">Add to cart</a>
                         )}
