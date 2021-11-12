@@ -58,10 +58,11 @@ class ProductView(APIView):
 
     def delete(self, request):
         product_id = request.GET.get('id')
-        seller = request.user
+        seller = str(request.user.id)
         try:
             prod = ProductModel.objects.filter(id=product_id)
-            if getattr(prod, "seller") == seller:  # If same user can be deleted
+            owner = str(prod.values('seller').first()['seller'])
+            if owner == seller:  # If same user can be deleted
                 ProductModel.objects.filter(id=product_id).delete()
             return Response(status=status.HTTP_200_OK)
         except:
