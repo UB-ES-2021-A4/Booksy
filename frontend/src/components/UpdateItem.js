@@ -45,7 +45,7 @@ class UpdateItem extends Component {
     };
 
     getInfoToUpdate () {
-        axios.get(`http://127.0.0.1:8000/api/product/?id=${this.state.item.id}`)
+        axios.get(`https://booksy.pythonanywhere.com/api/product/?id=${this.state.item.id}`)
             .then((res) => {
                 this.state.item.title = res.data[0].title
                 this.state.item.author = res.data[0].author
@@ -63,7 +63,7 @@ class UpdateItem extends Component {
     }
 
     getCategory (category_name) {
-        axios.get(`http://127.0.0.1:8000/api/category/?category=${category_name}`)
+        axios.get(`https://booksy.pythonanywhere.com/api/category/?category=${category_name}`)
             .then((res) => {
                 this.state.item.category = res.data.category_description
                 console.log(this.state.item.category)
@@ -80,7 +80,7 @@ class UpdateItem extends Component {
         formItem.append('description',this.state.item.description)
 
         if (this.checkFormParams(formItem)) {
-            axios.patch(`http://127.0.0.1:8000/api/product/?id=${this.state.item.id}`, formItem,
+            axios.patch(`https://booksy.pythonanywhere.com/api/product/?id=${this.state.item.id}`, formItem,
                 {headers: {'Authorization': `Token ${window.localStorage.getItem('token')}`}})
                 .then((res) => {
                     console.error(res.data)
@@ -107,7 +107,7 @@ class UpdateItem extends Component {
         var imgs = new FormData()
         imgs.append('id', product_id)
         imgs.append('image', this.state.item.images)
-        axios.patch('http://127.0.0.1:8000/api/image/', imgs,
+        axios.patch('https://booksy.pythonanywhere.com/api/image/', imgs,
             {headers: {'Authorization': `Token ${window.localStorage.getItem('token')}`}})
             .then((res)=> {
                 this.successfulPostAlert()
@@ -121,7 +121,7 @@ class UpdateItem extends Component {
 
 
     getCategories() {
-        axios.get('http://127.0.0.1:8000/api/category/')
+        axios.get('https://booksy.pythonanywhere.com/api/category/')
             .then((res)=> {
                 this.populateCategories(res.data)
             })

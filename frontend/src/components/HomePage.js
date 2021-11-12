@@ -49,7 +49,7 @@ class HomePage extends Component {
         })
             .then((willDelete) => {
                 if (willDelete) {
-                    axios.delete(`http://127.0.0.1:8000/api/product/?id=${id}`,
+                    axios.delete(`https://booksy.pythonanywhere.com/api/product/?id=${id}`,
                         {headers: {'Authorization': `Token ${window.localStorage.getItem('token')}`}})
                         .then((res) => {
                             swal("Poof! Your item has been deleted!", {
