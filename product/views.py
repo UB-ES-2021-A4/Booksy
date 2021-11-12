@@ -69,18 +69,24 @@ class ProductView(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
     def patch(self, request):
-        product_id = request.data.get('id')
-        seller = request.user
-
+        product_id = request.GET.get('id')
+        seller = str(request.user.id)
+        print(seller)
         try:
-            product = ProductModel.objects.get(id=product_id)
+            product = ProductModel.objects.filter(id=product_id)
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         try:
-            if seller == getattr(product, 'seller'):
+            owner = str(product.values('seller').first()['seller'])
+            print(owner)
+            if seller == owner:
+                print("he llegado al primer if")
                 product_serialized = ProductSerializer(product, data=request.data)
+                print("he llegado al segundo if")
+                print(product_serialized)
                 if product_serialized.is_valid():
+                    print("he pasado al segundo if")
                     product_serialized.save()
                     return Response(status=status.HTTP_200_OK)
                 return Response(status=status.HTTP_400_BAD_REQUEST)

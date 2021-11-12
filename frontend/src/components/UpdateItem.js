@@ -80,7 +80,7 @@ class UpdateItem extends Component {
         formItem.append('description',this.state.item.description)
 
         if (this.checkFormParams(formItem)) {
-            axios.patch('http://127.0.0.1:8000/api/product/', formItem,
+            axios.patch(`http://127.0.0.1:8000/api/product/?id=${this.state.item.id}`, formItem,
                 {headers: {'Authorization': `Token ${window.localStorage.getItem('token')}`}})
                 .then((res) => {
                     console.error(res.data)
