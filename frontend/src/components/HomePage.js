@@ -75,7 +75,7 @@ class HomePage extends Component {
     }
 
     getCards() {
-        axios.get('http://127.0.0.1:8000/api/product/')
+        axios.get('https://booksy.pythonanywhere.com/api/product/')
             .then((res)=> {
                 this.populateCards(res.data)
             })
@@ -87,8 +87,7 @@ class HomePage extends Component {
 
         for (let index = 0; index < data.length; index++) {
             data[index]['images'] = []
-            this.stat = window.localStorage.getItem('user_id')
-            await axios.get(`http://127.0.0.1:8000/api/image/?id=${data[index]['id']}`)
+            await axios.get(`https://booksy.pythonanywhere.com/api/image/?id=${data[index]['id']}`)
                 .then((res) => {
                     data[index]['images'].push(res.data['image'])
                 })
@@ -109,9 +108,9 @@ class HomePage extends Component {
         return allCards.map(card =>
             <Col>
                 <Card className="card-HomePage">
+                    <img className="card-img-top image_100"
+                         src={`https://booksy.pythonanywhere.com${card['images']}`}
 
-                    <img className="card-img-top image_100 "
-                         src={`http://127.0.0.1:8000${card['images']}`}
                          alt="Card image cap"/>
                     {this.isOwner(card) ? (
                         <button className="btn-delete"><CancelRoundedIcon onClick={() => this.handleDelete(card['id'])}/></button>
