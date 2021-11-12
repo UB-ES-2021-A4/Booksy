@@ -9,6 +9,7 @@ import Signup from "./components/SignUp";
 import Cart from "./components/Cart/Cart";
 import HomePage from "./components/HomePage";
 import AddItem from "./components/AddItem";
+import UpdateItem from "./components/UpdateItem";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
                 <Route path='/signup' component={Signup}/>
                 <Route exact path='/home_page' render={()=><HomePage />}/>
                 <Route exact path='/additem' render={()=><AddItem />}/>
+                <Route path='/updateItems/:id' render={()=><UpdateItem />}/>
                 {/*<Route exact path='/books' render={()=><Books />}/>*/}
                 <Route exact path='/cart' render={()=><Cart />}/>
             </Switch>

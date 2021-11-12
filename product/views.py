@@ -64,28 +64,35 @@ class ProductView(APIView):
 
     def delete(self, request):
         product_id = request.GET.get('id')
-        seller = request.user
+        seller = str(request.user.id)
         try:
             prod = ProductModel.objects.filter(id=product_id)
-            if getattr(prod, "seller") == seller:  # If same user can be deleted
+            owner = str(prod.values('seller').first()['seller'])
+            if owner == seller:  # If same user can be deleted
                 ProductModel.objects.filter(id=product_id).delete()
             return Response(status=status.HTTP_200_OK)
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
     def patch(self, request):
-        product_id = request.data.get('id')
-        seller = request.user
-
+        product_id = request.GET.get('id')
+        seller = str(request.user.id)
+        print(seller)
         try:
-            product = ProductModel.objects.get(id=product_id)
+            product = ProductModel.objects.filter(id=product_id)
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         try:
-            if seller == getattr(product, 'seller'):
+            owner = str(product.values('seller').first()['seller'])
+            print(owner)
+            if seller == owner:
+                print("he llegado al primer if")
                 product_serialized = ProductSerializer(product, data=request.data)
+                print("he llegado al segundo if")
+                print(product_serialized)
                 if product_serialized.is_valid():
+                    print("he pasado al segundo if")
                     product_serialized.save()
                     return Response(status=status.HTTP_200_OK)
                 return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -99,6 +106,14 @@ class CategoriesView(APIView):
     permission_classes = (AllowAny,)
 
     def get(self, request):
+        category = request.GET.get('category')
+        if category:
+            try:
+                cat = CategorySerializer(Category.objects.get(category_name=category)).data
+            except:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+            return Response(cat, status=status.HTTP_200_OK if cat else status.HTTP_204_NO_CONTENT)
+
         categories = list(Category.objects.all())
         serialized_categories = [CategorySerializer(cat).data for cat in categories]
         return Response(serialized_categories,
