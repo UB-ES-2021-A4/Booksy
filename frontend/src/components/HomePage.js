@@ -3,6 +3,8 @@ import {Col, Container, Row, Card} from "react-bootstrap";
 import './HomePage.css'
 import axios from "axios";
 import {withRouter} from "react-router-dom";
+import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
+import swal from "sweetalert";
 
 
 class HomePage extends Component {
@@ -35,6 +37,32 @@ class HomePage extends Component {
             pathname: `/updateItems/${id}`,
             state: { id: id}
         });
+    }
+
+    handleDelete = (id) => {
+        swal({
+            title: "Are you sure?",
+            text: "Once deleted, you will not be able to recover this item.",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    axios.delete(`http://127.0.0.1:8000/api/product/?id=${id}`)
+                        .then((res) => {
+                            swal("Poof! Your item has been deleted!", {
+                                icon: "success",
+                            });
+                        }).catch((error) => {
+                        console.error(error)
+                        swal('Error', 'Item couldn`t be deleted due to some internal errors.', 'error')
+                    })
+
+                } else {
+                    swal("Success", "Your item is safe!", 'success');
+                }
+            });
     }
 
     componentDidMount() {
@@ -77,10 +105,10 @@ class HomePage extends Component {
             <Col>
                 <Card className="card-HomePage">
 
-                    <img className="card-img-top image_100"
+                    <img className="card-img-top image_100 "
                          src={`http://127.0.0.1:8000${card['images']}`}
                          alt="Card image cap"/>
-
+                    <button className="btn-delete"><CancelRoundedIcon onClick={() => this.handleDelete(card['id'])}/></button>
                     <div className="card-body">
                         <h4 className="card-title">{card['title']}</h4>
                         <p>{`${card['price']} €`}</p>

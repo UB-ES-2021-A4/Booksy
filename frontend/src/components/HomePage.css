@@ -34,6 +34,26 @@
     background-color: #f1f1f1;
     width: 15rem;
 }
+.card-HomePage img {
+    width: 100%;
+    height: auto;
+}
+
+.card-HomePage .btn-delete {
+    background-color: transparent;
+    cursor:pointer;
+    font-weight: bolder;
+    font-size: 1.2em;
+    position:absolute;
+    top: 12px;
+    left: 14px;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    color: white;
+    box-shadow: #111111;
+    border: none;
+    border-radius: 5px;
+}
 
 .button-add-item {
     float: right;
@@ -89,3 +109,5 @@
     background-color: #01353D;
     color: white;
 }
+
+
