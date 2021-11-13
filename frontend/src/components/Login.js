@@ -8,6 +8,10 @@ import swal from "sweetalert";
 import axios from "axios";
 import {withRouter} from "react-router-dom";
 
+const deploy_url = 'https://booksy.pythonanywhere.com';
+const debug_url = 'http://127.0.0.1:8000';
+const url = debug_url;
+
 class Login extends Component {
     constructor(props) {
         super(props);
@@ -46,7 +50,7 @@ class Login extends Component {
             password: this.state.password
         }
 
-        axios.post('https://booksy.pythonanywhere.com//api/login/', parameters)
+        axios.post(`${url}/api/login/`, parameters)
             .then((res) => {
                 this.successAlert()
                 // We are saving the token in the localStorage(not very secure), django's token do not expire.

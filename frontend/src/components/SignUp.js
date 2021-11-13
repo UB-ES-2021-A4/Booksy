@@ -6,6 +6,9 @@ import Libro_SignUp from "./pictures/theSunAndHerFlowers.jpg";
 import { withRouter } from "react-router-dom";
 import swal from 'sweetalert';
 
+const deploy_url = 'https://booksy.pythonanywhere.com';
+const debug_url = 'http://127.0.0.1:8000';
+const url = deploy_url;
 
 class Signup extends Component {
     constructor(props) {
@@ -60,7 +63,7 @@ class Signup extends Component {
         }
         if (this.state.Repeatpassword === this.state.password) {
 
-            axios.post('https://booksy.pythonanywhere.com/api/signUpaccount/', user)
+            axios.post(`${url}/api/signUpaccount/`, user)
                 .then((res) => this.handleClick())
                 .catch((error) => {
                     console.error(error)

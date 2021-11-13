@@ -6,6 +6,9 @@ import {withRouter} from "react-router-dom";
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import swal from "sweetalert";
 
+const deploy_url = 'https://booksy.pythonanywhere.com';
+const debug_url = 'http://127.0.0.1:8000';
+const url = deploy_url;
 
 class HomePage extends Component {
     constructor(props) {
@@ -49,7 +52,7 @@ class HomePage extends Component {
         })
             .then((willDelete) => {
                 if (willDelete) {
-                    axios.delete(`https://booksy.pythonanywhere.com/api/product/?id=${id}`,
+                    axios.delete(`${url}/api/product/?id=${id}`,
                         {headers: {'Authorization': `Token ${window.localStorage.getItem('token')}`}})
                         .then((res) => {
                             swal("Poof! Your item has been deleted!", {
@@ -75,7 +78,7 @@ class HomePage extends Component {
     }
 
     getCards() {
-        axios.get('https://booksy.pythonanywhere.com/api/product/')
+        axios.get(`${url}/api/product/`)
             .then((res)=> {
                 this.populateCards(res.data)
             })
@@ -87,7 +90,7 @@ class HomePage extends Component {
 
         for (let index = 0; index < data.length; index++) {
             data[index]['images'] = []
-            await axios.get(`https://booksy.pythonanywhere.com/api/image/?id=${data[index]['id']}`)
+            await axios.get(`${url}/api/image/?id=${data[index]['id']}`)
                 .then((res) => {
                     data[index]['images'].push(res.data['image'])
                 })
@@ -109,7 +112,7 @@ class HomePage extends Component {
             <Col>
                 <Card className="card-HomePage">
                     <img className="card-img-top image_100"
-                         src={`https://booksy.pythonanywhere.com${card['images']}`}
+                         src={`${url}${card['images']}`}
 
                          alt="Card image cap"/>
                     {this.isOwner(card) ? (

@@ -7,19 +7,22 @@ import axios from "axios";
 import swal from "sweetalert";
 import { withRouter} from "react-router-dom";
 
+const deploy_url = 'https://booksy.pythonanywhere.com';
+const debug_url = 'http://127.0.0.1:8000';
+const url = deploy_url;
+
 
 class UpdateItem extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            item: {
-                id: this.props.location.state.id,
-                title: '',
-                price: 0,
-                author: '',
-                category: '',
-                description: '',
-            },
+            id: this.props.location.state.id,
+            seller: (window.localStorage.getItem('user_id')).toString(),
+            title: '',
+            price: 0,
+            author: '',
+            category: '',
+            description: '',
             categories: {},
             card_id: props.id
         }
@@ -45,15 +48,15 @@ class UpdateItem extends Component {
     };
 
     getInfoToUpdate () {
-        axios.get(`https://booksy.pythonanywhere.com/api/product/?id=${this.state.item.id}`)
+        axios.get(`${url}/api/product/?id=${this.state.id}`)
             .then((res) => {
-                this.state.item.title = res.data[0].title
-                this.state.item.author = res.data[0].author
-                this.state.item.description = res.data[0].description
-                this.state.item.price = res.data[0].price
-                this.state.item.category = res.data[0].category
+                this.state.title = res.data[0].title
+                this.state.author = res.data[0].author
+                this.state.description = res.data[0].description
+                this.state.price = res.data[0].price
+                this.state.category = res.data[0].category
+
                 //TODO recuperar las imagenes y bien las categorias
-                console.log(res.data[0].category)
 
                 //this.getCategory(res.data[0].category)
             })
@@ -63,24 +66,23 @@ class UpdateItem extends Component {
     }
 
     getCategory (category_name) {
-        axios.get(`https://booksy.pythonanywhere.com/api/category/?category=${category_name}`)
+        axios.get(`${url}/api/category/?category=${category_name}`)
             .then((res) => {
-                this.state.item.category = res.data.category_description
-                console.log(this.state.item.category)
+                this.state.category = res.data.category_description
             })
     }
 
     updateItem = event => {
         //We are using FormData because the backend needs a form-encoded data (request.POST)
         let formItem = new FormData()
-        formItem.append('title',this.state.item.title)
-        formItem.append('price',this.state.item.price)
-        formItem.append('author',this.state.item.author)
-        formItem.append('category', this.state.item.category)
-        formItem.append('description',this.state.item.description)
-
+        formItem.append('title',this.state.title)
+        formItem.append('price',this.state.price)
+        formItem.append('author',this.state.author)
+        formItem.append('category', this.state.category)
+        formItem.append('seller', this.state.seller)
+        formItem.append('description',this.state.description)
         if (this.checkFormParams(formItem)) {
-            axios.patch(`https://booksy.pythonanywhere.com/api/product/?id=${this.state.item.id}`, formItem,
+            axios.patch(`${url}/api/product/?id=${this.state.id}`, formItem,
                 {headers: {'Authorization': `Token ${window.localStorage.getItem('token')}`}})
                 .then((res) => {
                     console.error(res.data)
@@ -105,9 +107,10 @@ class UpdateItem extends Component {
 
     uploadImages(product_id) {
         var imgs = new FormData()
-        imgs.append('id', product_id)
-        imgs.append('image', this.state.item.images)
-        axios.patch('https://booksy.pythonanywhere.com/api/image/', imgs,
+        imgs.append('id', this.props.location.state.id)
+        imgs.append('image', this.state.images)
+        console.log(imgs.get('id'))
+        axios.patch(`${url}/api/image/`, imgs,
             {headers: {'Authorization': `Token ${window.localStorage.getItem('token')}`}})
             .then((res)=> {
                 this.successfulPostAlert()
@@ -121,7 +124,7 @@ class UpdateItem extends Component {
 
 
     getCategories() {
-        axios.get('https://booksy.pythonanywhere.com/api/category/')
+        axios.get(`${url}/api/category/`)
             .then((res)=> {
                 this.populateCategories(res.data)
             })
@@ -178,23 +181,23 @@ class UpdateItem extends Component {
                             <br/>
                             <form action="">
                                 <div className="input-field">
-                                    <input type="text" id="title" defaultValue={this.state.item.title} onClick={this.handleChange}  />
+                                    <input type="text" id="title" onChange={this.handleChange} required defaultValue={this.state.title}  />
                                     <label htmlFor="title" >Título del libro u objeto</label>
                                 </div>
                                 <br/>
                                 <div className="input-field">
-                                    <input type="text" id="author" onChange={this.handleChange} required defaultValue={this.state.item.author}/>
+                                    <input type="text" id="author" onChange={this.handleChange} required defaultValue={this.state.author}/>
                                     <label htmlFor="author">Autor del libro</label>
                                 </div>
                                 <br/>
                                 <div className="input-field">
-                                    <input type="number" min="0" id="price" onChange={this.handleChange} required defaultValue={this.state.item.price}/>
+                                    <input type="number" min="0" id="price" onChange={this.handleChange} required defaultValue={this.state.price}/>
                                     <label htmlFor="price">Precio del objeto</label>
                                 </div>
                                 <br/>
 
                                 <select className="form-select" id="category" onChange={this.handleChange} >
-                                    <option selected >{this.state.item.category}</option>
+                                    <option selected >{this.state.category}</option>
                                     {this.renderCategories()}
                                 </select>
                                 <br/>
@@ -218,7 +221,7 @@ class UpdateItem extends Component {
                                 </div>
                                 <br/><br/>
                                 <div className="input-field">
-                                    <textarea name="the-textarea" id="description" maxLength="300" defaultValue={this.state.item.description} placeholder="Write your description" autoFocus onChange={this.handleChange} required/>
+                                    <textarea name="the-textarea" id="description" maxLength="300" defaultValue={this.state.description} placeholder="Write your description" autoFocus onChange={this.handleChange} required/>
                                     <div id="the-count">
                                         <span id="current">0</span>
                                         <span id="maximum">/ 300</span>
