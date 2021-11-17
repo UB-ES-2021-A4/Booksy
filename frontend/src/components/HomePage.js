@@ -8,7 +8,7 @@ import swal from "sweetalert";
 
 const deploy_url = 'https://booksy.pythonanywhere.com';
 const debug_url = 'http://127.0.0.1:8000';
-const url = deploy_url;
+const url = debug_url;
 
 class HomePage extends Component {
     constructor(props) {

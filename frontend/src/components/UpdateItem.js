@@ -9,7 +9,7 @@ import { withRouter} from "react-router-dom";
 
 const deploy_url = 'https://booksy.pythonanywhere.com';
 const debug_url = 'http://127.0.0.1:8000';
-const url = deploy_url;
+const url = debug_url;
 
 
 class UpdateItem extends Component {
@@ -54,7 +54,8 @@ class UpdateItem extends Component {
                 this.state.author = res.data[0].author
                 this.state.description = res.data[0].description
                 this.state.price = res.data[0].price
-                this.state.category = res.data[0].category
+                this.state.shown_category = res.data[0].category['category_description']
+                this.state.category = res.data[0].category['category_name']
 
                 //TODO recuperar las imagenes y bien las categorias
 
@@ -68,7 +69,7 @@ class UpdateItem extends Component {
     getCategory (category_name) {
         axios.get(`${url}/api/category/?category=${category_name}`)
             .then((res) => {
-                this.state.category = res.data.category_description
+                this.state.category = res.data.category
             })
     }
 
@@ -79,6 +80,9 @@ class UpdateItem extends Component {
         formItem.append('price',this.state.price)
         formItem.append('author',this.state.author)
         formItem.append('category', this.state.category)
+        for (let i; i < this.state.categories.length; i++){
+
+        }
         formItem.append('seller', this.state.seller)
         formItem.append('description',this.state.description)
         if (this.checkFormParams(formItem)) {
@@ -136,11 +140,13 @@ class UpdateItem extends Component {
         for (let index = 0; index < data.length; index++) {
             tmp[data[index]['category_name']] = data[index]['category_description']
         }
+
         this.setState({categories: tmp});
     }
 
     renderCategories = () => {
         const newCategories = Object.getOwnPropertyNames(this.state.categories);
+
         return newCategories.map((cat, i) => (
             <option value={cat}>{this.state.categories[cat]}</option>
         ));
