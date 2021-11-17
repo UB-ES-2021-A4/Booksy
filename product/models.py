@@ -2,7 +2,6 @@ import os
 from uuid import uuid4
 
 from django.db import models
-from django.utils.translation import gettext_lazy as _
 from accounts.models import UserProfile
 
 
@@ -10,25 +9,20 @@ from accounts.models import UserProfile
 
 class Category(models.Model):
     class CategoryValues(models.TextChoices):
-        HUMANIDADES = 'HM', _('Humanidades')
-        TECNICO_FORMACION = 'TF', _('Técnico y formación')
-        METODOS_IDIOMAS = 'MI', _('Métodos de idiomas')
-        LITERATURA = 'LI', _('Literatura')
-        COMIC_MANGA = 'CM', _('Cómic y manga')
-        JUVENIL = 'JU', _('Juvenil')
-        ARTES = 'AR', _('Artes')
-        FILOLOGIA = 'FI', _(' Filología')
-        OCIO = 'OC', _('Ocio')
-        COCINA = 'CO', _('Cocina')
-        FANTASIA = 'FA', _('Fantasía')
-        MISTERIO_THRILLER = 'MT', _('Misterio y thriller')
+        HUMANIDADES = 'Humanidades'
+        TECNICO_FORMACION = 'Técnico y formación'
+        METODOS_IDIOMAS = 'Métodos de idiomas'
+        LITERATURA = 'Literatura'
+        COMIC_MANGA = 'Cómic y manga'
+        JUVENIL = 'Juvenil'
+        ARTES = 'Artes'
+        FILOLOGIA = 'Filología'
+        OCIO = 'Ocio'
+        COCINA = 'Cocina'
+        FANTASIA = 'Fantasía'
+        MISTERIO_THRILLER = 'Misterio y thriller'
 
-    category_name = models.CharField(max_length=2, choices=CategoryValues.choices, default=CategoryValues.COCINA)
-
-    # Max_length = 2 porque es lo que ocupará cada categoría
-
-    def __str__(self):
-        return self.get_category_name_display()
+    category_name = models.CharField(max_length=20, choices=CategoryValues.choices, default=CategoryValues.COCINA)
 
 
 class ProductModel(models.Model):

@@ -11,7 +11,6 @@ const deploy_url = 'https://booksy.pythonanywhere.com';
 const debug_url = 'http://127.0.0.1:8000';
 const url = deploy_url;
 
-
 class UpdateItem extends Component {
     constructor(props) {
         super(props);
@@ -68,7 +67,7 @@ class UpdateItem extends Component {
     getCategory (category_name) {
         axios.get(`${url}/api/category/?category=${category_name}`)
             .then((res) => {
-                this.state.category = res.data.category_description
+                this.state.category = res.data.category_name
             })
     }
 
@@ -134,7 +133,7 @@ class UpdateItem extends Component {
         this.state.categories = {}
         let tmp={}
         for (let index = 0; index < data.length; index++) {
-            tmp[data[index]['category_name']] = data[index]['category_description']
+            tmp[data[index]['category_name']] = data[index]['category_name']
         }
         this.setState({categories: tmp});
     }
