@@ -1,0 +1,113 @@
+* {
+    box-sizing: border-box;
+}
+
+/* Float four columns side by side */
+.column-HomePage {
+    float: left;
+    width: 25%;
+    padding: 0 10px;
+}
+
+/* Remove extra left and right margins, due to padding */
+.row-HomePage {margin: 0 -5px;}
+
+/* Clear floats after the columns */
+.row-HomePage:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Responsive columns */
+@media screen and (max-width: 600px) {
+    .column-HomePage {
+        width: 100%;
+        display: block;
+        margin-bottom: 20px;
+    }
+}
+
+/* Style the counter cards */
+.card-HomePage {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    background-color: #f1f1f1;
+    width: 15rem;
+}
+.card-HomePage img {
+    width: 100%;
+    height: auto;
+}
+
+.card-HomePage .btn-delete {
+    background-color: transparent;
+    cursor:pointer;
+    font-weight: bolder;
+    font-size: 1.2em;
+    position:absolute;
+    top: 12px;
+    left: 14px;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    color: white;
+    box-shadow: #111111;
+    border: none;
+    border-radius: 5px;
+}
+
+.button-add-item {
+    float: right;
+    background-color: #004B23;
+    color: white;
+    padding: 10px;
+    margin: 5px;
+    width: 150px;
+}
+
+.button-add-item:hover {
+    background-color: #013D1D;
+}
+
+.button-add-to-cart {
+    float: end;
+    alignment: center;
+    background-color: #004B23;
+    color: white;
+    padding: 10px;
+    margin: 5px;
+    width: 100%;
+}
+.button-add-to-cart:hover {
+    float: end;
+    alignment: center;
+    background-color: #013D1D;
+    color: white;
+    padding: 10px;
+    margin: 5px;
+    width: 100%;
+}
+
+.image_100 {
+    width: 100%;
+    margin: 0;
+}
+
+
+.button_update {
+    border-radius: 4px;
+    border: none;
+    float: end;
+    alignment: center;
+    background-color: #003F4B;
+    color: white;
+    padding: 10px;
+    margin: 5px;
+    width: 100%;
+}
+
+.button_update:hover {
+    background-color: #01353D;
+    color: white;
+}
+
+

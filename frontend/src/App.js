@@ -6,6 +6,10 @@ import First_Page from "./components/First_Page"
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import Login from "./components/Login";
 import Signup from "./components/SignUp";
+import Cart from "./components/Cart/Cart";
+import HomePage from "./components/HomePage";
+import AddItem from "./components/AddItem";
+import UpdateItem from "./components/UpdateItem";
 
 function App() {
   return (
@@ -16,9 +20,11 @@ function App() {
                 <Route exact path='/' render={()=><First_Page />}/>
                 <Route exact path='/login' render={()=><Login />}/>
                 <Route path='/signup' component={Signup}/>
-                {/*<Route exact path='/home_page' render={()=><HomePage />}/>*/}
+                <Route exact path='/home_page' render={()=><HomePage />}/>
+                <Route exact path='/additem' render={()=><AddItem />}/>
+                <Route path='/updateItems/:id' render={()=><UpdateItem />}/>
                 {/*<Route exact path='/books' render={()=><Books />}/>*/}
-                {/*<Route exact path='/cart' render={()=><Cart />}/>*/}
+                <Route exact path='/cart' render={()=><Cart />}/>
             </Switch>
         </BrowserRouter>
         <Footer />
