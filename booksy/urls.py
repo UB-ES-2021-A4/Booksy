@@ -33,5 +33,7 @@ urlpatterns = [
     path('api/login/', views.UserLoginApiView.as_view()), #TODO should be on accounts.urls
     path('api/', include('product.urls')),
 
+    path('api/', include('transaction.urls')),
+
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
   + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
