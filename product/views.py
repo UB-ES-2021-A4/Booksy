@@ -86,7 +86,10 @@ class ProductView(APIView):
         try:
             owner = getattr(product, 'seller')
             if seller == owner:
-                product_serialized = ProductSerializer(product, data=request.data)
+                dic = request.data.dict()
+                category = Category.objects.get(category_name=request.POST.get('category'))
+                dic.update({'category': {'category_name': category.category_name, 'category_description': category.get_category_name_display()}, 'seller': seller.id})
+                product_serialized = ProductSerializer(product, data=dic)
                 if product_serialized.is_valid():
                     product_serialized.save()
                     return Response(status=status.HTTP_200_OK)
