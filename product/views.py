@@ -48,7 +48,7 @@ class ProductView(APIView):
 
         try:
             dic = request.data.dict()
-            dic.update({'category': category.category_name, 'seller': seller.id})
+            dic.update({'category': {'category_name': category.category_name, 'category_description': category.get_category_name_display()}, 'seller': seller.id})
             product_serialized = ProductSerializer(data=dic)
             if not product_serialized.is_valid():
                 return Response(status=status.HTTP_400_BAD_REQUEST)
