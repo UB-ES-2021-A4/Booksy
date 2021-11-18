@@ -8,7 +8,7 @@ import swal from "sweetalert";
 
 const deploy_url = 'https://booksy.pythonanywhere.com';
 const debug_url = 'http://127.0.0.1:8000';
-const url = deploy_url;
+const url = debug_url;
 
 class HomePage extends Component {
     constructor(props) {
@@ -22,11 +22,10 @@ class HomePage extends Component {
             },
             cards: [],
         }
-        this.getCards = this.getCards.bind(this);
-
     }
+
     isOwner (card) {
-        let owner = (window.localStorage.getItem('user_id')).toString()
+        let owner = (window.localStorage.getItem('user_id'))
         return (card.seller).toString() === owner;
     }
 
@@ -71,6 +70,7 @@ class HomePage extends Component {
     }
 
     componentDidMount() {
+        this.getCards = this.getCards.bind(this);
         this.getCards()
     }
     refreshPage() {
