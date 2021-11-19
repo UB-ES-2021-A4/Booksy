@@ -4,7 +4,7 @@ from product.models import ProductModel, Image, Category
 
 class CategorySerializer(serializers.Serializer):
     category_description = serializers.CharField(source='get_category_name_display')
-    category_name = serializers.CharField()
+    category_name = serializers.CharField(max_length=2)
 
     class Meta:
         model = Category
