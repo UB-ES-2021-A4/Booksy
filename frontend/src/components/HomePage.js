@@ -23,8 +23,8 @@ class HomePage extends Component {
             cards: [],
         }
         this.getCards = this.getCards.bind(this);
-
     }
+
     isOwner (card) {
         let owner = (window.localStorage.getItem('user_id')).toString()
         return (card.seller).toString() === owner;
