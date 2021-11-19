@@ -24,19 +24,19 @@ class NavBar extends Component {
         swal('Something went wrong', 'You are not logged in the web. Try the Login button first, please.', 'warning');
     }
 
-    isLogged () {
-        let user = (window.localStorage.getItem('user_id')).toString()
+    isNotLogged () {
+        let user = (window.localStorage.getItem('user_id'))
         console.log(user)
-        return user === '';
+        return user === null;
     }
 
     render() {
         return (
             <section className="navbar">
-                {this.isLogged() ? (
-                    <a href="/home_page" className="navbar-item" style={{padding: 15}} id="home_page_link">Home page</a>
-                ) : (
+                {this.isNotLogged() ? (
                     <a href="/" className="navbar-item" style={{padding: 15}} id="home_page_link" onClick={this.handleNotLogged}>Home page</a>
+                ) : (
+                    <a href="/home_page" className="navbar-item" style={{padding: 15}} id="home_page_link">Home page</a>
                 )}
                 <a href="/books" className="navbar-item" style={{padding: 15}} id="books_link">Books</a>
                 <a href="/login" className="navbar-item" style={{padding: 15}} id="login_link">Log In</a>

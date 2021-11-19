@@ -109,7 +109,7 @@ class HomePage extends Component {
         const allCards = this.state.cards
         console.error('Render')
         return allCards.map(card =>
-            <Col>
+            <Col key={card['id']} >
                 <Card className="card-HomePage">
                     <img className="card-img-top image_100"
                          src={`${url}${card['images']}`}

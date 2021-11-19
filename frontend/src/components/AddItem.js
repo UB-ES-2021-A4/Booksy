@@ -110,7 +110,7 @@ class AddItem extends Component {
     renderCategories = () => {
         const newCategories = Object.getOwnPropertyNames(this.state.categories);
         return newCategories.map((cat, i) => (
-            <option value={cat}>{this.state.categories[cat]}</option>
+            <option value={cat} key={i}>{this.state.categories[cat]}</option>
         ));
     };
 
@@ -165,7 +165,7 @@ class AddItem extends Component {
                                 <br/>
 
                                 <select className="form-select" id="category" onChange={this.handleChange} >
-                                    <option selected>Selecciona una categoría</option>
+                                    <option defaultValue>Selecciona una categoría</option>
                                         {this.renderCategories()}
                                 </select>
                                 <br/>
