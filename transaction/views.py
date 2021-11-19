@@ -33,8 +33,9 @@ class BuyView(APIView):
         except ResponseError as e:
             return Response(status=e.message)
         except:
-            return Response(status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+        return Response(status=status.HTTP_200_OK)
 
 class ResponseError(Exception):
 
