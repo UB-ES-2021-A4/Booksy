@@ -1,14 +1,11 @@
 import os
 
-from django.shortcuts import render
 from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from accounts.models import UserProfile
-from booksy import settings
 from product.models import ProductModel, Category, Image
 from product.serializers import ProductSerializer, CategorySerializer, ImageSerializer
 
@@ -45,22 +42,26 @@ class ProductView(APIView):
             return Response(status=status.HTTP_418_IM_A_TEAPOT)
 
     def post(self, request):
-        print(request.data)
         seller = request.user
         category = Category.objects.get(category_name=request.POST.get('category'))
         product_serialized = ProductSerializer(data=request.data)
-        if (not product_serialized.is_valid()):
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        else:
-            a = ProductModel.objects.create(title=request.POST.get('title'), author=request.POST.get('author'),
-                                            description=request.POST.get('description'),
-                                            price=request.POST.get('price'),
-                                            seller=seller, category=category)
-            try:
-                product = ProductModel.objects.get(id=a.id)
-                return Response(a.id, status=status.HTTP_200_OK if product else status.HTTP_400_BAD_REQUEST)
-            except:
-                return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        try:
+            dic = request.data.dict()
+            dic.update({'category': {'category_name': category.category_name, 'category_description': category.get_category_name_display()}, 'seller': seller.id})
+            product_serialized = ProductSerializer(data=dic)
+            if not product_serialized.is_valid():
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+
+            prod = ProductModel.objects.create(title=request.POST.get('title'), author=request.POST.get('author'),
+                                               description=request.POST.get('description'),
+                                               price=request.POST.get('price'),
+                                               seller=seller, category=category)
+
+            product = ProductModel.objects.get(id=prod.id)
+            return Response(prod.id, status=status.HTTP_200_OK if product else status.HTTP_400_BAD_REQUEST)
+        except:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def delete(self, request):
         product_id = request.GET.get('id')
@@ -85,7 +86,10 @@ class ProductView(APIView):
         try:
             owner = getattr(product, 'seller')
             if seller == owner:
-                product_serialized = ProductSerializer(product, data=request.data)
+                dic = request.data.dict()
+                category = Category.objects.get(category_name=request.POST.get('category'))
+                dic.update({'category': {'category_name': category.category_name, 'category_description': category.get_category_name_display()}, 'seller': seller.id})
+                product_serialized = ProductSerializer(product, data=dic)
                 if product_serialized.is_valid():
                     product_serialized.save()
                     return Response(status=status.HTTP_200_OK)
