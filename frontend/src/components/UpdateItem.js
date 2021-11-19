@@ -56,10 +56,6 @@ class UpdateItem extends Component {
                 this.state.price = res.data[0].price
                 this.state.category = res.data[0].category['category_name']
                 this.setState(this.state)
-
-                //TODO recuperar las imagenes y bien las categorias
-
-                //this.getCategory(res.data[0].category)
             })
             .catch((error) => {
                 console.log(error)

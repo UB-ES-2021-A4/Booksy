@@ -10,6 +10,7 @@ import Cart from "./components/Cart/Cart";
 import HomePage from "./components/HomePage";
 import AddItem from "./components/AddItem";
 import UpdateItem from "./components/UpdateItem";
+import OpenItem from "./components/OpenItem";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
                 <Route exact path='/home_page' render={()=><HomePage />}/>
                 <Route exact path='/additem' render={()=><AddItem />}/>
                 <Route path='/updateItems/:id' render={()=><UpdateItem />}/>
+                <Route path='/OpenItem/:id' render={()=><OpenItem />}/>
                 {/*<Route exact path='/books' render={()=><Books />}/>*/}
                 <Route exact path='/cart' render={()=><Cart />}/>
             </Switch>

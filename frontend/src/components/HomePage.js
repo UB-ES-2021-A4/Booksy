@@ -41,6 +41,12 @@ class HomePage extends Component {
             state: { id: id}
         });
     }
+    handleOpen = (id) => {
+        this.props.history.push({
+            pathname: `/OpenItem/${id}`,
+            state: { id: id}
+        });
+    }
 
     handleDelete = (id) => {
         swal({
@@ -111,10 +117,9 @@ class HomePage extends Component {
         console.error('Render')
         return allCards.map(card =>
             <Col key={card['id']} >
-                <Card className="card-HomePage">
+                <Card className="card-HomePage" onClick={() => this.handleOpen(card['id'])}>
                     <img className="card-img-top image_100"
                          src={`${url}${card['images']}`}
-
                          alt="Card image cap"/>
                     {this.isOwner(card) ? (
                         <button className="btn-delete"><CancelRoundedIcon onClick={() => this.handleDelete(card['id'])}/></button>
@@ -136,9 +141,7 @@ class HomePage extends Component {
     }
 
     render () {
-
         return (
-
             <div>
                 <Container>
                     <Row>
