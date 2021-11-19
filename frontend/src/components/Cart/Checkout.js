@@ -4,7 +4,9 @@ import './Cart.css'
 import './wizard-stepper.css'
 import Book1 from '../pictures/book1.png'
 
-
+const deploy_url = 'https://booksy.pythonanywhere.com';
+const debug_url = 'http://127.0.0.1:8000';
+const url = debug_url;
 
 export default class Checkout extends Component {
     continue = e => {

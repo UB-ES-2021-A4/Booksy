@@ -9,8 +9,7 @@ import { withRouter} from "react-router-dom";
 
 const deploy_url = 'https://booksy.pythonanywhere.com';
 const debug_url = 'http://127.0.0.1:8000';
-const url = deploy_url;
-
+const url = debug_url;
 
 class UpdateItem extends Component {
     constructor(props) {

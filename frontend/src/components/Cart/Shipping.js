@@ -4,6 +4,10 @@ import ShippingPhoto from "../pictures/shipping.jpg";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import './Cart.css'
 
+const deploy_url = 'https://booksy.pythonanywhere.com';
+const debug_url = 'http://127.0.0.1:8000';
+const url = debug_url;
+
 export default class Shipping extends Component {
     constructor(props) {
         super(props);
