@@ -68,18 +68,14 @@ class AddItem extends Component {
     }
 
     checkFormParams (params) {
-        if (params.toString().length === 0) {
-            return false
-        }
-        return true
-
+        return params.toString().length !== 0;
     }
 
     uploadImages(product_id) {
         var imgs = new FormData()
         imgs.append('id', product_id)
         imgs.append('image', this.state.images)
-        axios.post(`${url}/api/image/`, imgs,
+        axios.post('http://127.0.0.1:8000/api/image/', imgs,
             {headers: {'Authorization': `Token ${window.localStorage.getItem('token')}`}})
             .then((res)=> {
                 this.successfulPostAlert()
@@ -88,7 +84,6 @@ class AddItem extends Component {
                 this.noPhotosAlert()
                 console.error(error)
             })
-
     }
 
     getCategories() {
