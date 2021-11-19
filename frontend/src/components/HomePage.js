@@ -41,10 +41,10 @@ class HomePage extends Component {
             state: { id: id}
         });
     }
-    handleOpen = (id) => {
+    handleOpen = (id, image) => {
         this.props.history.push({
             pathname: `/OpenItem/${id}`,
-            state: { id: id}
+            state: { id: id,  image: image}
         });
     }
 
@@ -114,10 +114,9 @@ class HomePage extends Component {
 
     renderCards() {
         const allCards = this.state.cards
-        console.error('Render')
         return allCards.map(card =>
             <Col key={card['id']} >
-                <Card className="card-HomePage" onClick={() => this.handleOpen(card['id'])}>
+                <Card className="card-HomePage" onClick={() => this.handleOpen(card['id'], card['images'])}>
                     <img className="card-img-top image_100"
                          src={`${url}${card['images']}`}
                          alt="Card image cap"/>

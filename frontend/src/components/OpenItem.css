@@ -47,3 +47,16 @@
     margin: 5px;
     width: 150px;
 }
+
+.portrait {
+    height: 500px;
+    width: 375px;
+    display: block;
+    margin: 0 auto;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.3);
+    background-color: #f1f1f1;
+}
+
+.description_part {
+    height: 150px;
+}

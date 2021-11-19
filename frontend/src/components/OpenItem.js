@@ -6,6 +6,7 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import {withRouter} from "react-router-dom";
 import './OpenItem.css'
 import {blue} from "@mui/material/colors";
+import {Box} from "@material-ui/core";
 
 const deploy_url = 'https://booksy.pythonanywhere.com';
 const debug_url = 'http://127.0.0.1:8000';
@@ -22,15 +23,15 @@ class OpenItem extends Component {
             seller: '',
             category: '',
             description: '',
-            image: '',
+            image: this.props.location.state.image[0],
             card_id: props.id
         }
     }
 
     componentDidMount() {
         this.getInfoToLoad = this.getInfoToLoad.bind(this);
-        this.getImageToLoad()
         this.getInfoToLoad()
+        this.getSellerName()
     }
 
 
@@ -38,14 +39,10 @@ class OpenItem extends Component {
         this.props.history.push('/cart')
     }
 
-    getImageToLoad() {
-        axios.get(`${url}/api/image/?id=${this.state.id}`)
-            .then((res) => {
-                this.state.image = res.data[0].image
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+    getSellerName() {
+        console.log(window.localStorage.getItem('username'))
+        this.state.seller = (window.localStorage.getItem('user_id')).toString()
+        this.setState(this.state)
     }
 
     getInfoToLoad() {
@@ -56,7 +53,6 @@ class OpenItem extends Component {
                 this.state.description = res.data[0].description
                 this.state.price = res.data[0].price
                 this.state.category = res.data[0].category['category_description']
-                this.state.seller = res.data[0].seller
                 this.setState(this.state)
             })
             .catch((error) => {
@@ -78,9 +74,10 @@ class OpenItem extends Component {
                         </Col>
                         <Col xs lg="5">
                             <br/>
-                            <img className="card-img-top image_100"
-                                 src={this.state.image}
+                            <img className="portrait"
+                                 src={`${url}${this.state.image}`}
                                  alt="No image"/>
+                            <br/><br/>
                         </Col>
                         <Col xs lg={5}>
                             <br/>
@@ -89,28 +86,30 @@ class OpenItem extends Component {
                                     <button className="button button-category">{this.state.category}</button>
                                 </Col>
                             </Row>
+                            <br/>
                             <Row className="title_and_author_part">
                                 <Col>
                                     <h1><b>{this.state.title}</b></h1>
-                                    <h2>By {this.state.author}</h2>
+                                    <h3>By {this.state.author}</h3>
                                 </Col>
                             </Row>
-                            <Row className="seller_part">
+                            <br/>
+                            <Row className="seller_and_price_part">
                                 <Col>
-                                    <h4 color={blue}>Sold by {this.state.seller}</h4>
+                                    <h5 color={blue.A100}>Sold by {this.state.seller}</h5>
                                 </Col>
-                            </Row>
-                            <Row className="price_part">
                                 <Col>
-                                    <h3>{this.state.price}€</h3>
+                                    <h2 className="text-end">{this.state.price}€</h2>
                                 </Col>
                             </Row>
+                            <br/>
                             <Row className="description_part">
                                 <Col>
                                     <p>{this.state.description}</p>
                                 </Col>
                             </Row>
-                            <Row className="add_cart_part">
+                            <br/>
+                            <Row className="add_cart_part align-bottom">
                                 <Col>
                                     <button className="button button_add_cart" onClick={this.handleClick}><span>ADD TO CART</span></button>
                                 </Col>
