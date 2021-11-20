@@ -73,4 +73,4 @@ def path_and_rename(instance, filename):
 
 class UserProfile(models.Model):
     account_id = models.OneToOneField(UserAccount, primary_key=True, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to=path_and_rename, blank=True, null=True)  # Can be null as you don't upload image on sign up
+    image = models.ImageField(upload_to=path_and_rename, blank=True, null=True, default="/default.jpg")

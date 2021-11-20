@@ -11,7 +11,6 @@ from rest_framework.response import Response
 from rest_framework import viewsets, status
 from rest_framework.authtoken.models import Token
 from accounts import serializers, models
-from django.views.generic.base import TemplateView
 
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 
@@ -33,8 +32,7 @@ class UserAccountSignUp(APIView):
                 account = models.UserAccount.objects.get(id=account.id)
 
                 # Create userProfile from account
-                data = {'account_id': account.id,
-                        'image': None}
+                data = {'account_id': account.id}
                 profile = UserProfileSerializer(data=data)
                 profile.is_valid()
                 profi = profile.save()
@@ -119,7 +117,8 @@ class UserProfileView(APIView):
             serial_profi = UserProfileSerializer(profi, data=request.data)
             if serial_profi.is_valid():
                 serial_profi.save()
-                if orig_img_path is not None:
+                # Check if the image path is NOT the one of the original path
+                if os.path.normpath("media/default.jpg") not in orig_img_path:
                     os.remove(orig_img_path)
                 return Response(serial_profi.data, status=status.HTTP_200_OK)
             else:
