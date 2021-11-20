@@ -27,3 +27,15 @@ class ShippingInfo(models.Model):
 
     def __str__(self):
         return self.direction  # Maybe we want to change this
+
+
+class Payment(models.Model):
+    transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE, default=None)
+
+    card_name = models.CharField(max_length=255, null=False)
+    card_num = models.IntegerField(null=False)
+    expiration_card = models.CharField(max_length=5, null=False)
+    cvv = models.IntegerField(null=False)
+
+    def __str__(self):
+        return self.card_num  # Maybe we want to change this
