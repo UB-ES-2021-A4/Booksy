@@ -60,3 +60,67 @@
 .description_part {
     height: 150px;
 }
+
+
+.button_update_item {
+    border-radius: 4px;
+    background-color: #000000;
+    border: none;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 15px;
+    padding: 13px;
+    width: inherit;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin: 5px;
+}
+
+
+.button_update_item span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+}
+
+.button_update_item span:after {
+    content: '\21BA';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
+}
+
+
+.button_delete_item {
+    border-radius: 4px;
+    background-color: #000000;
+    border: none;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 15px;
+    padding: 13px;
+    width: inherit;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin: 5px;
+}
+
+
+.button_delete_item span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+}
+
+.button_delete_item span:after {
+    content: '\2573';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
+}

@@ -29,7 +29,6 @@ class OpenItem extends Component {
     componentDidMount() {
         this.getInfoToLoad = this.getInfoToLoad.bind(this);
         this.getInfoToLoad()
-        //this.getSellerName()
     }
 
 
@@ -67,7 +66,7 @@ class OpenItem extends Component {
 
     isOwner(){
         let user_id = (window.localStorage.getItem('user_id')).toString()
-        return user_id === this.state.seller
+        return user_id === (this.state.seller).toString()
     }
 
     handleDelete = (id) => {
@@ -97,6 +96,11 @@ class OpenItem extends Component {
                 }
             });
     }
+
+    refreshPage() {
+        this.props.history.push('/home_page')
+    }
+
 
 
     render () {
@@ -152,10 +156,10 @@ class OpenItem extends Component {
                                     {this.isOwner() ? (
                                         <Row>
                                             <Col>
-                                                <button className="button button_add_cart" onClick={() => this.handleClick(this.isOwner())}><span>UPDATE ITEM</span></button>
+                                                <button className="button button_update_item" onClick={() => this.handleClick(this.isOwner())}><span>UPDATE ITEM</span></button>
                                             </Col>
                                             <Col>
-                                                <button className="button button_add_cart" onClick={() => this.handleDelete(this.state.id)}><span>DELETE ITEM</span></button>
+                                                <button className="button button_delete_item" onClick={() => this.handleDelete(this.state.id)}><span>DELETE ITEM</span></button>
                                             </Col>
                                         </Row>
                                     ) : (

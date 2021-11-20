@@ -58,9 +58,6 @@ class HomePage extends Component {
         this.getCards = this.getCards.bind(this);
         this.getCards()
     }
-    refreshPage() {
-        window.location.reload(false);
-    }
 
     getCards() {
         axios.get(`${url}/api/product/`)
