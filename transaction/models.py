@@ -6,11 +6,10 @@ from product.models import ProductModel
 # Create your models here.
 
 class Transaction(models.Model):
-    seller_id = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=False)  # On_Delete what to do
-    buyer_id = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=False)
+    buyer = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=False, related_name='buyer_id')
 
     def __str__(self):
-        return self.buyer_id
+        return str(self.id)
 
 
 class ShippingInfo(models.Model):
@@ -36,9 +35,11 @@ class Payment(models.Model):
     cvv = models.IntegerField(null=False)
 
     def __str__(self):
-        return self.card_num  # Maybe we want to change this
+        return str(self.card_num)  # Maybe we want to change this
 
 
 class BooksBought(models.Model):
     transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE, default=None)
-    product_id = models.ForeignKey(ProductModel, on_delete=models.CASCADE, null=False)
+    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, null=False)
+    seller = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=False, related_name='seller_id')  # On_Delete what to do
+
