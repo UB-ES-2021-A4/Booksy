@@ -1,12 +1,10 @@
 import React, {Component} from "react";
 import axios from "axios";
-import swal from "sweetalert";
 import {Col, Container, Row} from "react-bootstrap";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import {withRouter} from "react-router-dom";
 import './OpenItem.css'
-import {blue} from "@mui/material/colors";
-import {Box} from "@material-ui/core";
+import swal from "sweetalert";
 
 const deploy_url = 'https://booksy.pythonanywhere.com';
 const debug_url = 'http://127.0.0.1:8000';
@@ -31,19 +29,25 @@ class OpenItem extends Component {
     componentDidMount() {
         this.getInfoToLoad = this.getInfoToLoad.bind(this);
         this.getInfoToLoad()
-        this.getSellerName()
+        //this.getSellerName()
     }
 
 
-    handleClick = () => {
-        this.props.history.push('/cart')
+    handleClick = (isOwner) => {
+        if (isOwner) {
+            this.props.history.push({
+                pathname: `/updateItems/${this.state.id}`,
+                state: { id: this.state.id}
+            });
+        } else {
+            this.props.history.push('/cart')
+        }
     }
 
-    getSellerName() {
-        console.log(window.localStorage.getItem('username'))
-        this.state.seller = (window.localStorage.getItem('user_id')).toString()
-        this.setState(this.state)
-    }
+    //getSellerName() {
+      //  this.state.seller = (window.localStorage.getItem('user_id')).toString()
+        //this.setState(this.state)
+    //}
 
     getInfoToLoad() {
         axios.get(`${url}/api/product/?id=${this.state.id}`)
@@ -53,11 +57,45 @@ class OpenItem extends Component {
                 this.state.description = res.data[0].description
                 this.state.price = res.data[0].price
                 this.state.category = res.data[0].category['category_description']
+                this.state.seller = res.data[0].seller
                 this.setState(this.state)
             })
             .catch((error) => {
                 console.log(error)
             })
+    }
+
+    isOwner(){
+        let user_id = (window.localStorage.getItem('user_id')).toString()
+        return user_id === this.state.seller
+    }
+
+    handleDelete = (id) => {
+        swal({
+            title: "Are you sure?",
+            text: "Once deleted, you will not be able to recover this item.",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    axios.delete(`${url}/api/product/?id=${id}`,
+                        {headers: {'Authorization': `Token ${window.localStorage.getItem('token')}`}})
+                        .then((res) => {
+                            swal("Poof! Your item has been deleted!", {
+                                icon: "success",
+                            });
+                            this.refreshPage();
+                        }).catch((error) => {
+                        console.error(error)
+                        swal('Error', 'Item couldn`t be deleted due to some internal errors.', 'error')
+                    })
+
+                } else {
+                    swal("Success", "Your item is safe!", 'success');
+                }
+            });
     }
 
 
@@ -96,7 +134,7 @@ class OpenItem extends Component {
                             <br/>
                             <Row className="seller_and_price_part">
                                 <Col>
-                                    <h5 color={blue.A100}>Sold by {this.state.seller}</h5>
+                                    <h5>Sold by {this.state.seller}</h5>
                                 </Col>
                                 <Col>
                                     <h2 className="text-end">{this.state.price}€</h2>
@@ -111,7 +149,18 @@ class OpenItem extends Component {
                             <br/>
                             <Row className="add_cart_part align-bottom">
                                 <Col>
-                                    <button className="button button_add_cart" onClick={this.handleClick}><span>ADD TO CART</span></button>
+                                    {this.isOwner() ? (
+                                        <Row>
+                                            <Col>
+                                                <button className="button button_add_cart" onClick={() => this.handleClick(this.isOwner())}><span>UPDATE ITEM</span></button>
+                                            </Col>
+                                            <Col>
+                                                <button className="button button_add_cart" onClick={() => this.handleDelete(this.state.id)}><span>DELETE ITEM</span></button>
+                                            </Col>
+                                        </Row>
+                                    ) : (
+                                        <button className="button button_add_cart" onClick={() => this.handleClick(this.isOwner())}><span>ADD TO CART</span></button>
+                                    )}
                                 </Col>
                             </Row>
                         </Col>
