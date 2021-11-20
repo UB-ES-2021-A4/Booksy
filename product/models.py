@@ -45,7 +45,7 @@ class ProductModel(models.Model):
 
 
 def path_and_rename(instance, filename):
-    upload_to = 'images/'
+    upload_to = 'product/images/'
     ext = filename.split('.')[-1]
     # get filename
     if instance.pk:
