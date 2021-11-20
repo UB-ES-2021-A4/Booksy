@@ -5,7 +5,7 @@ from accounts import models
 class UserAccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.UserAccount
-        fields = [ 'id', 'email', 'username', 'password', 'first_name', 'last_name' ]
+        fields = ['id', 'email', 'username', 'password', 'first_name', 'last_name']
         extra_kwargs = {
             'password': {
                 'write_only': True,
@@ -29,3 +29,16 @@ class UserAccountSerializer(serializers.ModelSerializer):
             instance.set_password(password)
 
         return super().update(instance, validated_data)
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(required=False, allow_null=True)
+
+    class Meta:
+        model = models.UserProfile
+        fields = ['account_id', 'image']
+
+    def update(self, instance, validated_data):
+        instance.image = validated_data.get('image', instance.image)
+        instance.save()
+        return instance

@@ -1,3 +1,6 @@
+import os
+from uuid import uuid4
+
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
@@ -54,4 +57,20 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.first_name + " " + self.last_name
 
+# Code is duplicated, but it's easier to manage this way right now
+def path_and_rename(instance, filename):
+    upload_to = 'account/images/'
+    ext = filename.split('.')[-1]
+    # get filename
+    if instance.pk:
+        filename = '{}.{}'.format(instance.pk, ext)
+    else:
+        # set filename as random string
+        filename = '{}.{}'.format(uuid4().hex, ext)
+    # return the whole path to the file
+    return os.path.join(upload_to, filename)
 
+
+class UserProfile(models.Model):
+    account_id = models.OneToOneField(UserAccount, primary_key=True, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to=path_and_rename, blank=True, null=True)  # Can be null as you don't upload image on sign up
