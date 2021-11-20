@@ -90,7 +90,7 @@ class HomePage extends Component {
 
         for (let index = 0; index < data.length; index++) {
             data[index]['images'] = []
-            await axios.get(`${url}/api/image/?id=${data[index]['id']}`)
+            await axios.get(`${url}/api/product/image/?id=${data[index]['id']}`)
                 .then((res) => {
                     data[index]['images'].push(res.data['image'])
                 })

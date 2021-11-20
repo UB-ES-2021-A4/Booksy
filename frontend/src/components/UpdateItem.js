@@ -67,7 +67,7 @@ class UpdateItem extends Component {
     }
 
     getCategory (category_name) {
-        axios.get(`${url}/api/category/?category=${category_name}`)
+        axios.get(`${url}/api/product/category/?category=${category_name}`)
             .then((res) => {
                 this.state.category = res.data.category
             })
@@ -111,7 +111,7 @@ class UpdateItem extends Component {
         imgs.append('id', this.props.location.state.id)
         imgs.append('image', this.state.images)
         console.log(imgs.get('id'))
-        axios.patch(`${url}/api/image/`, imgs,
+        axios.patch(`${url}/api/product/image/`, imgs,
             {headers: {'Authorization': `Token ${window.localStorage.getItem('token')}`}})
             .then((res)=> {
                 this.successfulPostAlert()
@@ -125,7 +125,7 @@ class UpdateItem extends Component {
 
 
     getCategories() {
-        axios.get(`${url}/api/category/`)
+        axios.get(`${url}/api/product/category/`)
             .then((res)=> {
                 this.populateCategories(res.data)
             })

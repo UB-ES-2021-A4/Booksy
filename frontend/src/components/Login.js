@@ -50,7 +50,7 @@ class Login extends Component {
             password: this.state.password
         }
 
-        axios.post(`${url}/api/login/`, parameters)
+        axios.post(`${url}/api/account/login/`, parameters)
             .then((res) => {
                 this.successAlert()
                 // We are saving the token in the localStorage(not very secure), django's token do not expire.

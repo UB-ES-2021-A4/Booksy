@@ -13,7 +13,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import selenium
 from rest_framework.test import APIClient
-from accounts.models import UserProfile
+from accounts.models import UserAccount
 
 
 class Test_SignUp(TestCase):
@@ -21,9 +21,9 @@ class Test_SignUp(TestCase):
     def setUp(self):
         ### Deberíamos tener una url intermedia para que el usuario confirmase su cuenta a traves del correo.
         # self.url_verify = '/verify#IdUser
-        self.url = '/api/signUpaccount/'
+        self.url = '/api/account/signup/'
 
-        self.name = 'testuser'
+        self.username = 'testuser'
         self.email = 'manololama@gmail.com'
         self.first_name = 'Manolo'
         self.last_name = 'Lama'
@@ -32,24 +32,18 @@ class Test_SignUp(TestCase):
         self.password = 'MESSI_CHIQUITO_10'
 
         self.client = APIClient()
-        self.user_bien = UserProfile.objects.create(
+        self.user_bien = UserAccount.objects.create(
             email='testerAdmin@test.es',
-            name='TestAdmin',
+            username='TestAdmin',
             password='123fsfsfaha4213',
             first_name='Admin',
             last_name='User')
 
     # No Reverse Match
-    ###def test_SignUp_url(self):
-    ###response = self.client.post(self.url)
-    ###self.assertEqual(response.status_code, 200)
-    ###self.assertTemplateUsed(response, template_name='SignUp.js')
-
-    ## No se si he de hacer el Post con el nombre del atributo de la BBDD o con el del Model
     def test_SignUp_form(self):
         response = self.client.post((self.url),
                                     data={
-                                        'name': self.name,
+                                        'username': self.username,
                                         'email': self.email,
                                         'first_name': self.first_name,
                                         'last_name': self.last_name,
@@ -76,7 +70,7 @@ class Test_SignUp(TestCase):
     def test_SignUp_requiredEmail(self):
         response = self.client.post((self.url),
                                     data={
-                                        'name': self.name,
+                                        'username': self.username,
                                         'first_name': self.first_name,
                                         'last_name': self.last_name,
                                         'is_active': self.is_active,
@@ -89,7 +83,7 @@ class Test_SignUp(TestCase):
     def test_SignUp_badEmail(self):
         response = self.client.post((self.url),
                                     data={
-                                        'name': self.name,
+                                        'username': self.username,
                                         'email': 'EstoNoEsUnEmail',
                                         'first_name': self.first_name,
                                         'last_name': self.last_name,
@@ -103,7 +97,7 @@ class Test_SignUp(TestCase):
     def test_SignUp_username15(self):
         response = self.client.post((self.url),
                                     data={
-                                        'name': 'EstoEsUnNombreDemasiadoLargoBADREQUEST',
+                                        'username': 'EstoEsUnNombreDemasiadoLargoBADREQUEST',
                                         'email': self.email,
                                         'first_name': self.first_name,
                                         'last_name': self.last_name,
@@ -119,7 +113,7 @@ class Test_SignUp(TestCase):
     def test_SignUp_passwordStrength(self):
         response = self.client.post(self.url,
                                     data={
-                                        'name': self.name,
+                                        'username': self.username,
                                         'email': self.email,
                                         'first_name': self.first_name,
                                         'last_name': self.last_name,
@@ -152,31 +146,31 @@ class Test_SignUp(TestCase):
 class Test_Login(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.user_bien = UserProfile.objects.create(
+        self.user_bien = UserAccount.objects.create(
             email='testerAdmin@test.es',
-            name='TestAdmin',
+            username='TestAdmin',
             password='123fsfsfaha4213',
             first_name='Admin',
             last_name='User')
 
-        self.url = '/api/login/'
+        self.url = '/api/account/login/'
 
     def test_LogIn(self):
-        user = UserProfile.objects.create(name='Manolo')
+        user = UserAccount.objects.create(username='Manolo')
         user.set_password('TestDjango1!')
         user.save()
 
         client = Client()
-        logged = client.login(name='Manolo', password='TestDjango1!')
+        logged = client.login(username='Manolo', password='TestDjango1!')
         self.assertEqual(logged, True)
 
     def test_LogIn_wrongPass(self):
-        user = UserProfile.objects.create(name='Manolo')
+        user = UserAccount.objects.create(username='Manolo')
         user.set_password('TestDjango1!')
         user.save()
 
         client = Client()
-        logged = client.login(name='Manolo', password='NEGATIVO')
+        logged = client.login(username='Manolo', password='NEGATIVO')
         self.assertEqual(logged, False)
 
     def test_LogIn_url(self):
@@ -188,7 +182,7 @@ class Test_Login(TestCase):
         response = self.client.post(self.url,
                                     {
                                         'password': '12334',
-                                        'name': ''
+                                        'username': ''
                                     })
         self.assertEqual(response.status_code, 400)
 
@@ -196,7 +190,7 @@ class Test_Login(TestCase):
         response = self.client.post(self.url,
                                     {
                                         'password': '',
-                                        'name': 'Manolo'
+                                        'username': 'Manolo'
                                     })
         self.assertEqual(response.status_code, 400)
 
@@ -204,7 +198,7 @@ class Test_Login(TestCase):
         response = self.client.post(self.url,
                                     {
                                         'password': '12345',
-                                        'name': 'UsuarioInventado'
+                                        'username': 'UsuarioInventado'
                                     })
         self.assertEqual(response.status_code, 400)
 
@@ -212,7 +206,7 @@ class Test_Login(TestCase):
         response = self.client.post(self.url,
                                     {
                                         'password': 'Ronaldo!7',
-                                        'name': 'Cristiano'
+                                        'username': 'Cristiano'
                                     })
         print(response)
         self.assertEqual(response.status_code, 400)
