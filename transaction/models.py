@@ -5,13 +5,25 @@ from product.models import ProductModel
 
 # Create your models here.
 
-class Transactions(models.Model):
-    seller_id = models.ForeignKey(UserProfile, null=False)  # On_Delete what to do
-    buyer_id = models.ForeignKey(UserProfile, null=False)
-    product_id = models.ForeignKey(ProductModel, null=False)
+class Transaction(models.Model):
+    seller_id = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=False)  # On_Delete what to do
+    buyer_id = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=False)
+    product_id = models.ForeignKey(ProductModel, on_delete=models.CASCADE, null=False)
 
     def __str__(self):
         return 'The product with ID: ', self.product_id, ', was sold by ', self.seller_id, \
                ', and bought by: ', self.buyer_id
 
 
+class ShippingInfo(models.Model):
+    transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE, default=None)
+
+    name = models.CharField(max_length=255, null=False, blank=False)
+    surnames = models.CharField(max_length=255, null=False, blank=False)
+    direction = models.CharField(max_length=255, null=False, blank=False)
+    city = models.CharField(max_length=255, null=False, blank=False)
+    country = models.CharField(max_length=255, null=False, blank=False)
+    zip_code = models.IntegerField(null=False, blank=False)
+
+    def __str__(self):
+        return self.direction  # Maybe we want to change this
