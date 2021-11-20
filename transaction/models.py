@@ -8,11 +8,9 @@ from product.models import ProductModel
 class Transaction(models.Model):
     seller_id = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=False)  # On_Delete what to do
     buyer_id = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=False)
-    product_id = models.ForeignKey(ProductModel, on_delete=models.CASCADE, null=False) # By now we only consider 1 Book
 
     def __str__(self):
-        return 'The product with ID: ', self.product_id, ', was sold by ', self.seller_id, \
-               ', and bought by: ', self.buyer_id
+        return self.buyer_id
 
 
 class ShippingInfo(models.Model):
@@ -39,3 +37,8 @@ class Payment(models.Model):
 
     def __str__(self):
         return self.card_num  # Maybe we want to change this
+
+
+class BooksBought(models.Model):
+    transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE, default=None)
+    product_id = models.ForeignKey(ProductModel, on_delete=models.CASCADE, null=False)
