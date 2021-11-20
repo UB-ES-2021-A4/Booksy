@@ -67,7 +67,7 @@ export default class CheckOut extends Component {
         switch (step) {
             case 1:
                 console.log(this.props.items)
-                if (this.props.items){
+                if (!this.props.items){
                     return (
                         <Checkout
                             nextStep={this.nextStep}

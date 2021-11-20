@@ -7,7 +7,7 @@ export default class Footer extends Component {
     render() {
         return (
             <div className="footer">
-                <footer className={Footer} color='#C6E7D8'>
+                <footer className="Footer" color='#C6E7D8'>
                     <div className="row">
                         <div className="column_big">
                             <img src={logo} width="90" height="90" alt="logo_small"/>

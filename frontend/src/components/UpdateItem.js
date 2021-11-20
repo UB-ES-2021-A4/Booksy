@@ -16,7 +16,7 @@ class UpdateItem extends Component {
         super(props);
         this.state = {
             id: this.props.location.state.id,
-            seller: (window.localStorage.getItem('user_id')).toString(),
+            seller: (window.localStorage.getItem('user_id')),
             title: '',
             price: 0,
             author: '',
@@ -25,11 +25,12 @@ class UpdateItem extends Component {
             categories: {},
             card_id: props.id
         }
-        this.getCategories()
-        this.handleChange = this.handleChange.bind(this);
     }
 
-    componentWillMount() {
+    componentDidMount() {
+        this.getInfoToUpdate = this.getInfoToUpdate.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.getCategories()
         this.getInfoToUpdate()
     }
 
@@ -46,18 +47,15 @@ class UpdateItem extends Component {
         });
     };
 
-    getInfoToUpdate () {
+    getInfoToUpdate() {
         axios.get(`${url}/api/product/?id=${this.state.id}`)
             .then((res) => {
                 this.state.title = res.data[0].title
                 this.state.author = res.data[0].author
                 this.state.description = res.data[0].description
                 this.state.price = res.data[0].price
-                this.state.category = res.data[0].category
-
-                //TODO recuperar las imagenes y bien las categorias
-
-                //this.getCategory(res.data[0].category)
+                this.state.category = res.data[0].category['category_name']
+                this.setState(this.state)
             })
             .catch((error) => {
                 console.log(error)
@@ -67,7 +65,7 @@ class UpdateItem extends Component {
     getCategory (category_name) {
         axios.get(`${url}/api/category/?category=${category_name}`)
             .then((res) => {
-                this.state.category = res.data.category_description
+                this.state.category = res.data.category
             })
     }
 
@@ -78,8 +76,8 @@ class UpdateItem extends Component {
         formItem.append('price',this.state.price)
         formItem.append('author',this.state.author)
         formItem.append('category', this.state.category)
-        formItem.append('seller', this.state.seller)
         formItem.append('description',this.state.description)
+
         if (this.checkFormParams(formItem)) {
             axios.patch(`${url}/api/product/?id=${this.state.id}`, formItem,
                 {headers: {'Authorization': `Token ${window.localStorage.getItem('token')}`}})
@@ -135,6 +133,7 @@ class UpdateItem extends Component {
         for (let index = 0; index < data.length; index++) {
             tmp[data[index]['category_name']] = data[index]['category_description']
         }
+
         this.setState({categories: tmp});
     }
 
@@ -190,13 +189,12 @@ class UpdateItem extends Component {
                                 </div>
                                 <br/>
                                 <div className="input-field">
-                                    <input type="number" min="0" id="price" onChange={this.handleChange} required defaultValue={this.state.price}/>
+                                    <input type="number" min="0" id="price" onChange={this.handleChange} required value={this.state.price}/>
                                     <label htmlFor="price">Precio del objeto</label>
                                 </div>
                                 <br/>
 
-                                <select className="form-select" id="category" onChange={this.handleChange} >
-                                    <option selected >{this.state.category}</option>
+                                <select className="form-select" id="category" onChange={this.handleChange} value={this.state.category} >
                                     {this.renderCategories()}
                                 </select>
                                 <br/>
