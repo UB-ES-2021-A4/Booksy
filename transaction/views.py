@@ -67,6 +67,10 @@ class BuyView(APIView):
                                            serializers[0].data['country'],
                                            serializers[0].data['zip_code']
                                            )
+                    self.send_email_buyer(request.user.email,
+                                          request.user.get_full_name(),
+                                          product.title
+                                          )
 
         except ResponseError as e:
             return Response(status=e.message)
@@ -118,12 +122,22 @@ class BuyView(APIView):
         template = get_template('seller_mail.html')
         content = template.render(context)
 
-        print(content)
-
-        print('Alo')
-
         email = EmailMultiAlternatives(
             'Product Sold!',
+            'Booksy',
+            settings.EMAIL_HOST_USER,
+            [mail]
+        )
+        email.attach_alternative(content, 'text/html')
+        email.send()
+
+    def send_email_buyer(self, mail, buyer, prod_title):
+        context = {'user':buyer, 'product_title': prod_title}
+        template = get_template('buyer_mail.html')
+        content = template.render(context)
+
+        email = EmailMultiAlternatives(
+            'Product Bought!',
             'Booksy',
             settings.EMAIL_HOST_USER,
             [mail]
