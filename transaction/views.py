@@ -67,6 +67,7 @@ class BuyView(APIView):
                                            serializers[0].data['country'],
                                            serializers[0].data['zip_code']
                                            )
+
                     self.send_email_buyer(request.user.email,
                                           request.user.get_full_name(),
                                           product.title
