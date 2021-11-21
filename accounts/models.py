@@ -6,22 +6,22 @@ from django.contrib.auth.models import BaseUserManager
 
 # Create your models here.
 
-class UserProfileManager(BaseUserManager):
+class AccountManager(BaseUserManager):
 
-    def create_user(self, email, name, password=None, first_name="John", last_name="Doe"):
+    def create_user(self, email, username, password=None, first_name="John", last_name="Doe"):
         if not email:
             raise ValueError("User has not email")
 
         email = self.normalize_email(email)
-        user = self.model(email=email, name=name, first_name=first_name, last_name=last_name)
+        user = self.model(email=email, username=username, first_name=first_name, last_name=last_name)
 
         user.set_password(password)
         user.save(using=self._db)
 
         return user
 
-    def create_superuser(self, email, name, password, first_name="John", last_name="Doe"):
-        user = self.create_user(email, name, password, first_name, last_name)
+    def create_superuser(self, email, username, password, first_name="John", last_name="Doe"):
+        user = self.create_user(email, username, password, first_name, last_name)
 
         user.is_superuser = True
         user.is_staff = True
@@ -30,9 +30,9 @@ class UserProfileManager(BaseUserManager):
         return user
 
 
-class UserProfile(AbstractBaseUser, PermissionsMixin):
+class UserAccount(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True)
-    name = models.CharField(max_length=15, unique=True)
+    username = models.CharField(max_length=15, unique=True)
 
     first_name = models.CharField(max_length=50, default="John")
     last_name = models.CharField(max_length=50, default="Doe")
@@ -40,16 +40,18 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=True)
 
-    objects = UserProfileManager()
+    objects = AccountManager()
 
-    USERNAME_FIELD = 'name'
+    USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email', 'first_name', "last_name"]
 
     def get_full_name(self):
-        return self.name
+        return self.first_name + " " + self.last_name
 
     def get_short_name(self):
-        return self.name
+        return self.username
 
     def __str__(self):
         return self.first_name + " " + self.last_name
+
+

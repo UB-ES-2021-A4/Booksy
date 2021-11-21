@@ -7,6 +7,10 @@ import axios from "axios";
 import swal from "sweetalert";
 import {withRouter} from "react-router-dom";
 
+const deploy_url = 'https://booksy.pythonanywhere.com';
+const debug_url = 'http://127.0.0.1:8000';
+const url = debug_url;
+
 class AddItem extends Component {
     constructor(props) {
         super(props);
@@ -48,7 +52,7 @@ class AddItem extends Component {
         formItem.append('description',this.state.description)
 
         if (this.checkFormParams(formItem)) {
-            axios.post('https://booksy.pythonanywhere.com/api/product/', formItem,
+            axios.post(`${url}/api/product/`, formItem,
                 {headers: {'Authorization': `Token ${window.localStorage.getItem('token')}`}})
                 .then((res) => {
                     console.error(res.data)
@@ -75,7 +79,7 @@ class AddItem extends Component {
         var imgs = new FormData()
         imgs.append('id', product_id)
         imgs.append('image', this.state.images)
-        axios.post('https://booksy.pythonanywhere.com/api/image/', imgs,
+        axios.post(`${url}/api/product/image/`, imgs,
             {headers: {'Authorization': `Token ${window.localStorage.getItem('token')}`}})
             .then((res)=> {
                 this.successfulPostAlert()
@@ -88,7 +92,7 @@ class AddItem extends Component {
     }
 
     getCategories() {
-        axios.get('https://booksy.pythonanywhere.com/api/category/')
+        axios.get(`${url}/api/product/category/`)
             .then((res)=> {
                 this.populateCategories(res.data)
             })

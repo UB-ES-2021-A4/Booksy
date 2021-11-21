@@ -8,14 +8,14 @@ import swal from 'sweetalert';
 
 const deploy_url = 'https://booksy.pythonanywhere.com';
 const debug_url = 'http://127.0.0.1:8000';
-const url = deploy_url;
+const url = debug_url;
 
 class Signup extends Component {
     constructor(props) {
         super(props);
         this.state = {
             email: '',
-            name: '',
+            username: '',
             password: '',
             Repeatpassword: '',
             first_name: '',
@@ -56,14 +56,14 @@ class Signup extends Component {
 
         const user = {
             email: this.state.email,
-            name: this.state.username,
+            username: this.state.username,
             password: this.state.password,
             first_name: this.state.name,
             last_name: this.state.apellidos
         }
         if (this.state.Repeatpassword === this.state.password) {
 
-            axios.post(`${url}/api/signUpaccount/`, user)
+            axios.post(`${url}/api/account/signup/`, user)
                 .then((res) => this.handleClick())
                 .catch((error) => {
                     console.error(error)

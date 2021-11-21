@@ -3,7 +3,7 @@ from uuid import uuid4
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from accounts.models import UserProfile
+from accounts.models import UserAccount
 
 
 # Create your models here.
@@ -37,7 +37,7 @@ class ProductModel(models.Model):
     author = models.CharField(max_length=50, null=False, blank=False)
     description = models.CharField(max_length=1000, null=False, blank=False)
     price = models.FloatField(default=0., blank=False)  # Minimum value has to be validated in form level
-    seller = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=False)
+    seller = models.ForeignKey(UserAccount, on_delete=models.CASCADE, null=False)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     hidden = models.BooleanField(default=False)
 
@@ -46,7 +46,7 @@ class ProductModel(models.Model):
 
 
 def path_and_rename(instance, filename):
-    upload_to = 'images/'
+    upload_to = 'product/images/'
     ext = filename.split('.')[-1]
     # get filename
     if instance.pk:

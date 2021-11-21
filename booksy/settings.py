@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'booksy',
     'accounts',
     'product',
+    'transaction',
     'corsheaders',
 ]
 
@@ -111,13 +112,10 @@ WSGI_APPLICATION = 'booksy.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'booksy$d7cm11lo9q6vmh',
-        'USER': 'booksy',
-        'PASSWORD': 'z8feEEG@rnZzEYi',
-        'HOST': 'booksy.mysql.pythonanywhere-services.com',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
+
 }
 
 # Media folder
@@ -175,7 +173,7 @@ STATICFILES_DIRS = (
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'accounts.UserProfile'
+AUTH_USER_MODEL = 'accounts.UserAccount'
 
 # EMAIL
 
