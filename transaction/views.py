@@ -7,6 +7,9 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.db import transaction as tsn
+from django.template.loader import get_template
+from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
 
 from product.models import ProductModel
 from transaction.models import Transaction, ShippingInfo, Payment, BooksBought
@@ -55,6 +58,16 @@ class BuyView(APIView):
                     booksBought.save()
                     product.save()
 
+                    self.send_email_seller(product.seller.email,
+                                           product.seller.get_full_name(),
+                                           request.user.get_full_name(),
+                                           product.title,
+                                           serializers[0].data['direction'],
+                                           serializers[0].data['city'],
+                                           serializers[0].data['country'],
+                                           serializers[0].data['zip_code']
+                                           )
+
         except ResponseError as e:
             return Response(status=e.message)
 
@@ -62,7 +75,6 @@ class BuyView(APIView):
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         return Response(status=status.HTTP_200_OK)
-
 
     def __get_model_info(self, request, model):
         '''
@@ -74,7 +86,6 @@ class BuyView(APIView):
             model_info[attr] = request.data.get(attr)
         return model_info
 
-
     def __check_model_validation(self, data, serializer_class):
         '''
         Check if the serializer is valid for the data given
@@ -83,7 +94,6 @@ class BuyView(APIView):
         if not serializer.is_valid():
             raise ResponseError(message=status.HTTP_400_BAD_REQUEST)
         return serializer
-
 
     def __info_and_validate(self, *args, request, transaction_id):
         '''
@@ -101,6 +111,25 @@ class BuyView(APIView):
             serializers.append(s)
 
         return serializers
+
+    def send_email_seller(self, mail, seller, buyer, prod_title, address, city, country, zip_code):
+        context = {'user': seller, 'buyer': buyer, 'product_title': prod_title,
+                   'address': address, 'city':city, 'country':country, 'zip_code':zip_code}
+        template = get_template('seller_mail.html')
+        content = template.render(context)
+
+        print(content)
+
+        print('Alo')
+
+        email = EmailMultiAlternatives(
+            'Product Sold!',
+            'Booksy',
+            settings.EMAIL_HOST_USER,
+            [mail]
+        )
+        email.attach_alternative(content, 'text/html')
+        email.send()
 
 
 class ResponseError(Exception):
