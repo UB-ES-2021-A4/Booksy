@@ -48,10 +48,10 @@ class ProductView(APIView):
 
         try:
             dic = request.data.dict()
-            dic.update({'category': category.category_name, 'seller': seller.id})
+            dic.update({'category': {'category_name': category.category_name, 'category_description': category.get_category_name_display()}, 'seller': seller.id})
             product_serialized = ProductSerializer(data=dic)
             if not product_serialized.is_valid():
-                return Response(status=status.HTTP_400_BAD_REQUEST)
+                return Response(product_serialized.errors, status=status.HTTP_400_BAD_REQUEST)
 
             prod = ProductModel.objects.create(title=request.POST.get('title'), author=request.POST.get('author'),
                                                description=request.POST.get('description'),
@@ -86,11 +86,14 @@ class ProductView(APIView):
         try:
             owner = getattr(product, 'seller')
             if seller == owner:
-                product_serialized = ProductSerializer(product, data=request.data)
+                dic = request.data.dict()
+                category = Category.objects.get(category_name=request.POST.get('category'))
+                dic.update({'category': {'category_name': category.category_name, 'category_description': category.get_category_name_display()}, 'seller': seller.id})
+                product_serialized = ProductSerializer(product, data=dic)
                 if product_serialized.is_valid():
                     product_serialized.save()
                     return Response(status=status.HTTP_200_OK)
-                return Response(status=status.HTTP_400_BAD_REQUEST)
+                return Response(product_serialized.errors, status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response(status=status.HTTP_401_UNAUTHORIZED)
         except:

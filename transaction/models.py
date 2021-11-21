@@ -1,12 +1,12 @@
 from django.db import models
-from accounts.models import UserProfile
+from accounts.models import UserAccount
 from product.models import ProductModel
 
 
 # Create your models here.
 
 class Transaction(models.Model):
-    buyer = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=False, related_name='buyer_id')
+    buyer = models.ForeignKey(UserAccount, on_delete=models.CASCADE, null=False, related_name='buyer_id')
 
     def __str__(self):
         return str(self.id)
@@ -41,5 +41,5 @@ class Payment(models.Model):
 class BooksBought(models.Model):
     transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE, default=None)
     product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, null=False)
-    seller = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=False, related_name='seller_id')  # On_Delete what to do
+    seller = models.ForeignKey(UserAccount, on_delete=models.CASCADE, null=False, related_name='seller_id')  # On_Delete what to do
 

@@ -55,7 +55,6 @@ class UpdateItem extends Component {
                 this.state.author = res.data[0].author
                 this.state.description = res.data[0].description
                 this.state.price = res.data[0].price
-                this.state.shown_category = res.data[0].category['category_description']
                 this.state.category = res.data[0].category['category_name']
                 this.setState(this.state)
 
@@ -68,7 +67,7 @@ class UpdateItem extends Component {
     }
 
     getCategory (category_name) {
-        axios.get(`${url}/api/category/?category=${category_name}`)
+        axios.get(`${url}/api/product/category/?category=${category_name}`)
             .then((res) => {
                 this.state.category = res.data.category
             })
@@ -77,12 +76,10 @@ class UpdateItem extends Component {
     updateItem = event => {
         //We are using FormData because the backend needs a form-encoded data (request.POST)
         let formItem = new FormData()
-        formItem.append('id', this.state.id)
         formItem.append('title',this.state.title)
         formItem.append('price',this.state.price)
         formItem.append('author',this.state.author)
         formItem.append('category', this.state.category)
-        formItem.append('seller', this.state.seller)
         formItem.append('description',this.state.description)
 
         if (this.checkFormParams(formItem)) {
@@ -114,7 +111,7 @@ class UpdateItem extends Component {
         imgs.append('id', this.props.location.state.id)
         imgs.append('image', this.state.images)
         console.log(imgs.get('id'))
-        axios.patch(`${url}/api/image/`, imgs,
+        axios.patch(`${url}/api/product/image/`, imgs,
             {headers: {'Authorization': `Token ${window.localStorage.getItem('token')}`}})
             .then((res)=> {
                 this.successfulPostAlert()
@@ -128,7 +125,7 @@ class UpdateItem extends Component {
 
 
     getCategories() {
-        axios.get(`${url}/api/category/`)
+        axios.get(`${url}/api/product/category/`)
             .then((res)=> {
                 this.populateCategories(res.data)
             })
