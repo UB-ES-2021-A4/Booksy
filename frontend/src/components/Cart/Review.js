@@ -3,6 +3,10 @@ import './Cart.css'
 import {Col, Container, Row} from "react-bootstrap";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 
+const deploy_url = 'https://booksy.pythonanywhere.com';
+const debug_url = 'http://127.0.0.1:8000';
+const url = debug_url;
+
 export default class Review extends Component {
     continue = e => {
         e.preventDefault();

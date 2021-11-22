@@ -68,18 +68,16 @@ class AddItem extends Component {
     }
 
     checkFormParams (params) {
-        if (params.toString().length === 0) {
-            return false
-        }
-        return true
-
+        return params.toString().length !== 0;
     }
 
     uploadImages(product_id) {
         var imgs = new FormData()
         imgs.append('id', product_id)
         imgs.append('image', this.state.images)
+
         axios.post(`${url}/api/product/image/`, imgs,
+
             {headers: {'Authorization': `Token ${window.localStorage.getItem('token')}`}})
             .then((res)=> {
                 this.successfulPostAlert()
@@ -88,7 +86,6 @@ class AddItem extends Component {
                 this.noPhotosAlert()
                 console.error(error)
             })
-
     }
 
     getCategories() {
@@ -110,7 +107,7 @@ class AddItem extends Component {
     renderCategories = () => {
         const newCategories = Object.getOwnPropertyNames(this.state.categories);
         return newCategories.map((cat, i) => (
-            <option value={cat}>{this.state.categories[cat]}</option>
+            <option value={cat} key={i}>{this.state.categories[cat]}</option>
         ));
     };
 
@@ -165,7 +162,7 @@ class AddItem extends Component {
                                 <br/>
 
                                 <select className="form-select" id="category" onChange={this.handleChange} >
-                                    <option selected>Selecciona una categoría</option>
+                                    <option defaultValue>Selecciona una categoría</option>
                                         {this.renderCategories()}
                                 </select>
                                 <br/>

@@ -6,7 +6,9 @@ import Shipping from "./Shipping";
 import Checkout from "./Checkout";
 import emptyCart from '../pictures/empty_cart.png'
 
-
+const deploy_url = 'https://booksy.pythonanywhere.com';
+const debug_url = 'http://127.0.0.1:8000';
+const url = debug_url;
 
 export default class CheckOut extends Component {
     constructor(props) {
@@ -65,7 +67,7 @@ export default class CheckOut extends Component {
         switch (step) {
             case 1:
                 console.log(this.props.items)
-                if (this.props.items){
+                if (!this.props.items){
                     return (
                         <Checkout
                             nextStep={this.nextStep}
