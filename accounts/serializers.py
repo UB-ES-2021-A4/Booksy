@@ -2,10 +2,10 @@ from rest_framework import serializers
 from accounts import models
 
 
-class UserProfileSerializer(serializers.ModelSerializer):
+class UserAccountSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.UserProfile
-        fields = ('id', 'email', 'name', 'password', 'first_name', 'last_name')
+        model = models.UserAccount
+        fields = [ 'id', 'email', 'username', 'password', 'first_name', 'last_name' ]
         extra_kwargs = {
             'password': {
                 'write_only': True,
@@ -14,9 +14,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        user = models.UserProfile.objects.create_user(
+        user = models.UserAccount.objects.create_user(
             email=validated_data['email'],
-            name=validated_data['name'],
+            username=validated_data['username'],
             password=validated_data['password'],
             first_name=validated_data['first_name'],
             last_name=validated_data['last_name']

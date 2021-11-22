@@ -75,7 +75,9 @@ class AddItem extends Component {
         var imgs = new FormData()
         imgs.append('id', product_id)
         imgs.append('image', this.state.images)
-        axios.post('http://127.0.0.1:8000/api/image/', imgs,
+
+        axios.post(`${url}/api/product/image/`, imgs,
+
             {headers: {'Authorization': `Token ${window.localStorage.getItem('token')}`}})
             .then((res)=> {
                 this.successfulPostAlert()
@@ -87,7 +89,7 @@ class AddItem extends Component {
     }
 
     getCategories() {
-        axios.get(`${url}/api/category/`)
+        axios.get(`${url}/api/product/category/`)
             .then((res)=> {
                 this.populateCategories(res.data)
             })

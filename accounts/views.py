@@ -1,32 +1,51 @@
 from django.shortcuts import render
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.settings import api_settings
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status, viewsets, filters, generics
-from rest_framework.authentication import TokenAuthentication
+from rest_framework import viewsets, status
 from rest_framework.authtoken.models import Token
-from rest_framework.authtoken.views import ObtainAuthToken
-from rest_framework.settings import api_settings
-from accounts import serializers, models, permissions
+from accounts import serializers, models
 from django.views.generic.base import TemplateView
 
-from rest_framework.decorators import permission_classes
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 
-# TODO refactor name, this view is for signup.
-# TODO Check if TemplateView does anything (Should check in heroku not in local)
-class UserProfileViewSet(viewsets.ModelViewSet, TemplateView):  # Viewset has DEFAULT_RENDERER_CLASSES by default, no need to add it
-    serializer_class = serializers.UserProfileSerializer
-    queryset = models.UserProfile.objects.all()
+from accounts.serializers import UserAccountSerializer
+
+"""
+class UserAccountViewSet(viewsets.ModelViewSet,
+                         TemplateView):  # Viewset has DEFAULT_RENDERER_CLASSES by default, no need to add it
+    serializer_class = serializers.UserAccountSerializer
+    queryset = models.UserAccount.objects.all()
     permission_classes = (AllowAny,)
     http_method_names = ['post']  # Here you can put the names of the requests that this viewSet is able to process
     template_name = 'index.html'
+"""
 
 
-# Class view that returns a token if the user exists and the login credentials are correct.
-class UserLoginApiView(ObtainAuthToken):
+class UserAccountSignUp(APIView):
+    serializer_class = UserAccountSerializer
+    permission_classes = (AllowAny,)
+
+    def post(self, request):
+        try:
+            account_serialized = UserAccountSerializer(data=request.data)
+            if account_serialized.is_valid():
+                account = account_serialized.save()
+                account = models.UserAccount.objects.get(id=account.id)
+                token, created = Token.objects.get_or_create(user=account)
+                return Response({'token': token.key}, status=status.HTTP_201_CREATED)
+            else:
+                return Response(account_serialized.errors, status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class UserAccountLogin(ObtainAuthToken):
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
+    permission_classes = (AllowAny,)
 
     def post(self, request, *args, **kwargs):
         print(request.data)
@@ -36,7 +55,6 @@ class UserLoginApiView(ObtainAuthToken):
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
 
-        #TODO do we really need all this data? token may be enough.
         return Response({
             'token': token.key,
             'user_id': user.pk,
@@ -44,28 +62,6 @@ class UserLoginApiView(ObtainAuthToken):
             'email': user.email
         })
 
-'''
-# Class view that returns the user attached to the given token
-class UserApi(viewsets.ModelViewSet):
-    permission_classes(IsAuthenticated)
-    serializer_class = serializers.UserProfileSerializer
-    queryset = models.UserProfile.objects.all()
 
-    def get_object(self):
-        return self.request.user
-
-
-# Class view that removes the user's token, logging it out.
-class UserApiLogout(viewsets.ModelViewSet):
-    permission_classes(IsAuthenticated)
-    queryset = models.UserProfile.objects.all()
-    serializer_class = serializers.UserProfileSerializer
-
-    def get(self, request, format=None):
-        # simply delete the token to force a login
-        request.user.auth_token.delete()
-        return Response(status=status.HTTP_200_OK)
-
-'''
 def index(request):
     return render(request, 'index.html')
