@@ -1,6 +1,8 @@
 from django.test import TestCase
 from accounts.models import UserAccount
 from rest_framework.test import APIClient
+
+from product.models import Category, ProductModel
 from transaction.models import Transaction, ShippingInfo, Payment, BooksBought
 from datetime import datetime
 
@@ -301,3 +303,69 @@ class PaymentModelTest(TestCase):
         )
         pay.save()
         self.assertEquals(Payment.objects.get(transaction=self.trans).__str__(),'123')
+
+class TestEndpoint(TestCase):
+    def setUp(self):
+        self.user = UserAccount.objects.create(
+            email='testerAdmin@test.es',
+            username='TestAdminAddProduct',
+            password='123fsfsfaha4213',
+            first_name='Admin',
+            last_name='User')
+        self.user.save()
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
+        self.url = self.url = '/api/buy/'
+        self.seller = UserAccount.objects.create(
+            email='sellerAdmin@test.es',
+            username='SellerAdminAddProduct',
+            password='123fsfsfaha4213',
+            first_name='AdminSeller',
+            last_name='User')
+        self.seller.save()
+
+        self.category = Category.objects.create(category_name='JU')
+        self.category.save()
+
+        self.book = ProductModel.objects.create(title='Donde los árboles cantan',
+                                                author='Laura Gallego',
+                                                price=14.9,
+                                                description='Viana, la única hija del duque de Rocagrís, está prometida al ',
+                                                seller=self.seller,
+                                                category_id=self.category.id)
+        self.book.save()
+
+        self.book2 = ProductModel.objects.create(title='Donde los árboles cantan 2',
+                                                author='Laura Gallego Uwu',
+                                                price=2,
+                                                description='Viana, la única hija del duque de Rocagrís, está prometida al ',
+                                                seller=self.seller,
+                                                category_id=self.category.id)
+        self.book2.save()
+
+    def test_post_200(self):
+        ids = [[1,2]] # Haciendolo así te devuelve [1,2]
+        ids2 = [1,2] # Así te devuelve solo el 2
+        ids3 = {1:1,2:2} #Te dice que asi no se puede enviar, porque es json
+
+        ids4 = list() # Asi te devuelve el 2
+        ids4.append(1)
+        ids4.append(2)
+
+        response = self.client.post(self.url,
+                         data={
+                            'id': ids4,
+                            'datetime': datetime.now(), # Esto ya como veais donde gestionarlo
+                            'name': self.user.first_name,
+                            'surnames': self.user.last_name,
+                             'direction': 'La casa',
+                             'city': 'Alcantarilla',
+                             'country': 'Murcia del Norte',
+                             'zip_code': '08035',
+                             'card_name': 'Jose Contreras',
+                             'card_num': '08345',
+                             'expiration_card': 'tarde',
+                             'cvv': '342',
+                         })
+
+        self.assertEqual(response.status_code,200)
