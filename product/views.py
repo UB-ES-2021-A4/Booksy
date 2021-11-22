@@ -27,13 +27,13 @@ class ProductView(APIView):
             category = request.GET.get('category')
 
             if product_id:
-                product_list = list(ProductModel.objects.filter(id=product_id))
+                product_list = list(ProductModel.objects.filter(id=product_id, hidden=False))
 
             elif category:
                 category = Category.objects.get(category_name=category)
-                product_list = list(ProductModel.objects.filter(category=category))
+                product_list = list(ProductModel.objects.filter(category=category, hidden=False))
             else:
-                product_list = list(ProductModel.objects.all())
+                product_list = list(ProductModel.objects.filter(hidden=False))
 
             serialized_products = [ProductSerializer(prod).data for prod in product_list]
             return Response(serialized_products,

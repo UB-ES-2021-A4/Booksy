@@ -39,6 +39,7 @@ class ProductModel(models.Model):
     price = models.FloatField(default=0., blank=False)  # Minimum value has to be validated in form level
     seller = models.ForeignKey(UserAccount, on_delete=models.CASCADE, null=False)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    hidden = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
