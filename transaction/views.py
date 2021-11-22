@@ -26,6 +26,7 @@ class BuyView(APIView):
             with tsn.atomic():
 
                 if not isinstance(request.data['id'], list):
+                    print(request.data['id'])
                     raise ResponseError(message=status.HTTP_400_BAD_REQUEST)  # id must be a list
 
                 for id in request.data['id']:
