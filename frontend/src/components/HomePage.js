@@ -3,8 +3,8 @@ import {Col, Container, Row, Card} from "react-bootstrap";
 import './HomePage.css'
 import axios from "axios";
 import {withRouter} from "react-router-dom";
-import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
-import swal from "sweetalert";
+import VerifiedSharpIcon from '@mui/icons-material/VerifiedSharp';
+import {Grid} from "@mui/material";
 
 const deploy_url = 'https://booksy.pythonanywhere.com';
 const debug_url = 'http://127.0.0.1:8000';
@@ -22,10 +22,11 @@ class HomePage extends Component {
             },
             cards: [],
         }
-    }
+        this.getCards = this.getCards.bind(this);
 
+    }
     isOwner (card) {
-        let owner = (window.localStorage.getItem('user_id'))
+        let owner = (window.localStorage.getItem('user_id')).toString()
         return (card.seller).toString() === owner;
     }
 
@@ -40,41 +41,22 @@ class HomePage extends Component {
             state: { id: id}
         });
     }
-
-    handleDelete = (id) => {
-        swal({
-            title: "Are you sure?",
-            text: "Once deleted, you will not be able to recover this item.",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        })
-            .then((willDelete) => {
-                if (willDelete) {
-                    axios.delete(`${url}/api/product/?id=${id}`,
-                        {headers: {'Authorization': `Token ${window.localStorage.getItem('token')}`}})
-                        .then((res) => {
-                            swal("Poof! Your item has been deleted!", {
-                                icon: "success",
-                            });
-                            this.refreshPage();
-                        }).catch((error) => {
-                        console.error(error)
-                        swal('Error', 'Item couldn`t be deleted due to some internal errors.', 'error')
-                    })
-
-                } else {
-                    swal("Success", "Your item is safe!", 'success');
-                }
+    handleOpen = (id, image) => {
+        this.sleep(700).then(() => {
+            this.props.history.push({
+                pathname: `/OpenItem/${id}`,
+                state: { id: id,  image: image}
             });
+        });
+    }
+
+    sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     componentDidMount() {
         this.getCards = this.getCards.bind(this);
         this.getCards()
-    }
-    refreshPage() {
-        window.location.reload(false);
     }
 
     getCards() {
@@ -107,27 +89,22 @@ class HomePage extends Component {
 
     renderCards() {
         const allCards = this.state.cards
-        console.error('Render')
         return allCards.map(card =>
-            <Col>
+            <Col key={card['id']} onClick={() => this.handleOpen(card['id'], card['images'])}>
                 <Card className="card-HomePage">
                     <img className="card-img-top image_100"
                          src={`${url}${card['images']}`}
-
                          alt="Card image cap"/>
-                    {this.isOwner(card) ? (
-                        <button className="btn-delete"><CancelRoundedIcon onClick={() => this.handleDelete(card['id'])}/></button>
-                    ) : (
-                        <button className="btn-delete visually-hidden"><CancelRoundedIcon onClick={() => this.handleDelete(card['id'])}/></button>
-                    )}
+                    <div className="card-text-left">
+                        {this.isOwner(card) ? (
+                            <button className="btn-delete"><VerifiedSharpIcon/></button>
+                        ) : (
+                            <button className="btn-delete visually-hidden"><VerifiedSharpIcon/></button>
+                        )}
+                    </div>
                     <div className="card-body">
                         <h4 className="card-title">{card['title']}</h4>
-                        <p>{`${card['price']} €`}</p>
-                        {this.isOwner(card) ? (
-                            <a className="btn button_update button-add-item" id="updateItemButton" onClick={() => this.handleClickUpdate(card['id'])}>Update item</a>
-                        ) : (
-                            <a href="/cart" className="btn button-add-to-cart button-add-item" id="addToCartButton">Add to cart</a>
-                        )}
+                        <h5 className="text-end"><b>{`${card['price']} €`}</b></h5>
                     </div>
                 </Card>
             </Col>
@@ -135,9 +112,7 @@ class HomePage extends Component {
     }
 
     render () {
-
         return (
-
             <div>
                 <Container>
                     <Row>
@@ -149,7 +124,7 @@ class HomePage extends Component {
                             <button className="button button-add-item" onClick={this.handleClick}>Add Item</button>
                         </Col>
                     </Row>
-                    <Row>
+                    <Row className="wrapper">
                         {this.renderCards()}
                     </Row>
                     <br/>

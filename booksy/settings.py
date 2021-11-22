@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'booksy',
     'accounts',
     'product',
+    'transaction',
     'corsheaders',
 ]
 
@@ -114,6 +115,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
+
 }
 
 # Media folder
@@ -174,12 +176,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'accounts.UserAccount'
 
 # EMAIL
-
-EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_SSL = False
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'booksynoreply@gmail.com'
 EMAIL_HOST_PASSWORD = 'Wanpise2021'
 EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 # White listing the localhost:3000 port
 # for React

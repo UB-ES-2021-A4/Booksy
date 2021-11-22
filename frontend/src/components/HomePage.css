@@ -34,6 +34,38 @@
     background-color: #f1f1f1;
     width: 15rem;
 }
+
+.card-HomePage:hover {
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.3);
+    width: 15rem;
+}
+
+.card-HomePage:after {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 0;
+    top:0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: all 0.5s;
+    box-shadow: 0 0 10px 40px white;
+}
+
+.card-HomePage:active:after {
+    box-shadow: 0 0 0 0 #C6E7D8;
+    position: absolute;
+    left: 0;
+    top:0;
+    opacity: 1;
+    transition: 0s;
+}
+
+.card-HomePage:active {
+    top: 1px;
+}
+
 .card-HomePage img {
     width: 100%;
     height: auto;
@@ -45,12 +77,13 @@
     font-weight: bolder;
     font-size: 1.2em;
     position:absolute;
-    top: 12px;
-    left: 14px;
+    top: 15px;
+    left: 18px;
     transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
-    color: white;
-    box-shadow: #111111;
+    background-image: radial-gradient(black, rgba(0,0,0,0.4),transparent, transparent);
+    color: yellow;
+    box-shadow: black;
     border: none;
     border-radius: 5px;
 }
@@ -108,6 +141,12 @@
 .button_update:hover {
     background-color: #01353D;
     color: white;
+}
+
+.wrapper {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 550px;
 }
 
 

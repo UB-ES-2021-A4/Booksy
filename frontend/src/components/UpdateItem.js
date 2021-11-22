@@ -11,7 +11,6 @@ const deploy_url = 'https://booksy.pythonanywhere.com';
 const debug_url = 'http://127.0.0.1:8000';
 const url = debug_url;
 
-
 class UpdateItem extends Component {
     constructor(props) {
         super(props);
@@ -57,9 +56,6 @@ class UpdateItem extends Component {
                 this.state.price = res.data[0].price
                 this.state.category = res.data[0].category['category_name']
                 this.setState(this.state)
-
-                //TODO recuperar las imagenes y bien las categorias
-                //this.getCategory(res.data[0].category)
             })
             .catch((error) => {
                 console.log(error)

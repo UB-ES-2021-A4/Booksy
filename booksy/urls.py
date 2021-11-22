@@ -32,5 +32,7 @@ urlpatterns = [
     path('api/product/', include('product.urls')),
     path('api/profile/', include('accounts.profile_urls')),
 
+    path('api/', include('transaction.urls')),
+
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
   + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
