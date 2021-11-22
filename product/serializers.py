@@ -32,6 +32,7 @@ class ProductSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image

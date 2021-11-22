@@ -19,11 +19,9 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 import accounts.views
-from accounts import views
 
 urlpatterns = [
     path('', accounts.views.index, name='index'),
-
     path('signup/', accounts.views.index, name='index'),
     path('login/', accounts.views.index, name='index'),
     path('home_page/', accounts.views.index, name='index'),
@@ -32,6 +30,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/account/', include('accounts.urls')),
     path('api/product/', include('product.urls')),
+    path('api/profile/', include('accounts.profile_urls')),
 
     path('api/', include('transaction.urls')),
 
