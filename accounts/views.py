@@ -1,6 +1,5 @@
 import os
 
-from celery.bin.control import status
 from django.shortcuts import render
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.views import ObtainAuthToken
