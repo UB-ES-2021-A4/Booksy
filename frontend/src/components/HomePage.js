@@ -25,8 +25,8 @@ class HomePage extends Component {
             items_to_cart: [],
         }
         this.getCards = this.getCards.bind(this);
-
     }
+
     isOwner (card) {
         let owner = (window.localStorage.getItem('user_id')).toString()
         return (card.seller).toString() === owner;
@@ -68,8 +68,6 @@ class HomePage extends Component {
             this.state.items_to_cart = JSON.parse(localStorage.getItem("items_to_cart"));
             this.state.items_to_cart.push(this.props.location.state.item_to_cart)
         }
-
-        console.log(this.state.items_to_cart)
         axios.get(`${url}/api/product/`)
             .then((res)=> {
                 this.populateCards(res.data)
@@ -97,11 +95,9 @@ class HomePage extends Component {
     }
 
     addToCart () {
-        console.log("estoy en additem")
-        console.log(this.state.items_to_cart)
         if (this.state.items_to_cart !== []) {
-            console.log("json string")
             localStorage.setItem("items_to_cart", JSON.stringify(this.state.items_to_cart));
+            console.log("se hace el set")
         }
         this.props.history.push({
             pathname: '/cart',

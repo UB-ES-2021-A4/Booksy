@@ -63,27 +63,22 @@ class Cart extends Component {
     componentDidMount() {
         this.setItems = this.setItems.bind(this);
         this.setItems()
-        console.log("estoy en cart")
     }
 
     setItems() {
-        console.log(this.props)
         if (this.props.location.state) {
             this.state.items_to_cart = JSON.parse(localStorage.getItem("items_to_cart"));
-            this.state.items_to_cart.push(this.props.location.state.items_to_cart)
-            console.log(this.state.items_to_cart)
         }
     }
 
     render() {
         const { step } = this.state;
-        const { nombre, apellidos, email, direccion, ciudad, pais, codigoPostal, nombreTarjeta, numerotarjeta, expMonth, expYear, CVV, items_to_cart } = this.state;
-        const values = { nombre, apellidos, email, direccion, ciudad, pais, codigoPostal, nombreTarjeta, numerotarjeta, expMonth, expYear, CVV , items_to_cart};
+        const { nombre, apellidos, email, direccion, ciudad, pais, codigoPostal, nombreTarjeta, numerotarjeta, expMonth, expYear, CVV } = this.state;
+        const values = { nombre, apellidos, email, direccion, ciudad, pais, codigoPostal, nombreTarjeta, numerotarjeta, expMonth, expYear, CVV };
 
         switch (step) {
             case 1:
-                console.log(this.props.items)
-                if (this.state.items_to_cart === null){
+                if (this.props.location.state.items_to_cart.length > 0){
                     return (
                         <Checkout
                             nextStep={this.nextStep}
