@@ -343,6 +343,23 @@ class TestEndpoint(TestCase):
                                                 category_id=self.category.id)
         self.book2.save()
 
+        self.book3 = ProductModel.objects.create(title='Donde los árboles cantan 3',
+                                                 author='Laura Gallego Uwu',
+                                                 price=2,
+                                                 description='Viana, la única hija del duque de Rocagrís, está prometida al ',
+                                                 seller=self.seller,
+                                                 category_id=self.category.id)
+        self.book3.hidden = True
+        self.book3.save()
+
+        self.book4 = ProductModel.objects.create(title='Donde los árboles cantan 4',
+                                                 author='Laura Gallego Uwu',
+                                                 price=2,
+                                                 description='Viana, la única hija del duque de Rocagrís, está prometida al ',
+                                                 seller=self.seller,
+                                                 category_id=self.category.id)
+        self.book4.save()
+
     def test_post_200(self):
         ids = [[1,2]] # Haciendolo así te devuelve [1,2]
         ids2 = [1,2] # Así te devuelve solo el 2
@@ -369,3 +386,93 @@ class TestEndpoint(TestCase):
                          })
 
         self.assertEqual(response.status_code,200)
+
+    def test_post_notList(self):
+        response = self.client.post(self.url,
+                                    data={
+                                        'id': 'not list',
+                                        'datetime': datetime.now(),  # Esto ya como veais donde gestionarlo
+                                        'name': self.user.first_name,
+                                        'surnames': self.user.last_name,
+                                        'direction': 'La casa',
+                                        'city': 'Alcantarilla',
+                                        'country': 'Murcia del Norte',
+                                        'zip_code': '08035',
+                                        'card_name': 'Jose Contreras',
+                                        'card_num': '08345',
+                                        'expiration_card': 'tarde',
+                                        'cvv': '342',
+                                    })
+        self.assertEquals(response.status_code, 400)
+
+    def test_post_notFound(self):
+        response = self.client.post(self.url,
+                                    data={
+                                        'id': [1,404],
+                                        'datetime': datetime.now(),  # Esto ya como veais donde gestionarlo
+                                        'name': self.user.first_name,
+                                        'surnames': self.user.last_name,
+                                        'direction': 'La casa',
+                                        'city': 'Alcantarilla',
+                                        'country': 'Murcia del Norte',
+                                        'zip_code': '08035',
+                                        'card_name': 'Jose Contreras',
+                                        'card_num': '08345',
+                                        'expiration_card': 'tarde',
+                                        'cvv': '342',
+                                    })
+        self.assertEquals(response.status_code, 404)
+
+    def test_post_alreadySold(self):
+        response = self.client.post(self.url,
+                                    data={
+                                        'id': [1, 2, 3],
+                                        'datetime': datetime.now(),  # Esto ya como veais donde gestionarlo
+                                        'name': self.user.first_name,
+                                        'surnames': self.user.last_name,
+                                        'direction': 'La casa',
+                                        'city': 'Alcantarilla',
+                                        'country': 'Murcia del Norte',
+                                        'zip_code': '08035',
+                                        'card_name': 'Jose Contreras',
+                                        'card_num': '08345',
+                                        'expiration_card': 'tarde',
+                                        'cvv': '342',
+                                    })
+        self.assertEquals(response.status_code, 404)
+
+    def test_post_buyMyself(self):
+        response = self.client.post(self.url,
+                                    data={
+                                        'id': [4, 2, 3],
+                                        'datetime': datetime.now(),  # Esto ya como veais donde gestionarlo
+                                        'name': self.user.first_name,
+                                        'surnames': self.user.last_name,
+                                        'direction': 'La casa',
+                                        'city': 'Alcantarilla',
+                                        'country': 'Murcia del Norte',
+                                        'zip_code': '08035',
+                                        'card_name': 'Jose Contreras',
+                                        'card_num': '08345',
+                                        'expiration_card': 'tarde',
+                                        'cvv': '342',
+                                    })
+        self.assertEquals(response.status_code, 403)
+
+    def test_post_sameBook(self):
+        response = self.client.post(self.url,
+                                    data={
+                                        'id': [1, 1, 3],
+                                        'datetime': datetime.now(),  # Esto ya como veais donde gestionarlo
+                                        'name': self.user.first_name,
+                                        'surnames': self.user.last_name,
+                                        'direction': 'La casa',
+                                        'city': 'Alcantarilla',
+                                        'country': 'Murcia del Norte',
+                                        'zip_code': '08035',
+                                        'card_name': 'Jose Contreras',
+                                        'card_num': '08345',
+                                        'expiration_card': 'tarde',
+                                        'cvv': '342',
+                                    })
+        self.assertEquals(response.status_code, 404)
