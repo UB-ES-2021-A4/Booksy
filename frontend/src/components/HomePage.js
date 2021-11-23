@@ -4,7 +4,8 @@ import './HomePage.css'
 import axios from "axios";
 import {withRouter} from "react-router-dom";
 import VerifiedSharpIcon from '@mui/icons-material/VerifiedSharp';
-import {Grid} from "@mui/material";
+import StoreIcon from "@mui/icons-material/Store";
+import SearchIcon from "@mui/icons-material/Search";
 
 const deploy_url = 'https://booksy.pythonanywhere.com';
 const debug_url = 'http://127.0.0.1:8000';
@@ -21,6 +22,7 @@ class HomePage extends Component {
                 username: '',
             },
             cards: [],
+            items_to_cart: [],
         }
         this.getCards = this.getCards.bind(this);
 
@@ -42,6 +44,7 @@ class HomePage extends Component {
         });
     }
     handleOpen = (id, image) => {
+        localStorage.setItem("items_to_cart", JSON.stringify(this.state.items_to_cart));
         this.sleep(700).then(() => {
             this.props.history.push({
                 pathname: `/OpenItem/${id}`,
@@ -56,10 +59,17 @@ class HomePage extends Component {
 
     componentDidMount() {
         this.getCards = this.getCards.bind(this);
+        this.addToCart = this.addToCart.bind(this);
         this.getCards()
     }
 
     getCards() {
+        if (this.props.location.state) {
+            this.state.items_to_cart = JSON.parse(localStorage.getItem("items_to_cart"));
+            this.state.items_to_cart.push(this.props.location.state.item_to_cart)
+        }
+
+        console.log(this.state.items_to_cart)
         axios.get(`${url}/api/product/`)
             .then((res)=> {
                 this.populateCards(res.data)
@@ -86,6 +96,18 @@ class HomePage extends Component {
         //setState calls render() when used and is an asynchronous function, care headaches!
     }
 
+    addToCart () {
+        console.log("estoy en additem")
+        console.log(this.state.items_to_cart)
+        if (this.state.items_to_cart !== []) {
+            console.log("json string")
+            localStorage.setItem("items_to_cart", JSON.stringify(this.state.items_to_cart));
+        }
+        this.props.history.push({
+            pathname: '/cart',
+            state: { items_to_cart: this.state.items_to_cart}
+        });
+    }
 
     renderCards() {
         const allCards = this.state.cards
@@ -115,13 +137,21 @@ class HomePage extends Component {
         return (
             <div>
                 <Container>
+                    <br/>
                     <Row>
-                        <Col>
-                            <h2>Category</h2>
+                        <Col className="col-sm-2">
+                            <h1>All books</h1>
                             <br/>
                         </Col>
-                        <Col>
+                        <Col className="position-right">
+                            <StoreIcon onClick={this.addToCart}/>
                             <button className="button button-add-item" onClick={this.handleClick}>Add Item</button>
+                            <a className="navbar-item-right" >
+                                <div className="search-box">
+                                    <button className="btn-search"><SearchIcon/></button>
+                                    <input type="text" className="input-search" id="search_input" placeholder="Type to Search..."/>
+                                </div>
+                            </a>
                         </Col>
                     </Row>
                     <Row className="wrapper">

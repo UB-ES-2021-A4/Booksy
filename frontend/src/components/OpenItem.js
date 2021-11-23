@@ -39,7 +39,10 @@ class OpenItem extends Component {
                 state: { id: this.state.id}
             });
         } else {
-            this.props.history.push('/cart')
+            this.props.history.push({
+                pathname: '/home_page',
+                state: {item_to_cart: this.state.id}
+            });
         }
     }
 

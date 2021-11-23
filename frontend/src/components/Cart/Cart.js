@@ -5,12 +5,13 @@ import Payment from "./Payment";
 import Shipping from "./Shipping";
 import Checkout from "./Checkout";
 import emptyCart from '../pictures/empty_cart.png'
+import {withRouter} from "react-router-dom";
 
 const deploy_url = 'https://booksy.pythonanywhere.com';
 const debug_url = 'http://127.0.0.1:8000';
 const url = debug_url;
 
-export default class CheckOut extends Component {
+class Cart extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -27,6 +28,7 @@ export default class CheckOut extends Component {
             expMonth: 0,
             expYear: 0,
             CVV: 0,
+            items_to_cart: [],
         };
     }
 
@@ -58,16 +60,30 @@ export default class CheckOut extends Component {
         this.setState({ [input]: e.target.value });
     };
 
+    componentDidMount() {
+        this.setItems = this.setItems.bind(this);
+        this.setItems()
+        console.log("estoy en cart")
+    }
+
+    setItems() {
+        console.log(this.props)
+        if (this.props.location.state) {
+            this.state.items_to_cart = JSON.parse(localStorage.getItem("items_to_cart"));
+            this.state.items_to_cart.push(this.props.location.state.items_to_cart)
+            console.log(this.state.items_to_cart)
+        }
+    }
 
     render() {
         const { step } = this.state;
-        const { nombre, apellidos, email, direccion, ciudad, pais, codigoPostal, nombreTarjeta, numerotarjeta, expMonth, expYear, CVV } = this.state;
-        const values = { nombre, apellidos, email, direccion, ciudad, pais, codigoPostal, nombreTarjeta, numerotarjeta, expMonth, expYear, CVV };
+        const { nombre, apellidos, email, direccion, ciudad, pais, codigoPostal, nombreTarjeta, numerotarjeta, expMonth, expYear, CVV, items_to_cart } = this.state;
+        const values = { nombre, apellidos, email, direccion, ciudad, pais, codigoPostal, nombreTarjeta, numerotarjeta, expMonth, expYear, CVV , items_to_cart};
 
         switch (step) {
             case 1:
                 console.log(this.props.items)
-                if (!this.props.items){
+                if (this.state.items_to_cart === null){
                     return (
                         <Checkout
                             nextStep={this.nextStep}
@@ -119,3 +135,5 @@ export default class CheckOut extends Component {
         }
     }
 }
+
+export default withRouter(Cart);
