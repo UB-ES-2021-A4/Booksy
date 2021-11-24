@@ -80,7 +80,6 @@ class Cart extends Component {
             subtotal: store.subtotal,
             num_items: store.num_items,
         })
-        console.log(this.state)
     }
 
     componentDidMount() {

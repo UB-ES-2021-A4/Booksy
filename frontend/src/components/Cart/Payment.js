@@ -29,15 +29,9 @@ export default class Payment extends Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
-    componentDidMount() {
-        console.log(this.props.getStore())
-    }
-
-
     continue = e => {
         e.preventDefault();
         this.updateStoreInfo();
-        console.log(this.props.values)
         this.props.nextStep();
     };
 
@@ -75,7 +69,6 @@ export default class Payment extends Component {
         this.setState({
             [this.props.values]: this.state
         });
-        console.log(this.props.values)
         this.props.setStore(this.props.values)
     }
 

@@ -53,7 +53,6 @@ export default class Checkout extends Component {
         }
         let items_num = this.state.items_to_cart.length
         this.setState({cards: tmp, subtotal: total, num_items: items_num});
-        console.log(this.state.subtotal, this.state.num_items)
     }
 
     renderCards() {
@@ -117,7 +116,6 @@ export default class Checkout extends Component {
         this.setState({
             [this.props.values]: this.state
         });
-        console.log(this.props.values)
         this.props.setStore(this.props.values)
     }
 
