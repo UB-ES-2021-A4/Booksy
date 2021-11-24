@@ -61,13 +61,19 @@ class HomePage extends Component {
         this.getCards = this.getCards.bind(this);
         this.addToCart = this.addToCart.bind(this);
         this.getCards()
+        let finalString =  window.localStorage.getItem('items_to_cart').replace(/^,|,$/g, "")
+        console.log(window.localStorage.getItem('items_to_cart'))
     }
 
     getCards() {
         if (this.props.location.state) {
             this.state.items_to_cart = JSON.parse(localStorage.getItem("items_to_cart"));
             this.state.items_to_cart.push(this.props.location.state.item_to_cart)
+            console.log("estamos en el push")
+        } else {
+            //for(let index = 0; index <)
         }
+        console.log(this.state.items_to_cart)
         axios.get(`${url}/api/product/`)
             .then((res)=> {
                 this.populateCards(res.data)
@@ -97,7 +103,6 @@ class HomePage extends Component {
     addToCart () {
         if (this.state.items_to_cart !== []) {
             localStorage.setItem("items_to_cart", JSON.stringify(this.state.items_to_cart));
-            console.log("se hace el set")
         }
         this.props.history.push({
             pathname: '/cart',
@@ -140,7 +145,7 @@ class HomePage extends Component {
                             <br/>
                         </Col>
                         <Col className="position-right">
-                            <StoreIcon onClick={this.addToCart}/>
+                            <StoreIcon className="position-right" onClick={this.addToCart}/>
                             <button className="button button-add-item" onClick={this.handleClick}>Add Item</button>
                             <a className="navbar-item-right" >
                                 <div className="search-box">

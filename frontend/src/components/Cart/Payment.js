@@ -10,15 +10,45 @@ const url = debug_url;
 export default class Payment extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            nombreTarjeta: props.getStore().nombreTarjeta,
+            numeroTarjeta: props.getStore().numeroTarjeta,
+            expDate: props.getStore().expDate,
+            expMonth: 0,
+            expYear: 0,
+            CVV: props.getStore().CVV,
+            nombre: props.getStore().nombre,
+            apellidos: props.getStore().apellidos,
+            direccion: props.getStore().direccion,
+            ciudad: props.getStore().ciudad,
+            pais: props.getStore().pais,
+            codigoPostal: props.getStore().codigoPostal,
+            subtotal: props.getStore().subtotal,
+            num_items: props.getStore().num_items,
+        };
         this.handleChange = this.handleChange.bind(this);
     }
+
+    componentDidMount() {
+        console.log(this.props.getStore())
+    }
+
+
     continue = e => {
         e.preventDefault();
+        this.updateStoreInfo();
+        console.log(this.props.values)
         this.props.nextStep();
     };
 
+    getExpDate () {
+        let exp = this.state.expMonth.toString() + '/' + this.state.expYear.toString()
+        return exp
+    }
+
     back = e => {
         e.preventDefault();
+        this.updateStoreInfo();
         this.props.prevStep();
     };
 
@@ -27,6 +57,27 @@ export default class Payment extends Component {
             [event.target.id]: event.target.value
         });
     };
+
+    updateStoreInfo() {
+
+        this.props.values.nombreTarjeta = this.state.nombreTarjeta
+        this.props.values.numeroTarjeta = this.state.numeroTarjeta
+        this.props.values.expDate= this.getExpDate();
+        this.props.values.CVV = this.state.CVV
+        this.props.values.nombre = this.state.nombre
+        this.props.values.apellidos = this.state.apellidos
+        this.props.values.direccion= this.state.direccion
+        this.props.values.ciudad = this.state.ciudad
+        this.props.values.pais = this.state.pais
+        this.props.values.codigoPostal = this.state.codigoPostal
+        this.props.values.subtotal = this.state.subtotal
+        this.props.values.num_items = this.state.num_items
+        this.setState({
+            [this.props.values]: this.state
+        });
+        console.log(this.props.values)
+        this.props.setStore(this.props.values)
+    }
 
     render() {
         const { values, handleChange } = this.props;
@@ -63,18 +114,13 @@ export default class Payment extends Component {
                                 <br/>
                                 <form action="">
                                     <div className="input-field">
-                                        <input type="text" id="nombreTarjeta" onChange={handleChange} required/>
+                                        <input type="text" id="nombreTarjeta" onChange={this.handleChange} required/>
                                         <label htmlFor="nombreTarjeta">Nombre de la Tarjeta</label>
                                     </div>
                                     <br/>
                                     <div className="input-field">
                                         <input type="number" id="numeroTarjeta" onChange={this.handleChange} required/>
                                         <label htmlFor="numeroTarjeta">Número de la Tarjeta</label>
-                                    </div>
-                                    <br/>
-                                    <div className="input-field">
-                                        <input type="email" id="email" onChange={this.handleChange} required/>
-                                        <label htmlFor="email">Email</label>
                                     </div>
                                     <br/>
                                     <div className="input-field">

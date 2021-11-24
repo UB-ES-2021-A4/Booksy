@@ -25,9 +25,10 @@ class Cart extends Component {
             codigoPostal: 0,
             nombreTarjeta: '',
             numeroTarjeta: 0,
-            expMonth: 0,
-            expYear: 0,
+            expDate: '',
             CVV: 0,
+            subtotal: 0,
+            num_items: 0,
             items_to_cart: [],
         };
     }
@@ -60,6 +61,28 @@ class Cart extends Component {
         this.setState({ [input]: e.target.value });
     };
 
+    getStore() {
+        return this.state;
+    }
+
+    setStore(store) {
+        this.setState({
+            nombre: store.nombre,
+            apellidos: store.apellidos,
+            direccion: store.direccion,
+            ciudad: store.ciudad,
+            pais: store.pais,
+            codigoPostal: store.codigoPostal,
+            nombreTarjeta: store.nombreTarjeta,
+            numeroTarjeta: store.numeroTarjeta,
+            expDate: store.expDate,
+            CVV: store.CVV,
+            subtotal: store.subtotal,
+            num_items: store.num_items,
+        })
+        console.log(this.state)
+    }
+
     componentDidMount() {
         this.setItems = this.setItems.bind(this);
         this.setItems()
@@ -73,8 +96,8 @@ class Cart extends Component {
 
     render() {
         const { step } = this.state;
-        const { nombre, apellidos, email, direccion, ciudad, pais, codigoPostal, nombreTarjeta, numerotarjeta, expMonth, expYear, CVV } = this.state;
-        const values = { nombre, apellidos, email, direccion, ciudad, pais, codigoPostal, nombreTarjeta, numerotarjeta, expMonth, expYear, CVV };
+        const { nombre, apellidos, email, direccion, ciudad, pais, codigoPostal, nombreTarjeta, numeroTarjeta, expDate, CVV, subtotal, num_items } = this.state;
+        const values = { nombre, apellidos, email, direccion, ciudad, pais, codigoPostal, nombreTarjeta, numeroTarjeta, expDate, CVV, subtotal, num_items };
 
         switch (step) {
             case 1:
@@ -82,7 +105,9 @@ class Cart extends Component {
                     return (
                         <Checkout
                             nextStep={this.nextStep}
-                            handleChange={this.handleChange}
+                            handleChange={() => this.handleChange}
+                            getStore={() => (this.getStore())}
+                            setStore = {(e) => this.setStore(e)}
                             values={values}
                         />
                     );
@@ -102,7 +127,9 @@ class Cart extends Component {
                     <Shipping
                         nextStep={this.nextStep}
                         prevStep={this.prevStep}
-                        handleChange={this.handleChange}
+                        getStore={() => (this.getStore())}
+                        setStore = {(e) => this.setStore(e)}
+                        handleChange={() => this.handleChange}
                         values={values}
                     />
                 );
@@ -111,6 +138,9 @@ class Cart extends Component {
                     <Payment
                         nextStep={this.nextStep}
                         prevStep={this.prevStep}
+                        getStore={() => (this.getStore())}
+                        setStore = {(e) => this.setStore(e)}
+                        handleChange={() => this.handleChange}
                         values={values}
                     />
                 );
@@ -120,6 +150,8 @@ class Cart extends Component {
                         nextStep={this.nextStep}
                         prevStep={this.prevStep}
                         prev2Steps={this.prev2Steps}
+                        getStore={() => (this.getStore())}
+                        handleChange={() => this.handleChange}
                         values={values}
                     />
                 );

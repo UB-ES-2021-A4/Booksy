@@ -11,10 +11,21 @@ const url = debug_url;
 export default class Shipping extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            nombre: props.getStore().nombre,
+            apellidos: props.getStore().apellidos,
+            direccion: props.getStore().direccion,
+            ciudad: props.getStore().ciudad,
+            pais: props.getStore().pais,
+            codigoPostal: props.getStore().codigoPostal,
+            subtotal: props.getStore().subtotal,
+            num_items: props.getStore().num_items,
+        };
         this.handleChange = this.handleChange.bind(this);
     }
     continue = e => {
         e.preventDefault();
+        this.updateStoreInfo();
         this.props.nextStep();
     };
 
@@ -28,6 +39,21 @@ export default class Shipping extends Component {
             [event.target.id]: event.target.value
         });
     };
+
+    updateStoreInfo() {
+        this.props.values.nombre = this.state.nombre
+        this.props.values.apellidos = this.state.apellidos
+        this.props.values.direccion= this.state.direccion
+        this.props.values.ciudad = this.state.ciudad
+        this.props.values.pais = this.state.pais
+        this.props.values.codigoPostal = this.state.codigoPostal
+        this.props.values.subtotal = this.state.subtotal
+        this.props.values.num_items = this.state.num_items
+        this.setState({
+            [this.props.values]: this.state
+        });
+        this.props.setStore(this.props.values)
+    }
 
     render() {
         const { values, handleChange } = this.props;
@@ -74,11 +100,6 @@ export default class Shipping extends Component {
                                     </div>
                                     <br/>
                                     <div className="input-field">
-                                        <input type="email" id="email" onChange={this.handleChange} required/>
-                                        <label htmlFor="email">Email</label>
-                                    </div>
-                                    <br/>
-                                    <div className="input-field">
                                         <input type="text" id="direccion" onChange={this.handleChange} required/>
                                         <label htmlFor="direccion">Dirección</label>
                                     </div>
@@ -94,7 +115,7 @@ export default class Shipping extends Component {
                                     </div>
                                     <br/>
                                     <div className="input-field">
-                                        <input type="number" id="codigoPostal" onChange={this.handleChange} required/>
+                                        <input type="number" id="codigoPostal" maxLength={5} min={0} onChange={this.handleChange} required/>
                                         <label htmlFor="codigoPostal">Código Postal</label>
                                     </div>
                                 </form>
