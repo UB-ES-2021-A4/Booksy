@@ -55,7 +55,7 @@ export default class Review extends Component {
         formItem.append('direction',this.state.direccion)
         formItem.append('city', this.state.ciudad)
         formItem.append('country',this.state.pais)
-        formItem.append('zip_code',this.state.direccion)
+        formItem.append('zip_code',this.state.codigoPostal)
         formItem.append('card_name', this.state.nombreTarjeta)
         formItem.append('card_num',this.state.numeroTarjeta)
         formItem.append('expiration_card', this.state.expDate)
