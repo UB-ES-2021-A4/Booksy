@@ -33,6 +33,9 @@ export default class Review extends Component {
     componentWillMount() {
         this.calculateShipping = this.calculateShipping.bind(this);
         this.calculateShipping();
+        const entries = Object.values(this.props.getStore().items_to_cart);
+
+        console.log(entries);
     }
 
     calculateShipping () {
@@ -46,6 +49,7 @@ export default class Review extends Component {
 
         //We are using FormData because the backend needs a form-encoded data (request.POST)
         let formItem = new FormData()
+        formItem.append('id', Object.values(this.props.getStore().items_to_cart))
         formItem.append('name',this.state.nombre)
         formItem.append('surnames',this.state.apellidos)
         formItem.append('direction',this.state.direccion)
