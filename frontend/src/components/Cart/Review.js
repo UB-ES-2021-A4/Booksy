@@ -33,9 +33,6 @@ export default class Review extends Component {
     componentWillMount() {
         this.calculateShipping = this.calculateShipping.bind(this);
         this.calculateShipping();
-        const entries = Object.values(this.props.getStore().items_to_cart);
-
-        console.log(entries);
     }
 
     calculateShipping () {
