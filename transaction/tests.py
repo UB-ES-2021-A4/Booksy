@@ -221,14 +221,15 @@ class PaymentModelTest(TestCase):
         pay.save()
 
     def test_createPayment_blankName(self):
-        pay = Payment.objects.create(
-            transaction=self.trans,
-            card_name='',
-            card_num='1',
-            expiration_card='Test',
-            cvv='123'
-        )
+
         try:
+            pay = Payment.objects.create(
+                transaction=self.trans,
+                card_name=None,
+                card_num='1',
+                expiration_card='Test',
+                cvv='123'
+            )
             pay.save()
             check = False
         except:
@@ -236,15 +237,16 @@ class PaymentModelTest(TestCase):
         self.assertTrue(check)
 
     def test_createPayment_blankNum(self):
-        num = int()
-        pay = Payment.objects.create(
-            transaction=self.trans,
-            card_name='Mario Kard',
-            card_num=num,
-            expiration_card='Test',
-            cvv='123'
-        )
+
         try:
+            num = int()
+            pay = Payment.objects.create(
+                transaction=self.trans,
+                card_name='Mario Kard',
+                card_num=None,
+                expiration_card='Test',
+                cvv='123'
+            )
             pay.save()
             check = False
         except:
@@ -252,30 +254,31 @@ class PaymentModelTest(TestCase):
         self.assertTrue(check)
 
     def test_createPayment_blankExp(self):
-        pay = Payment.objects.create(
-            transaction=self.trans,
-            card_name='Mario Kard',
-            card_num='0',
-            expiration_card='',
-            cvv='123'
-        )
+
         try:
+            pay = Payment.objects.create(
+                transaction=self.trans,
+                card_name='Mario Kard',
+                card_num='0',
+                expiration_card=None,
+                cvv='123'
+            )
             pay.save()
             check = False
         except:
             check = True
         self.assertTrue(check)
 
-    def test_createPayment_blankNum(self):
-        num = int()
-        pay = Payment.objects.create(
-            transaction=self.trans,
-            card_name='Mario Kard',
-            card_num='123',
-            expiration_card='Test',
-            cvv=num
-        )
+    def test_createPayment_blankCvv(self):
         try:
+            num = int()
+            pay = Payment.objects.create(
+                transaction=self.trans,
+                card_name='Mario Kard',
+                card_num='123',
+                expiration_card='Test',
+                cvv=None
+            )
             pay.save()
             check = False
         except:
