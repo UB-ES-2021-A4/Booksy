@@ -29,6 +29,7 @@ class OpenItem extends Component {
     componentDidMount() {
         this.getInfoToLoad = this.getInfoToLoad.bind(this);
         this.getInfoToLoad()
+        //this.getSellerName()
     }
 
 
@@ -46,10 +47,10 @@ class OpenItem extends Component {
         }
     }
 
-    //getSellerName() {
-      //  this.state.seller = (window.localStorage.getItem('user_id')).toString()
-        //this.setState(this.state)
-    //}
+    getSellerName() {
+        let seller_name = window.localStorage.getItem('username')
+        this.setState({seller: seller_name})
+    }
 
     getInfoToLoad() {
         axios.get(`${url}/api/product/?id=${this.state.id}`)

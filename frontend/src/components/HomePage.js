@@ -141,7 +141,7 @@ class HomePage extends Component {
                             <h1>All books</h1>
                             <br/>
                         </Col>
-                        <Col className="position-right">
+                        <Col>
                             <StoreIcon className="position-right" onClick={this.addToCart}/>
                             <button className="button button-add-item" onClick={this.handleClick}>Add Item</button>
                             <a className="navbar-item-right" >
