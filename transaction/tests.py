@@ -356,7 +356,7 @@ class TestEndpoint(TestCase):
                                                  author='Laura Gallego Uwu',
                                                  price=2,
                                                  description='Viana, la única hija del duque de Rocagrís, está prometida al ',
-                                                 seller=self.seller,
+                                                 seller=self.user,
                                                  category_id=self.category.id)
         self.book4.save()
 
@@ -387,7 +387,7 @@ class TestEndpoint(TestCase):
 
         self.assertEqual(response.status_code,200)
 
-    def test_post_notList(self):
+    def test_post_invalid_id_type(self):
         response = self.client.post(self.url,
                                     data={
                                         'id': 'not list',
@@ -444,7 +444,7 @@ class TestEndpoint(TestCase):
     def test_post_buyMyself(self):
         response = self.client.post(self.url,
                                     data={
-                                        'id': [4, 2, 3],
+                                        'id': 4,
                                         'datetime': datetime.now(),  # Esto ya como veais donde gestionarlo
                                         'name': self.user.first_name,
                                         'surnames': self.user.last_name,
