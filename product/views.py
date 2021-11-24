@@ -1,5 +1,8 @@
+import operator
 import os
+from functools import reduce
 
+from django.db.models import Q
 from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
@@ -23,18 +26,27 @@ class ProductView(APIView):
         """
         try:
             # Get the category
+
             product_id = request.GET.get('id')
             category = request.GET.get('category')
+            search = request.GET.get('search')
+            seller = request.GET.get('seller_id')
+            qs = []
 
-            if product_id:
-                product_list = list(ProductModel.objects.filter(id=product_id, hidden=False))
-
-            elif category:
-                category = Category.objects.get(category_name=category)
-                product_list = list(ProductModel.objects.filter(category=category, hidden=False))
+            if category is not None and category != "":
+                qs.append(Q(category__category_name=category))
+            if search is not None and search != "":
+                qs.append(Q(title__icontains=search))
+            if product_id is not None and product_id != "":
+                qs.append(Q(id=product_id))
+            if seller is not None and seller != "":
+                qs.append(Q(seller__id=seller))
+            if len(qs) == 0:
+                product_list = list(ProductModel.objects.all())
             else:
-                product_list = list(ProductModel.objects.filter(hidden=False))
-
+                product_list = ProductModel.objects.filter(reduce(operator.and_, qs))
+            if len(product_list) == 0:
+                return Response(status=status.HTTP_204_NO_CONTENT)
             serialized_products = [ProductSerializer(prod).data for prod in product_list]
             return Response(serialized_products,
                             status=status.HTTP_200_OK if serialized_products else status.HTTP_204_NO_CONTENT)

@@ -7,9 +7,9 @@ from rest_framework.settings import api_settings
 from booksy import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import viewsets, status
+from rest_framework import status
 from rest_framework.authtoken.models import Token
-from accounts import serializers, models
+from accounts import models
 
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 
@@ -21,6 +21,7 @@ def index(request):
 
 
 class UserAccountSignUp(APIView):
+    serializer_class = UserAccountSerializer
     permission_classes = (AllowAny,)
 
     def post(self, request):
@@ -62,6 +63,30 @@ class UserAccountLogin(ObtainAuthToken):
             'name': user.get_full_name(),
             'email': user.email
         })
+
+    def get(self, request):
+        try:
+            user_id = request.GET.get('id')
+            if not user_id:  # If no user ID is given cannot give data about user
+                return Response("id is required to make a query", status=status.HTTP_400_BAD_REQUEST)
+
+            user_account_object = models.UserAccount.objects.get(id=user_id)
+            try:
+                user_profile_object = models.UserProfile.objects.get(account_id=user_id)
+            except:
+                return Response("User has no profile", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+            ser_user_account_object = UserAccountSerializer(user_account_object).data
+            ser_user_profile_object = UserProfileSerializer(user_profile_object).data
+
+            return Response({'user_id': ser_user_account_object['id'],
+                             'first_name': ser_user_account_object['first_name'],
+                             'last_name': ser_user_account_object['last_name'],
+                             'email': ser_user_account_object['email'],
+                             'image': ser_user_profile_object['image']}, status=status.HTTP_200_OK
+            if user_account_object and user_profile_object else status.HTTP_404_NOT_FOUND)
+        except:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class UserProfileView(APIView):
