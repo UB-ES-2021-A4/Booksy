@@ -364,11 +364,7 @@ class TestEndpoint(TestCase):
         self.book4.save()
 
     def test_post_200(self):
-        ids = [[1,2]] # Haciendolo así te devuelve [1,2]
-        ids2 = [1,2] # Así te devuelve solo el 2
-        ids3 = {1:1,2:2} #Te dice que asi no se puede enviar, porque es json
-
-        ids4 = list() # Asi te devuelve el 2
+        ids4 = list()
         ids4.append(1)
         ids4.append(2)
 
