@@ -49,7 +49,10 @@ export default class Review extends Component {
 
         //We are using FormData because the backend needs a form-encoded data (request.POST)
         let formItem = new FormData()
-        formItem.append('id', Object.values(this.props.getStore().items_to_cart))
+        let ids = Object.values(this.props.getStore().items_to_cart)
+        for (let i=0; i < ids.length; i++){
+            formItem.append('id', ids[i])
+        }
         formItem.append('name',this.state.nombre)
         formItem.append('surnames',this.state.apellidos)
         formItem.append('direction',this.state.direccion)
@@ -60,6 +63,7 @@ export default class Review extends Component {
         formItem.append('card_num',this.state.numeroTarjeta)
         formItem.append('expiration_card', this.state.expDate)
         formItem.append('cvv',this.state.CVV)
+
         axios.post(`${url}/api/buy/`, formItem,
             {headers: {'Authorization': `Token ${window.localStorage.getItem('token')}`}})
             .then((res) => {
@@ -77,7 +81,7 @@ export default class Review extends Component {
     }
 
     continue = e => {
-        e.preventDefault();
+        //e.preventDefault();
         this.props.nextStep();
     };
 

@@ -27,16 +27,12 @@ class BuyView(APIView):
     def post(self, request):
         try:
             with tsn.atomic():
-                list_ids = list(request.data['id'].replace(',', ''))
-                print(list_ids)
-                for id in list_ids:
+
+                for id in request.data.getlist('id'):
                     id = int(id)
-                    print(id)
+
                     try:
-                        print("estamos en el try")
                         product = ProductModel.objects.get(id=id)  # Front end should have the product id
-                        print("estamos despues")
-                        print(product.hidden)
                         if product.hidden:
                             raise  # Product is already bought
                     except:
