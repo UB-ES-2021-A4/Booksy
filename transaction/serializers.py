@@ -5,7 +5,7 @@ from transaction.models import Transaction, ShippingInfo, Payment, BooksBought
 class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
-        fields = ['buyer']
+        fields = ['buyer', 'datetime']
 
 
 class ShippingInfoSerializer(serializers.ModelSerializer):

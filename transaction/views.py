@@ -10,6 +10,8 @@ from django.db import transaction as tsn
 from django.template.loader import get_template
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
+from rest_framework.parsers import MultiPartParser, FormParser
+from datetime import datetime
 
 from product.models import ProductModel
 from transaction.models import Transaction, ShippingInfo, Payment, BooksBought
@@ -20,26 +22,30 @@ from transaction.serializers import TransactionSerializer, ShippingInfoSerialize
 class BuyView(APIView):
     permission_classes = (IsAuthenticatedOrReadOnly,)
     authentication_classes = (TokenAuthentication,)
+    parser_classes = [MultiPartParser, FormParser]
 
     def post(self, request):
         try:
             with tsn.atomic():
-
-                if not isinstance(request.data['id'], list):
-                    raise ResponseError(message=status.HTTP_400_BAD_REQUEST)  # id must be a list
-
-                for id in request.data['id']:
+                list_ids = list(request.data['id'].replace(',', ''))
+                print(list_ids)
+                for id in list_ids:
+                    id = int(id)
+                    print(id)
                     try:
+                        print("estamos en el try")
                         product = ProductModel.objects.get(id=id)  # Front end should have the product id
+                        print("estamos despues")
+                        print(product.hidden)
                         if product.hidden:
-                            raise ResponseError(message=status.HTTP_404_NOT_FOUND)  # Product is already bought
+                            raise  # Product is already bought
                     except:
                         raise ResponseError(message=status.HTTP_404_NOT_FOUND)
 
                     if product.seller == request.user:
                         raise ResponseError(message=status.HTTP_403_FORBIDDEN)  # You can't buy your own product
 
-                    transaction_info = {'buyer': request.user.id}
+                    transaction_info = {'buyer': request.user.id, 'datetime': datetime.now()}
                     transaction = self.__check_model_validation(transaction_info, TransactionSerializer)
                     transaction = transaction.save()
 
@@ -75,6 +81,9 @@ class BuyView(APIView):
 
         except ResponseError as e:
             return Response(status=e.message)
+
+        except ValueError:
+            return Response(status=status.HTTP_400_BAD_REQUEST) # Id is not an integer
 
         except:
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
