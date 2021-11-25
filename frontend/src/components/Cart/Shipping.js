@@ -3,6 +3,7 @@ import {Col, Container, Row} from "react-bootstrap";
 import ShippingPhoto from "../pictures/shipping.jpg";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import './Cart.css'
+import swal from "sweetalert";
 
 const deploy_url = 'https://booksy.pythonanywhere.com';
 const debug_url = 'http://127.0.0.1:8000';
@@ -23,10 +24,30 @@ export default class Shipping extends Component {
         };
         this.handleChange = this.handleChange.bind(this);
     }
+
+    checkFormParams() {
+        let postalRGEX = new RegExp('/[0-9]*5/g')
+        let postalResult = postalRGEX.test((this.state.codigoPostal).toString());
+        if (this.state.nombre === '' || this.state.apellidos === '' || this.state.direccion === '' ||
+            this.state.ciudad === '' || this.state.pais === '' || this.state.codigoPostal === 0) {
+            return false
+        } else return !(this.state.codigoPostal.length < 6 || postalResult === false);
+    }
+
+    fillAllParamsAlert () {
+        // Use sweetalert2
+        swal('Error', 'In order to continue shopping, all parameters should be\n filled correctly. \n The zip code should be 5 digit number only, please.', 'error');
+    };
+
+
     continue = e => {
         e.preventDefault();
-        this.updateStoreInfo();
-        this.props.nextStep();
+        if (this.checkFormParams()) {
+            this.updateStoreInfo();
+            this.props.nextStep();
+        } else {
+            this.fillAllParamsAlert();
+        }
     };
 
     back = e => {
@@ -43,7 +64,7 @@ export default class Shipping extends Component {
     updateStoreInfo() {
         this.props.values.nombre = this.state.nombre
         this.props.values.apellidos = this.state.apellidos
-        this.props.values.direccion= this.state.direccion
+        this.props.values.direccion = this.state.direccion
         this.props.values.ciudad = this.state.ciudad
         this.props.values.pais = this.state.pais
         this.props.values.codigoPostal = this.state.codigoPostal
@@ -53,6 +74,7 @@ export default class Shipping extends Component {
             [this.props.values]: this.state
         });
         this.props.setStore(this.props.values)
+
     }
 
 

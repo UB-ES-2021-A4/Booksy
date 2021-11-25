@@ -72,7 +72,7 @@ class OpenItem extends Component {
 
     isOwner(){
         let user_id = (window.localStorage.getItem('user_id')).toString()
-        return user_id === (this.state.seller).toString()
+        return user_id === (this.state.seller_id).toString()
     }
 
     handleDelete = (id) => {
