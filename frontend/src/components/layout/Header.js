@@ -11,7 +11,7 @@ export default class Header extends Component {
                     <section className="header-top">
                         <section className="header-top-logo">
                             <img className="img-logo" src={logo} width="50" height="50" alt="logo_small"/>
-                            <a href="/" className="header-logo">Booksy</a>
+                            <a href="" className="header-logo">Booksy</a>
                         </section>
                         <section className="header-top__navbar">
                             <NavBar />

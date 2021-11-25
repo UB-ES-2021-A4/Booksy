@@ -6,8 +6,8 @@ import './Footer.css'
 export default class Footer extends Component {
     render() {
         return (
-            <div className="footer">
-                <footer className="Footer" color='#C6E7D8'>
+            <section className="bgr_color">
+                <footer className="footer">
                     <div className="row">
                         <div className="column_big">
                             <img src={logo} width="90" height="90" alt="logo_small"/>
@@ -76,7 +76,7 @@ export default class Footer extends Component {
                         </div>
                     </div>
                 </footer>
-            </div>
+            </section>
         )
     }
 }

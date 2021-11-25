@@ -118,6 +118,7 @@ class Cart extends Component {
                                 <br/>
                                 <a href='/home_page'><b>Shop for items now!</b></a>
                             </center>
+                            <br/>
                         </div>
                     );
                 }
