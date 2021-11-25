@@ -19,6 +19,7 @@ class OpenItem extends Component {
             price: 0,
             author: '',
             seller: '',
+            seller_id: 0,
             category: '',
             description: '',
             image: this.props.location.state.image[0],
@@ -29,9 +30,7 @@ class OpenItem extends Component {
     componentDidMount() {
         this.getInfoToLoad = this.getInfoToLoad.bind(this);
         this.getInfoToLoad()
-        //this.getSellerName()
     }
-
 
     handleClick = (isOwner) => {
         if (isOwner) {
@@ -47,11 +46,6 @@ class OpenItem extends Component {
         }
     }
 
-    getSellerName() {
-        let seller_name = window.localStorage.getItem('username')
-        this.setState({seller: seller_name})
-    }
-
     getInfoToLoad() {
         axios.get(`${url}/api/product/?id=${this.state.id}`)
             .then((res) => {
@@ -60,8 +54,16 @@ class OpenItem extends Component {
                 this.state.description = res.data[0].description
                 this.state.price = res.data[0].price
                 this.state.category = res.data[0].category['category_description']
-                this.state.seller = res.data[0].seller
-                this.setState(this.state)
+                this.state.seller_id = res.data[0].seller
+
+                axios.get(`${url}/api/account/login/?id=${res.data[0].seller}`)
+                    .then((res) => {
+                        this.state.seller = res.data.username
+                        this.setState(this.state)
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    })
             })
             .catch((error) => {
                 console.log(error)
