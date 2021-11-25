@@ -22,7 +22,11 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install coverage
-    - uses: codecov/codecov-action@v2
+    - name: code coverage
+      run:
+        coverage run --source='.' manage.py test && (coverage report > coverage.txt)
+    - name: code coverage to codecov
+    - uses: codecov/codecov-action@v1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         fail_ci_if_error: true
