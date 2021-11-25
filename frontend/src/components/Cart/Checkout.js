@@ -3,6 +3,7 @@ import {Col, Row, Container, Card} from 'react-bootstrap';
 import './Cart.css'
 import './wizard-stepper.css'
 import axios from "axios";
+import emptyCart from "../pictures/empty_cart.png";
 
 const deploy_url = 'https://booksy.pythonanywhere.com';
 const debug_url = 'http://127.0.0.1:8000';
@@ -33,7 +34,6 @@ export default class Checkout extends Component {
     };
 
     populateCards = async data => {
-        this.state.cards = []
         let tmp = []
         let total = 0
         for (let index = 0; index < data.length; index++) {
@@ -57,50 +57,63 @@ export default class Checkout extends Component {
 
     renderCards() {
         const allCards = this.state.cards
-        return allCards.map(card =>
-            <section>
-                <Card className="card border checkout_card">
-                    <Row>
-                        <Col xs lg={3}>
-                            <br/>
-                            <center>
-                                <img width={175}
-                                     height={250}
-                                     src={`${url}${card['images']}`}
-                                     alt="No image"
-                                />
-                            </center>
-                            <br/>
-                        </Col>
-                        <Col xs lg={7}>
-                            <body>
-                            <br/>
-                            <Row>
-                                <h1>{card['title']}</h1>
-                            </Row>
-                            <Row>
-                                <p><b>Sold by username1234</b></p>
-                            </Row>
-                            <br/>
-                            <Row>
-                                <h3>Description:</h3>
-                                <p>{card['description']}</p>
-                            </Row>
-                            </body>
-                        </Col>
-                        <Col xs lg={2}>
-                            <center >
+        if (this.state.items_to_cart.length > 0){
+            return allCards.map(card =>
+                <section>
+                    <Card className="card border checkout_card">
+                        <Row>
+                            <Col xs lg={3}>
                                 <br/>
-                                <h1>{card['price']}€</h1>
-                                <button className="button button-erase">ERASE</button>
-                            </center>
-                        </Col>
-                    </Row>
-                </Card>
-                <br/>
-            </section>
+                                <center>
+                                    <img width={175}
+                                         height={250}
+                                         src={`${url}${card['images']}`}
+                                         alt="No image"
+                                    />
+                                </center>
+                                <br/>
+                            </Col>
+                            <Col xs lg={7}>
+                                <body>
+                                <br/>
+                                <Row>
+                                    <h1>{card['title']}</h1>
+                                </Row>
+                                <Row>
+                                    <p><b>Sold by username1234</b></p>
+                                </Row>
+                                <br/>
+                                <Row>
+                                    <h3>Description:</h3>
+                                    <p>{card['description']}</p>
+                                </Row>
+                                </body>
+                            </Col>
+                            <Col xs lg={2}>
+                                <center >
+                                    <br/>
+                                    <h1>{card['price']}€</h1>
+                                    <button className="button button-erase" onClick={() => this.eraseItemFromCart(card['id'])}>ERASE</button>
+                                </center>
+                            </Col>
+                        </Row>
+                    </Card>
+                    <br/>
+                </section>
+            );
+        } else {
+            return (
+                <div>
+                    <center>
+                        <img className="align-content-center" style={{width:'450px', height:'375px'}} src={emptyCart} alt="emptyCart" /><br/>
+                        <br/>
+                        <a href='/home_page'><b>Shop for items now!</b></a>
+                    </center>
+                    <br/>
+                </div>
+            );
+        }
 
-        );
     }
 
     continue = e => {
@@ -109,6 +122,23 @@ export default class Checkout extends Component {
         this.props.nextStep();
 
     };
+
+    eraseItemFromCart(id) {
+        let new_items_list = []
+        for (let idx = 0; idx < this.state.items_to_cart.length; idx++) {
+            if (this.state.items_to_cart[idx] !== id) {
+                new_items_list.push(this.state.items_to_cart[idx]);
+            }
+        }
+        this.setState({items_to_cart : new_items_list})
+        localStorage.setItem("items_to_cart", JSON.stringify(new_items_list));
+        this.props.values.items_to_cart = new_items_list
+        this.setState({
+            [this.props.values]: this.state
+        });
+        this.props.setStore(this.props.values)
+        this.getCards()
+    }
 
     updateStoreInfo() {
         this.props.values.subtotal = this.state.subtotal
@@ -119,10 +149,9 @@ export default class Checkout extends Component {
         this.props.setStore(this.props.values)
     }
 
-    render() {
-        const { values, handleChange } = this.props;
+    normalRender () {
         return (
-            <div className="checkout">
+            <section>
                 <div className="card">
                     <div className="card-header">
                         <div className="steps">
@@ -161,6 +190,34 @@ export default class Checkout extends Component {
                         <br/>
                     </Container>
                 </section>
+            </section>
+        );
+    }
+
+    noItemsRender() {
+        return(
+            <section >
+                <Container>
+                    {this.renderCards()}
+                    <br/>
+                </Container>
+            </section>
+        );
+    }
+
+    thereAreItems() {
+        return this.state.items_to_cart.length > 0
+    }
+
+    render() {
+        const { values, handleChange } = this.props;
+        return (
+            <div className="checkout">
+                {this.thereAreItems() ? (
+                    this.normalRender()
+                ) : (
+                    this.noItemsRender()
+                )}
             </div>
         )
     }
