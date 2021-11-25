@@ -26,17 +26,17 @@ export default class Shipping extends Component {
     }
 
     checkFormParams() {
-        let postalRGEX = new RegExp('/[0-9]*5/g')
-        let postalResult = postalRGEX.test((this.state.codigoPostal).toString());
+        let portalString = (this.state.codigoPostal).toString()
+        let postalResult = portalString.match(/\d{5}/);
         if (this.state.nombre === '' || this.state.apellidos === '' || this.state.direccion === '' ||
             this.state.ciudad === '' || this.state.pais === '' || this.state.codigoPostal === 0) {
             return false
-        } else return !(this.state.codigoPostal.length < 6 || postalResult === false);
+        } else return (this.state.codigoPostal.length < 6 && postalResult !== null);
     }
 
     fillAllParamsAlert () {
         // Use sweetalert2
-        swal('Error', 'In order to continue shopping, all parameters should be\n filled correctly. \n The zip code should be 5 digit number only, please.', 'error');
+        swal('Error', 'In order to continue shopping, all parameters should be\n filled correctly. \n The zip code can only be a five-digit number.', 'error');
     };
 
 
@@ -165,5 +165,3 @@ export default class Shipping extends Component {
         );
     }
 }
-
-
