@@ -31,8 +31,7 @@ class ProductView(APIView):
             category = request.GET.get('category')
             search = request.GET.get('search')
             seller = request.GET.get('seller_id')
-            qs = []
-
+            qs = [Q(hidden=False)]
             if category is not None and category != "":
                 qs.append(Q(category__category_name=category))
             if search is not None and search != "":
