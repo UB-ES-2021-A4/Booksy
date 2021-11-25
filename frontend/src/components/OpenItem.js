@@ -8,7 +8,7 @@ import swal from "sweetalert";
 
 const deploy_url = 'https://booksy.pythonanywhere.com';
 const debug_url = 'http://127.0.0.1:8000';
-const url = debug_url;
+const url = deploy_url;
 
 class OpenItem extends Component {
     constructor(props) {

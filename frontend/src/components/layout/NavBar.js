@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
 import './NavBar.css'
-import SearchIcon from '@mui/icons-material/Search';
-import StoreIcon from '@mui/icons-material/Store';
 import swal from "sweetalert";
 import {withRouter} from "react-router-dom";
 
