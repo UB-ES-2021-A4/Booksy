@@ -19,6 +19,7 @@ class OpenItem extends Component {
             price: 0,
             author: '',
             seller: '',
+            seller_id: 0,
             category: '',
             description: '',
             image: this.props.location.state.image[0],
@@ -31,7 +32,6 @@ class OpenItem extends Component {
         this.getInfoToLoad()
     }
 
-
     handleClick = (isOwner) => {
         if (isOwner) {
             this.props.history.push({
@@ -39,14 +39,12 @@ class OpenItem extends Component {
                 state: { id: this.state.id}
             });
         } else {
-            this.props.history.push('/cart')
+            this.props.history.push({
+                pathname: '/home_page',
+                state: {item_to_cart: this.state.id}
+            });
         }
     }
-
-    //getSellerName() {
-      //  this.state.seller = (window.localStorage.getItem('user_id')).toString()
-        //this.setState(this.state)
-    //}
 
     getInfoToLoad() {
         axios.get(`${url}/api/product/?id=${this.state.id}`)
@@ -56,8 +54,16 @@ class OpenItem extends Component {
                 this.state.description = res.data[0].description
                 this.state.price = res.data[0].price
                 this.state.category = res.data[0].category['category_description']
-                this.state.seller = res.data[0].seller
-                this.setState(this.state)
+                this.state.seller_id = res.data[0].seller
+
+                axios.get(`${url}/api/account/login/?id=${res.data[0].seller}`)
+                    .then((res) => {
+                        this.state.seller = res.data.username
+                        this.setState(this.state)
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    })
             })
             .catch((error) => {
                 console.log(error)
@@ -66,7 +72,7 @@ class OpenItem extends Component {
 
     isOwner(){
         let user_id = (window.localStorage.getItem('user_id')).toString()
-        return user_id === (this.state.seller).toString()
+        return user_id === (this.state.seller_id).toString()
     }
 
     handleDelete = (id) => {

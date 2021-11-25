@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Col, Container, Row} from "react-bootstrap";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import PaymentPhoto from "../pictures/payment.png";
+import swal from "sweetalert";
 
 const deploy_url = 'https://booksy.pythonanywhere.com';
 const debug_url = 'http://127.0.0.1:8000';
@@ -10,15 +11,88 @@ const url = debug_url;
 export default class Payment extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            nombreTarjeta: props.getStore().nombreTarjeta,
+            numeroTarjeta: props.getStore().numeroTarjeta,
+            expDate: props.getStore().expDate,
+            expMonth: 0,
+            expYear: 0,
+            CVV: props.getStore().CVV,
+            nombre: props.getStore().nombre,
+            apellidos: props.getStore().apellidos,
+            direccion: props.getStore().direccion,
+            ciudad: props.getStore().ciudad,
+            pais: props.getStore().pais,
+            codigoPostal: props.getStore().codigoPostal,
+            subtotal: props.getStore().subtotal,
+            num_items: props.getStore().num_items,
+        };
         this.handleChange = this.handleChange.bind(this);
     }
+
     continue = e => {
         e.preventDefault();
-        this.props.nextStep();
+        if (this.checkFormParams()) {
+            this.updateStoreInfo();
+            this.props.nextStep();
+        }
     };
+
+    fillAllParamsAlert () {
+        // Use sweetalert2
+        swal('Error', 'In order to continue shopping, all parameters should be\n filled correctly.', 'error');
+    };
+
+    wrongDateAlert () {
+        // Use sweetalert2
+        swal('Error', 'Month and year should be two-digit numbers.', 'error');
+    };
+
+    wrongCVVAlert () {
+        // Use sweetalert2
+        swal('Error', 'CVV number can only be a three-digit number.', 'error');
+    };
+
+    wrongNumberCardAlert () {
+        // Use sweetalert2
+        swal('Error', 'Card number can only be a 16-digit number.', 'error');
+    };
+
+    checkFormParams() {
+        let CVV_String = (this.state.CVV).toString()
+        let CVV_Result = CVV_String.match(/\d{3}/);
+
+        let dateString = (this.state.expMonth).toString() + '/' + (this.state.expYear).toString()
+        let dateResult = dateString.match(/[0-9]{2}(\/)\d{2}/);
+
+        let numString = (this.state.numeroTarjeta).toString()
+        let numResult = numString.match(/\d{16}/);
+
+        if (this.state.nombreTarjeta === '' || this.state.numeroTarjeta === 0
+            || this.state.expMonth === 0 || this.state.expYear === 0 || this.state.CVV === 0) {
+            this.fillAllParamsAlert();
+            return false
+        } else if (dateString.length !== 5 || dateResult === null) {
+            this.wrongDateAlert();
+            return false
+        } else if (CVV_Result === null) {
+            this.wrongCVVAlert();
+            return false
+        } else if (numResult === null) {
+            this.wrongNumberCardAlert();
+            return false
+        }
+        return true;
+    }
+
+    getExpDate () {
+        let exp = this.state.expMonth.toString() + '/' + this.state.expYear.toString()
+        return exp
+    }
 
     back = e => {
         e.preventDefault();
+        this.updateStoreInfo();
         this.props.prevStep();
     };
 
@@ -27,6 +101,26 @@ export default class Payment extends Component {
             [event.target.id]: event.target.value
         });
     };
+
+    updateStoreInfo() {
+
+        this.props.values.nombreTarjeta = this.state.nombreTarjeta
+        this.props.values.numeroTarjeta = this.state.numeroTarjeta
+        this.props.values.expDate= this.getExpDate();
+        this.props.values.CVV = this.state.CVV
+        this.props.values.nombre = this.state.nombre
+        this.props.values.apellidos = this.state.apellidos
+        this.props.values.direccion= this.state.direccion
+        this.props.values.ciudad = this.state.ciudad
+        this.props.values.pais = this.state.pais
+        this.props.values.codigoPostal = this.state.codigoPostal
+        this.props.values.subtotal = this.state.subtotal
+        this.props.values.num_items = this.state.num_items
+        this.setState({
+            [this.props.values]: this.state
+        });
+        this.props.setStore(this.props.values)
+    }
 
     render() {
         const { values, handleChange } = this.props;
@@ -63,32 +157,27 @@ export default class Payment extends Component {
                                 <br/>
                                 <form action="">
                                     <div className="input-field">
-                                        <input type="text" id="nombreTarjeta" onChange={handleChange} required/>
+                                        <input type="text" id="nombreTarjeta" onChange={this.handleChange} required/>
                                         <label htmlFor="nombreTarjeta">Nombre de la Tarjeta</label>
                                     </div>
                                     <br/>
                                     <div className="input-field">
-                                        <input type="number" id="numeroTarjeta" onChange={this.handleChange} required/>
+                                        <input type="number" id="numeroTarjeta" maxLength={16} onChange={this.handleChange} required/>
                                         <label htmlFor="numeroTarjeta">Número de la Tarjeta</label>
                                     </div>
                                     <br/>
                                     <div className="input-field">
-                                        <input type="email" id="email" onChange={this.handleChange} required/>
-                                        <label htmlFor="email">Email</label>
-                                    </div>
-                                    <br/>
-                                    <div className="input-field">
-                                        <input type="number" id="expMonth" onChange={this.handleChange} required/>
+                                        <input type="number" id="expMonth" min={1} max={12} maxLength={2} onChange={this.handleChange} required/>
                                         <label htmlFor="expMonth">Mes de expiración</label>
                                     </div>
                                     <br/>
                                     <div className="input-field">
-                                        <input type="number" id="expYear" onChange={this.handleChange} required/>
+                                        <input type="number" id="expYear" min={0} max={99} maxLength={2} onChange={this.handleChange} required/>
                                         <label htmlFor="expYear">Año de expiración</label>
                                     </div>
                                     <br/>
                                     <div className="input-field">
-                                        <input type="number" id="CVV" onChange={this.handleChange} required/>
+                                        <input type="number" id="CVV" min={100} max={999} maxLength={3} onChange={this.handleChange} required/>
                                         <label htmlFor="CVV">CVV</label>
                                     </div>
                                 </form>

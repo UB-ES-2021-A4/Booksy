@@ -26,8 +26,15 @@ class NavBar extends Component {
 
     isNotLogged () {
         let user = (window.localStorage.getItem('user_id'))
-        console.log(user)
         return user === null;
+    }
+
+    handleHomepage = () => {
+        console.log(window.localStorage.getItem('items_to_cart'))
+        localStorage.setItem("items_to_cart", JSON.parse(localStorage.getItem("items_to_cart")))
+        this.props.history.push('/home_page');
+
+
     }
 
     render() {
@@ -36,17 +43,10 @@ class NavBar extends Component {
                 {this.isNotLogged() ? (
                     <a href="/" className="navbar-item" style={{padding: 15}} id="home_page_link" onClick={this.handleNotLogged}>Home page</a>
                 ) : (
-                    <a href="/home_page" className="navbar-item" style={{padding: 15}} id="home_page_link">Home page</a>
+                    <a href="" className="navbar-item" style={{padding: 15}} id="home_page_link" onClick={this.handleHomepage}>Home page</a>
                 )}
-                <a href="/books" className="navbar-item" style={{padding: 15}} id="books_link">Books</a>
+                <a href="" className="navbar-item" style={{padding: 15}} id="books_link">Books</a>
                 <a href="/login" className="navbar-item" style={{padding: 15}} id="login_link">Log In</a>
-                <a href="/cart" className="navbar-item-right" style={{padding: 15}} id="cartnpm_link"><StoreIcon/></a>
-                <a className="navbar-item-right" >
-                    <div className="search-box">
-                        <button className="btn-search"><SearchIcon/></button>
-                        <input type="text" className="input-search" id="search_input" placeholder="Type to Search..."/>
-                    </div>
-                </a>
             </section>
         )}
 }

@@ -82,6 +82,7 @@ class UserAccountLogin(ObtainAuthToken):
             return Response({'user_id': ser_user_account_object['id'],
                              'first_name': ser_user_account_object['first_name'],
                              'last_name': ser_user_account_object['last_name'],
+                             'username': ser_user_account_object['username'],
                              'email': ser_user_account_object['email'],
                              'image': ser_user_profile_object['image']}, status=status.HTTP_200_OK
             if user_account_object and user_profile_object else status.HTTP_404_NOT_FOUND)

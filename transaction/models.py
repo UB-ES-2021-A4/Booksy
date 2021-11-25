@@ -43,4 +43,3 @@ class BooksBought(models.Model):
     transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE, default=None)
     product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, null=False)
     seller = models.ForeignKey(UserAccount, on_delete=models.CASCADE, null=False, related_name='seller_id')  # On_Delete what to do
-
