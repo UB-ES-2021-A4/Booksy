@@ -24,7 +24,8 @@ jobs:
         pip install coverage
     - name: code coverage
       run: |
-        coverage run --source='.' manage.py test && (coverage report > coverage.txt)
+        coverage run --source='.' manage.py test
+        coverage report > coverage.txt
     - name: code coverage to codecov
     - uses: codecov/codecov-action@v1
       with:
