@@ -28,4 +28,10 @@ jobs:
     - name: Testing Coverage
       run: |
         coverage run --source='.' manage.py test
-        coverage report 
+        coverage report
+        coverage xml
+    - name: Upload Code Coverage Report
+    - uses: codecov/codecov-action@v2
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: ./coverage.xml
