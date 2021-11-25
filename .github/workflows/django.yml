@@ -22,7 +22,10 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install coverage
-    - name: test coverage
+    - name: Run Tests
+      run: |
+        python manage.py test
+    - name: Testing Coverage
       run: |
         coverage run --source='.' manage.py test
         coverage report 
