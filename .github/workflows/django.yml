@@ -28,4 +28,4 @@ jobs:
     - uses: codecov/codecov-action@v2
       with:
         fail_ci_if_error: true
-        token: b46cd1b5-e886-4c56-b647-8bb4bef2360b
+        token: ${{ secrets.CODECOV_TOKEN }}
