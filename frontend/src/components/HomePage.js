@@ -61,15 +61,12 @@ class HomePage extends Component {
         this.getCards = this.getCards.bind(this);
         this.addToCart = this.addToCart.bind(this);
         this.getCards()
-        let finalString =  window.localStorage.getItem('items_to_cart').replace(/^,|,$/g, "")
     }
 
     getCards() {
         if (this.props.location.state) {
             this.state.items_to_cart = JSON.parse(localStorage.getItem("items_to_cart"));
             this.state.items_to_cart.push(this.props.location.state.item_to_cart)
-        } else {
-            //for(let index = 0; index <)
         }
         axios.get(`${url}/api/product/`)
             .then((res)=> {

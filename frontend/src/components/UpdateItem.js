@@ -116,7 +116,6 @@ class UpdateItem extends Component {
                 this.noPhotosAlert()
                 console.error(error)
             })
-
     }
 
 
