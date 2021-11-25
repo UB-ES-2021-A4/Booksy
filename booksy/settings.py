@@ -112,9 +112,13 @@ WSGI_APPLICATION = 'booksy.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+       'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'booksy$d7cm11lo9q6vmh',
+        'USER': 'booksy',
+        'PASSWORD': 'z8feEEG@rnZzEYi',
+        'HOST': 'booksy.mysql.pythonanywhere-services.com',
+        'PORT': '3306',
+        }
 
 }
 
@@ -177,12 +181,12 @@ AUTH_USER_MODEL = 'accounts.UserAccount'
 
 # EMAIL
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_USE_SSL = False
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'booksynoreply@gmail.com'
 EMAIL_HOST_PASSWORD = 'Wanpise2021'
 EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+EMAIL_USE_SSL = True
+EMAIL_USE_TLS = False
 
 # White listing the localhost:3000 port
 # for React
