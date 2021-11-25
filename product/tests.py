@@ -1,6 +1,5 @@
 # Create your tests here.
 from django.core.files.uploadedfile import SimpleUploadedFile
-from selenium import webdriver
 from django.test import TestCase
 from product.models import ProductModel, Category, Image
 from accounts.models import UserAccount
@@ -137,14 +136,6 @@ class CategoryModelTest(TestCase):
         self.client.force_authenticate(user=user)
         self.url = self.url = '/api/product/category/'
 
-    def test_category_matched(self):
-        cat = Category.objects.get(category_name='HM')
-        self.assertEqual(cat.__getattribute__('category_name'), 'HM')
-
-    def test_category_unmatched(self):
-        cat = Category.get_by_name(self, 'Inventado')
-        self.assertEqual(None, cat)
-
     def test_getContent(self):
         self.category = Category.objects.create(category_name='JU')
         self.category.save()
@@ -158,7 +149,7 @@ class CategoryModelTest(TestCase):
         self.category.save()
 
         response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 500)
+        self.assertEqual(response.status_code, 200)
 
     def test_getContent_noCategory(self):
         response = self.client.get(self.url)
@@ -428,11 +419,9 @@ class UpdateProductModelTest(TestCase):
         self.client.force_authenticate(user=user)
 
         # Creation 2
-        user2 = UserAccount.objects.get(name='TestAdmin')
+        user2 = UserAccount.objects.get(username='TestAdmin')
         self.client2 = APIClient()
         self.client2.force_authenticate(user=user2)
-
-        category = Category.objects.create(category_name='JU')
 
         self.book = ProductModel.objects.create(title='Donde los árboles cantan',
                                                 author='Laura Gallego',
@@ -449,7 +438,7 @@ class UpdateProductModelTest(TestCase):
                                                             'las leyendas que se cuentan sobre el Gran Bosque... el lugar '
                                                             'donde los árboles cantan.',
                                                 seller=self.user,
-                                                category_id=category.id)
+                                                category_id=self.category.id)
 
         self.book2 = ProductModel.objects.create(title='Donde los árboles cantan2',
                                                  author='Laura Gallego',
@@ -466,8 +455,8 @@ class UpdateProductModelTest(TestCase):
                                                              'las leyendas que se cuentan sobre el Gran Bosque... el lugar '
                                                              'donde los árboles cantan.',
                                                  seller=self.user2,
-                                                 category_id=category.id)
-        self.book.save()
+                                                 category_id=self.category.id)
+        self.book2.save()
 
     def test_updateProduct_invalidArguments(self):
         response = self.client2.patch(self.url,
@@ -475,10 +464,10 @@ class UpdateProductModelTest(TestCase):
                                           'id': '2',
                                           'price': 10000,
                                       })
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 404)
 
     def test_updateProduct_invalidId(self):
-        response = self.client2.patch(self.url,
+        response = self.client2.patch('/api/product/?id=10',
                                       {
                                           'id': 10,
                                           'title': self.book2.title,
@@ -491,22 +480,22 @@ class UpdateProductModelTest(TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_updateProduct_invalidUser(self):
-        response = self.client.patch(self.url,
-                                     {
+        response = self.client.patch('/api/product/?id=2',
+                                     data={
                                          'id': self.book2.id,
                                          'title': self.book2.title,
                                          'author': self.book2.author,
                                          'description': 'Nueva Descripción',
                                          'price': self.book2.price,
                                          'seller': self.user2.id,
-                                         'category': self.category.category_name
+                                         'category': self.category
                                      })
         self.assertEqual(response.status_code, 401)
 
     def test_updateProduct_validArguments(self):
-        response = self.client2.patch(self.url,
+        response = self.client2.patch('/api/product/?id=2',
                                       data={
-                                          'id': self.book2.id,
+                                          'id': self.book2,
                                           'title': self.book2.title,
                                           'author': self.book2.author,
                                           'description': 'Nueva Descripción',
@@ -517,9 +506,9 @@ class UpdateProductModelTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_updateProduct_invalidDescription(self):
-        response = self.client2.patch(self.url,
+        response = self.client2.patch('/api/product/?id=2',
                                       data={
-                                          'id': self.book2.id,
+                                          'id': self.book2,
                                           'title': self.book2.title,
                                           'author': self.book2.author,
                                           'description': self.char_1001,

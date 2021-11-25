@@ -9,9 +9,6 @@ from django.urls import reverse
 from django.test import Client
 
 # Hay que mirar de añadir el Selenium
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-import selenium
 from rest_framework.test import APIClient
 from accounts.models import UserAccount
 
