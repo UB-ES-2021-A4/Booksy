@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
+import sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -110,17 +111,25 @@ WSGI_APPLICATION = 'booksy.wsgi.application'
         }
 """
 
-DATABASES = {
-    'default': {
-       'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'booksy$d7cm11lo9q6vmh',
-        'USER': 'booksy',
-        'PASSWORD': 'z8feEEG@rnZzEYi',
-        'HOST': 'booksy.mysql.pythonanywhere-services.com',
-        'PORT': '3306',
+if sys.argv[1] == 'test':
+    DATABASES = {
+        'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
         }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'booksy$d7cm11lo9q6vmh',
+            'USER': 'booksy',
+            'PASSWORD': 'z8feEEG@rnZzEYi',
+            'HOST': 'booksy.mysql.pythonanywhere-services.com',
+            'PORT': '3306',
+        }
+    }
 
-}
 
 # Media folder
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
