@@ -1,32 +1,53 @@
-from django.shortcuts import render
+import os
 
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status, viewsets, filters, generics
+from django.shortcuts import render
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
-from accounts import serializers, models, permissions
-from django.views.generic.base import TemplateView
+from booksy import settings
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.authtoken.models import Token
+from accounts import models
 
-from rest_framework.decorators import permission_classes
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 
-# TODO refactor name, this view is for signup.
-# TODO Check if TemplateView does anything (Should check in heroku not in local)
-class UserProfileViewSet(viewsets.ModelViewSet, TemplateView):  # Viewset has DEFAULT_RENDERER_CLASSES by default, no need to add it
-    serializer_class = serializers.UserProfileSerializer
-    queryset = models.UserProfile.objects.all()
+from accounts.serializers import UserAccountSerializer, UserProfileSerializer
+
+
+def index(request):
+    return render(request, 'index.html')
+
+
+class UserAccountSignUp(APIView):
+    serializer_class = UserAccountSerializer
     permission_classes = (AllowAny,)
-    http_method_names = ['post']  # Here you can put the names of the requests that this viewSet is able to process
-    template_name = 'index.html'
+
+    def post(self, request):
+        try:
+            account_serialized = UserAccountSerializer(data=request.data)
+            if account_serialized.is_valid():
+                account = account_serialized.save()
+                account = models.UserAccount.objects.get(id=account.id)
+
+                # Create userProfile from account
+                data = {'account_id': account.id}
+                profile = UserProfileSerializer(data=data)
+                profile.is_valid()
+                profi = profile.save()
+
+                token, created = Token.objects.get_or_create(user=account)
+                return Response({'token': token.key}, status=status.HTTP_201_CREATED)
+            else:
+                return Response(account_serialized.errors, status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-# Class view that returns a token if the user exists and the login credentials are correct.
-class UserLoginApiView(ObtainAuthToken):
+class UserAccountLogin(ObtainAuthToken):
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
+    permission_classes = (AllowAny,)
 
     def post(self, request, *args, **kwargs):
         print(request.data)
@@ -36,7 +57,6 @@ class UserLoginApiView(ObtainAuthToken):
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
 
-        #TODO do we really need all this data? token may be enough.
         return Response({
             'token': token.key,
             'user_id': user.pk,
@@ -44,28 +64,89 @@ class UserLoginApiView(ObtainAuthToken):
             'email': user.email
         })
 
-'''
-# Class view that returns the user attached to the given token
-class UserApi(viewsets.ModelViewSet):
-    permission_classes(IsAuthenticated)
-    serializer_class = serializers.UserProfileSerializer
-    queryset = models.UserProfile.objects.all()
+    def get(self, request):
+        try:
+            user_id = request.GET.get('id')
+            if not user_id:  # If no user ID is given cannot give data about user
+                return Response("id is required to make a query", status=status.HTTP_400_BAD_REQUEST)
 
-    def get_object(self):
-        return self.request.user
+            user_account_object = models.UserAccount.objects.get(id=user_id)
+            try:
+                user_profile_object = models.UserProfile.objects.get(account_id=user_id)
+            except:
+                return Response("User has no profile", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+            ser_user_account_object = UserAccountSerializer(user_account_object).data
+            ser_user_profile_object = UserProfileSerializer(user_profile_object).data
+
+            return Response({'user_id': ser_user_account_object['id'],
+                             'first_name': ser_user_account_object['first_name'],
+                             'last_name': ser_user_account_object['last_name'],
+                             'username': ser_user_account_object['username'],
+                             'email': ser_user_account_object['email'],
+                             'image': ser_user_profile_object['image']}, status=status.HTTP_200_OK
+            if user_account_object and user_profile_object else status.HTTP_404_NOT_FOUND)
+        except:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-# Class view that removes the user's token, logging it out.
-class UserApiLogout(viewsets.ModelViewSet):
-    permission_classes(IsAuthenticated)
-    queryset = models.UserProfile.objects.all()
-    serializer_class = serializers.UserProfileSerializer
+class UserProfileView(APIView):
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    authentication_classes = (TokenAuthentication,)
 
-    def get(self, request, format=None):
-        # simply delete the token to force a login
-        request.user.auth_token.delete()
-        return Response(status=status.HTTP_200_OK)
+    def get(self, request):
+        """
+        Should return only one user profile at a time
+        """
+        try:
+            account_id = request.GET.get('id')
 
-'''
-def index(request):
-    return render(request, 'index.html')
+            if account_id:
+                try:
+                    account = models.UserAccount.objects.get(id=account_id)
+                except:
+                    return Response("Account not found", status=status.HTTP_404_NOT_FOUND)
+                try:
+                    profile = models.UserProfile.objects.get(id=account_id)
+                except:
+                    return Response("Profile not found", status=status.HTTP_404_NOT_FOUND)
+
+                try:
+                    account_ser = UserAccountSerializer(account).data
+                    profile_ser = UserProfileSerializer(profile).data
+                    data = account_ser.update(profile_ser)
+                except:
+                    return Response(f"Error serializing user ${account_id} data",
+                                    status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+                return Response(data, status=status.HTTP_200_OK)
+
+
+            else:
+                return Response("No id has been provided", status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def patch(self, request):
+        account_id = request.GET.get('id')
+        if not account_id:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        try:
+            user = request.user
+            profi = models.UserProfile.objects.get(id=account_id)
+            if not profi:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+            if profi != user:
+                return Response(status=status.HTTP_401_UNAUTHORIZED)
+            orig_img_path = profi.image.file.name
+            serial_profi = UserProfileSerializer(profi, data=request.data)
+            if serial_profi.is_valid():
+                serial_profi.save()
+                # Check if the image path is NOT the one of the original path
+                if os.path.normpath("media/default.jpg") not in orig_img_path:
+                    os.remove(orig_img_path)
+                return Response(serial_profi.data, status=status.HTTP_200_OK)
+            else:
+                return Response(serial_profi.errors, status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)

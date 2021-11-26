@@ -1,10 +1,11 @@
 
 .footer {
-    position: relative;
+    position: center;
     left: 0;
     bottom: 0;
-    width: 100%;
-    background-color: #C6E7D8;
+    right: 0;
+    width: 99%;
+    background: #C6E7D8;
     color: #004B23;
     text-align: center;
 }
@@ -26,4 +27,8 @@
     width: 10.0%;
     padding: 10px;
     padding-top: 20px;
+}
+
+.bgr_color {
+    background: #C6E7D8;
 }

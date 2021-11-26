@@ -2,12 +2,21 @@ from rest_framework import serializers
 from product.models import ProductModel, Image, Category
 
 
+class CategorySerializer(serializers.Serializer):
+    category_description = serializers.CharField(source='get_category_name_display')
+    category_name = serializers.CharField(max_length=2)
+
+    class Meta:
+        model = Category
+        fields = ['category_name', 'category_description']
+
+
 class ProductSerializer(serializers.ModelSerializer):
     title = serializers.CharField(max_length=255, allow_blank=True)
     author = serializers.CharField(max_length=50, allow_blank=True)
     description = serializers.CharField(max_length=1000, allow_blank=True)
-    price = serializers.FloatField(default=0.)
-    category = serializers.CharField(source="category.category_name")
+    price = serializers.FloatField(default=0., min_value=0.)
+    category = CategorySerializer()
 
     class Meta:
         model = ProductModel
@@ -22,14 +31,6 @@ class ProductSerializer(serializers.ModelSerializer):
         instance.category = Category.objects.get(category_name=validated_data.get('category')['category_name'])
         instance.save()
         return instance
-
-
-class CategorySerializer(serializers.ModelSerializer):
-    category_description = serializers.CharField(source='get_category_name_display')
-
-    class Meta:
-        model = Category
-        fields = ['category_name', 'category_description']
 
 
 class ImageSerializer(serializers.ModelSerializer):

@@ -10,7 +10,7 @@ import {withRouter} from "react-router-dom";
 
 const deploy_url = 'https://booksy.pythonanywhere.com';
 const debug_url = 'http://127.0.0.1:8000';
-const url = debug_url;
+const url = deploy_url;
 
 class Login extends Component {
     constructor(props) {
@@ -24,6 +24,9 @@ class Login extends Component {
     }
     handleClick = () => {
         this.props.history.push('/home_page')
+    }
+    handleClickSignUp = () => {
+        this.props.history.push('/signup')
     }
 
     handleChange = event => {
@@ -50,12 +53,13 @@ class Login extends Component {
             password: this.state.password
         }
 
-        axios.post(`${url}/api/login/`, parameters)
+        axios.post(`${url}/api/account/login/`, parameters)
             .then((res) => {
                 this.successAlert()
                 // We are saving the token in the localStorage(not very secure), django's token do not expire.
                 localStorage.setItem('token', res.data.token)
                 localStorage.setItem('user_id', res.data.user_id)
+                localStorage.setItem('username', this.state.username)
                 this.handleClick()
             })
             .catch((error) => {
@@ -91,7 +95,7 @@ class Login extends Component {
                         </Col>
                         <Col md={"auto"}>
                             <br/><br/>
-                            <div className="vl"/>
+                            <div className="vl-login"/>
                             <br/><br/>
                         </Col>
                         <Col xs lg={5}>
@@ -111,8 +115,9 @@ class Login extends Component {
                             <section>
                                 <ClassIcon/> Gran variedad de autores para escoger.
                             </section>
-                            <button className="button_signup" type="button" id="button_to_signup">
-                                <a href="/signup" className="a_color">CRÉATE UNA CUENTA</a>
+                            <br/>
+                            <button className="button_signup" type="button" id="button_to_signup" onClick={this.handleClickSignUp}>
+                                CRÉATE UNA CUENTA
                             </button>
                         </Col>
                     </Row>

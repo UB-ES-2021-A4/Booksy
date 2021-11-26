@@ -1,10 +1,10 @@
 # Create your tests here.
 from django.core.files.uploadedfile import SimpleUploadedFile
-from selenium import webdriver
 from django.test import TestCase
 from product.models import ProductModel, Category, Image
-from accounts.models import UserProfile
+from accounts.models import UserAccount
 from rest_framework.test import APIClient, CoreAPIClient
+
 
 # Create your tests here.
 
@@ -25,8 +25,8 @@ class ProductModelTest(TestCase):
                                                        'cosa que esperar su regreso... y, tal vez, prestar atención a '
                                                        'las leyendas que se cuentan sobre el Gran Bosque... el lugar '
                                                        'donde los árboles cantan.',
-                                           seller=UserProfile.objects.create(email='testerAdmin@test.es',
-                                                                             name='TestAdmin',
+                                           seller=UserAccount.objects.create(email='testerAdmin@test.es',
+                                                                             username='TestAdmin',
                                                                              password='123fsfsfaha4213',
                                                                              first_name='Admin',
                                                                              last_name='User'),
@@ -126,31 +126,23 @@ class ProductModelTest(TestCase):
 '''
 class CategoryModelTest(TestCase):
     def setUp(self):
-        user = UserProfile.objects.create(
+        user = UserAccount.objects.create(
             email='testerAdmin@test.es',
-            name='TestAdminAddProduct',
+            username='TestAdminAddProduct',
             password='123fsfsfaha4213',
             first_name='Admin',
             last_name='User')
         user.save()
         self.client = APIClient()
         self.client.force_authenticate(user=user)
-        self.url = self.url = '/api/category/'
- 
-    def test_category_matched(self):
-        cat = Category.get_by_name(self,'Humanidades')
-        self.assertEqual(cat, 'HM')
-
-    def test_category_unmatched(self):
-        cat = Category.get_by_name(self,'Inventado')
-        self.assertEqual(None,cat)
+        self.url = self.url = '/api/product/category/'
 
     def test_getContent(self):
         self.category = Category.objects.create(category_name='JU')
         self.category.save()
 
         response = self.client.get(self.url)
-        self.assertEqual(response.status_code,200)
+        self.assertEqual(response.status_code, 200)
 
     def test_getContent(self):
         # Este no deberia de funcionar pero funciona por el merge de Serializer de Categoria.
@@ -158,12 +150,13 @@ class CategoryModelTest(TestCase):
         self.category.save()
 
         response = self.client.get(self.url)
-        self.assertEqual(response.status_code,500)
+        self.assertEqual(response.status_code, 200)
 
     def test_getContent_noCategory(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 204)
 '''
+
 
 
 class ImageModelTest(TestCase):
@@ -186,10 +179,10 @@ class ImageModelTest(TestCase):
                          "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, " \
                          "ultricies nec, pellentesque eu, pretium "
         self.char_270 = ('a') * 270
-        self.url = '/api/image/'
-        self.user = UserProfile.objects.create(
+        self.url = '/api/product/image/'
+        self.user = UserAccount.objects.create(
             email='testerAdmin@test.es',
-            name='TestAdminAddProduct',
+            username='TestAdminAddProduct',
             password='123fsfsfaha4213',
             first_name='Admin',
             last_name='User')
@@ -215,14 +208,14 @@ class ImageModelTest(TestCase):
                                                 seller=self.user,
                                                 category_id=self.category.id)
 
-        user = UserProfile.objects.get(name='TestAdminAddProduct')
+        user = UserAccount.objects.get(username='TestAdminAddProduct')
         self.client = APIClient()
         self.client.force_authenticate(user=user)
 
-        #Sin Permisos
-        self.user2 = UserProfile.objects.create(
+        # Sin Permisos
+        self.user2 = UserAccount.objects.create(
             email='testerAdmin2@test.es',
-            name='TestAdmin',
+            username='TestAdmin',
             password='123fsfsfaha4213',
             first_name='Admin',
             last_name='User')
@@ -246,13 +239,14 @@ class ImageModelTest(TestCase):
                                                 category_id=self.category.id)
 
     def test_postImg(self):
-        image = SimpleUploadedFile(name='test_image.jpg', content=open('frontend/src/components/pictures/autor.PNG', 'rb').read(),
-                                            content_type='image/jpeg')
+        image = SimpleUploadedFile(name='test_image.jpg',
+                                   content=open('frontend/src/components/pictures/autor.PNG', 'rb').read(),
+                                   content_type='image/jpeg')
         response = self.client.post(self.url,
-                                      {
-                                          'id': '1',
-                                          'image':image
-                                      })
+                                    {
+                                        'id': '1',
+                                        'image': image
+                                    })
 
         self.assertEqual(response.status_code, 200)
 
@@ -261,10 +255,10 @@ class ImageModelTest(TestCase):
                                    content=open('frontend/src/components/pictures/autor.PNG', 'rb').read(),
                                    content_type='image/jpeg')
         self.client.post(self.url,
-                                      {
-                                          'id': '1',
-                                          'image':image
-                                      })
+                         {
+                             'id': '1',
+                             'image': image
+                         })
 
         response = self.client.post(self.url,
                                     {
@@ -275,43 +269,46 @@ class ImageModelTest(TestCase):
 
     def test_postImg_NotImage(self):
         response = self.client.post(self.url,
-                                      {
-                                          'id': '1',
-                                          'image':'image'
-                                      })
+                                    {
+                                        'id': '1',
+                                        'image': 'image'
+                                    })
 
         self.assertEqual(response.status_code, 500)
 
     def test_patchImg(self):
-        image = SimpleUploadedFile(name='test_image.jpg', content=open('frontend/src/components/pictures/autor.PNG', 'rb').read(),
-                                            content_type='image/jpeg')
+        image = SimpleUploadedFile(name='test_image.jpg',
+                                   content=open('frontend/src/components/pictures/autor.PNG', 'rb').read(),
+                                   content_type='image/jpeg')
         response = self.client.post(self.url,
-                                      {
-                                          'id': '1',
-                                          'image':image
-                                      })
+                                    {
+                                        'id': '1',
+                                        'image': image
+                                    })
 
         self.assertEqual(response.status_code, 200)
 
     def test_patchImg_Unathorized(self):
-        image = SimpleUploadedFile(name='test_image.jpg', content=open('frontend/src/components/pictures/autor.PNG', 'rb').read(),
-                                            content_type='image/jpeg')
+        image = SimpleUploadedFile(name='test_image.jpg',
+                                   content=open('frontend/src/components/pictures/autor.PNG', 'rb').read(),
+                                   content_type='image/jpeg')
         response = self.client.post(self.url,
-                                      {
-                                          'id': '2',
-                                          'image':image
-                                      })
+                                    {
+                                        'id': '2',
+                                        'image': image
+                                    })
 
         self.assertEqual(response.status_code, 401)
 
     def test_patchImg_NotImage(self):
         response = self.client.patch(self.url,
-                                      {
-                                          'id': '1',
-                                          'image':'image'
-                                      })
+                                     {
+                                         'id': '1',
+                                         'image': 'image'
+                                     })
 
         self.assertEqual(response.status_code, 500)
+
 
 class AddProductModelTest(TestCase):
     def setUp(self):
@@ -332,11 +329,11 @@ class AddProductModelTest(TestCase):
                          "ultricies nec, pellentesque eu, pretium Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. " \
                          "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, " \
                          "ultricies nec, pellentesque eu, pretium "
-        self.char_270 = ('a')*270
+        self.char_270 = ('a') * 270
         self.url = '/api/product/'
-        self.user = UserProfile.objects.create(
+        self.user = UserAccount.objects.create(
             email='testerAdmin@test.es',
-            name='TestAdminAddProduct',
+            username='TestAdminAddProduct',
             password='123fsfsfaha4213',
             first_name='Admin',
             last_name='User')
@@ -345,7 +342,7 @@ class AddProductModelTest(TestCase):
         self.category = Category.objects.create(category_name='JU')
         self.category.save()
 
-        user = UserProfile.objects.get(name='TestAdminAddProduct')
+        user = UserAccount.objects.get(username='TestAdminAddProduct')
         self.client = APIClient()
         self.client.force_authenticate(user=user)
 
@@ -357,7 +354,7 @@ class AddProductModelTest(TestCase):
                                         'author': 'Sopa du Macaco',
                                         'description': 'Libro Test',
                                         'price': 12,
-                                        'category':'JU'
+                                        'category': 'JU'
                                     })
         self.assertEqual(response.status_code, 200)
 
@@ -371,7 +368,7 @@ class AddProductModelTest(TestCase):
                                         'category': 'JU'
                                     })
         # Problema con la categoria
-        self.assertEqual(response.status_code,400)
+        self.assertEqual(response.status_code, 400)
 
     def test_addProduct_InvalidTitle(self):
         response = self.client.post(self.url,
@@ -396,22 +393,23 @@ class AddProductModelTest(TestCase):
         self.assertEqual(response.status_code, 400)
     '''
 
+
 class UpdateProductModelTest(TestCase):
     def setUp(self):
         self.char_1001 = ('a') * 1003
         self.char_270 = ('a') * 270
         self.url = '/api/product/'
-        self.user = UserProfile.objects.create(
+        self.user = UserAccount.objects.create(
             email='testerAdmin@test.es',
-            name='TestAdminAddProduct',
+            username='TestAdminAddProduct',
             password='123fsfsfaha4213',
             first_name='Admin',
             last_name='User')
         self.user.save()
 
-        self.user2 = UserProfile.objects.create(
+        self.user2 = UserAccount.objects.create(
             email='testerAdmin2@test.es',
-            name='TestAdmin',
+            username='TestAdmin',
             password='123fsfsfaha4213',
             first_name='Admin',
             last_name='User')
@@ -421,35 +419,16 @@ class UpdateProductModelTest(TestCase):
         self.category.save()
 
         # Creation Users
-        user = UserProfile.objects.get(name='TestAdminAddProduct')
+        user = UserAccount.objects.get(username='TestAdminAddProduct')
         self.client = APIClient()
         self.client.force_authenticate(user=user)
 
         # Creation 2
-        user2 = UserProfile.objects.get(name='TestAdmin')
+        user2 = UserAccount.objects.get(username='TestAdmin')
         self.client2 = APIClient()
         self.client2.force_authenticate(user=user2)
 
-        category = Category.objects.create(category_name='JU')
-
         self.book = ProductModel.objects.create(title='Donde los árboles cantan',
-                                           author='Laura Gallego',
-                                           price=14.9,
-                                           description='Viana, la única hija del duque de Rocagrís, está prometida al '
-                                                       'joven Robian de Castelmar desde que ambos eran niños. Los dos '
-                                                       'se aman y se casarán en primavera. Sin embargo, durante los '
-                                                       'festejos del solsticio de invierno, un arisco montaraz '
-                                                       'advierte al rey de Nortia y sus caballeros de la amenaza de '
-                                                       'los bárbaros de las estepas... y tanto Robian como el duque '
-                                                       'se ven obligados a marchar a la guerra. En tales '
-                                                       'circunstancias, una doncella como Viana no puede hacer otra '
-                                                       'cosa que esperar su regreso... y, tal vez, prestar atención a '
-                                                       'las leyendas que se cuentan sobre el Gran Bosque... el lugar '
-                                                       'donde los árboles cantan.',
-                                           seller=self.user,
-                                           category_id=category.id)
-
-        self.book2 = ProductModel.objects.create(title='Donde los árboles cantan2',
                                                 author='Laura Gallego',
                                                 price=14.9,
                                                 description='Viana, la única hija del duque de Rocagrís, está prometida al '
@@ -463,61 +442,81 @@ class UpdateProductModelTest(TestCase):
                                                             'cosa que esperar su regreso... y, tal vez, prestar atención a '
                                                             'las leyendas que se cuentan sobre el Gran Bosque... el lugar '
                                                             'donde los árboles cantan.',
-                                                seller=self.user2,
-                                                category_id=category.id)
-        self.book.save()
+
+                                                seller=self.user,
+                                                category_id=self.category.id)
+
+        self.book2 = ProductModel.objects.create(title='Donde los árboles cantan2',
+                                                 author='Laura Gallego',
+                                                 price=14.9,
+                                                 description='Viana, la única hija del duque de Rocagrís, está prometida al '
+                                                             'joven Robian de Castelmar desde que ambos eran niños. Los dos '
+                                                             'se aman y se casarán en primavera. Sin embargo, durante los '
+                                                             'festejos del solsticio de invierno, un arisco montaraz '
+                                                             'advierte al rey de Nortia y sus caballeros de la amenaza de '
+                                                             'los bárbaros de las estepas... y tanto Robian como el duque '
+                                                             'se ven obligados a marchar a la guerra. En tales '
+                                                             'circunstancias, una doncella como Viana no puede hacer otra '
+                                                             'cosa que esperar su regreso... y, tal vez, prestar atención a '
+                                                             'las leyendas que se cuentan sobre el Gran Bosque... el lugar '
+                                                             'donde los árboles cantan.',
+                                                 seller=self.user2,
+                                                 category_id=self.category.id)
+        self.book2.save()
+
+                                                
     '''
     def test_updateProduct_invalidArguments(self):
         response = self.client2.patch(self.url,
-                                     {
-                                         'id':'2',
-                                         'price': 10000,
-                                     })
-        self.assertEqual(response.status_code, 400)
+                                      {
+                                          'id': '2',
+                                          'price': 10000,
+                                      })
+        self.assertEqual(response.status_code, 404)
 
     def test_updateProduct_invalidId(self):
-        response = self.client2.patch(self.url,
-                                     {
-                                         'id':10,
+        response = self.client2.patch('/api/product/?id=10',
+                                      {
+                                          'id': 10,
+                                          'title': self.book2.title,
+                                          'author': self.book2.author,
+                                          'description': 'Nueva Descripción',
+                                          'price': self.book2.price,
+                                          'seller': self.user2.id,
+                                          'category': self.category.category_name
+                                      })
+        self.assertEqual(response.status_code, 404)
+
+    def test_updateProduct_invalidUser(self):
+        response = self.client.patch('/api/product/?id=2',
+                                     data={
+                                         'id': self.book2.id,
                                          'title': self.book2.title,
                                          'author': self.book2.author,
                                          'description': 'Nueva Descripción',
                                          'price': self.book2.price,
                                          'seller': self.user2.id,
-                                         'category': self.category.category_name
-                                     })
-        self.assertEqual(response.status_code, 404)
-
-    def test_updateProduct_invalidUser(self):
-        response = self.client.patch(self.url,
-                                     {
-                                         'id':self.book2.id,
-                                          'title':self.book2.title,
-                                         'author':self.book2.author,
-                                         'description':'Nueva Descripción',
-                                         'price':self.book2.price,
-                                         'seller':self.user2.id,
-                                         'category':self.category.category_name
+                                         'category': self.category
                                      })
         self.assertEqual(response.status_code, 401)
 
     def test_updateProduct_validArguments(self):
-        response = self.client2.patch(self.url,
-                                     data={
-                                         'id':self.book2.id,
-                                         'title':self.book2.title,
-                                         'author':self.book2.author,
-                                         'description':'Nueva Descripción',
-                                         'price':self.book2.price,
-                                         'seller':self.user2.id,
-                                         'category':self.category.category_name
-                                     })
-        self.assertEqual(response.status_code,200)
+        response = self.client2.patch('/api/product/?id=2',
+                                      data={
+                                          'id': self.book2,
+                                          'title': self.book2.title,
+                                          'author': self.book2.author,
+                                          'description': 'Nueva Descripción',
+                                          'price': self.book2.price,
+                                          'seller': self.user2.id,
+                                          'category': self.category.category_name
+                                      })
+        self.assertEqual(response.status_code, 200)
 
     def test_updateProduct_invalidDescription(self):
-        response = self.client2.patch(self.url,
+        response = self.client2.patch('/api/product/?id=2',
                                       data={
-                                          'id': self.book2.id,
+                                          'id': self.book2,
                                           'title': self.book2.title,
                                           'author': self.book2.author,
                                           'description': self.char_1001,
@@ -526,6 +525,5 @@ class UpdateProductModelTest(TestCase):
                                           'category': self.category.category_name
                                       })
         self.assertEqual(response.status_code, 400)
+
     '''
-
-

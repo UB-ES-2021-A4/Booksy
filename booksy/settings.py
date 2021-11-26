@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'booksy',
     'accounts',
     'product',
+    'transaction',
     'corsheaders',
 ]
 
@@ -129,6 +130,7 @@ else:
         }
     }
 
+
 # Media folder
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_URL = "/media/"
@@ -184,15 +186,16 @@ STATICFILES_DIRS = (
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'accounts.UserProfile'
+AUTH_USER_MODEL = 'accounts.UserAccount'
 
 # EMAIL
-
-EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'booksynoreply@gmail.com'
 EMAIL_HOST_PASSWORD = 'Wanpise2021'
 EMAIL_PORT = 587
+EMAIL_USE_SSL = True
+EMAIL_USE_TLS = False
 
 # White listing the localhost:3000 port
 # for React

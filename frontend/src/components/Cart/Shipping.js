@@ -3,15 +3,47 @@ import {Col, Container, Row} from "react-bootstrap";
 import ShippingPhoto from "../pictures/shipping.jpg";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import './Cart.css'
+import swal from "sweetalert";
 
 export default class Shipping extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            nombre: props.getStore().nombre,
+            apellidos: props.getStore().apellidos,
+            direccion: props.getStore().direccion,
+            ciudad: props.getStore().ciudad,
+            pais: props.getStore().pais,
+            codigoPostal: props.getStore().codigoPostal,
+            subtotal: props.getStore().subtotal,
+            num_items: props.getStore().num_items,
+        };
         this.handleChange = this.handleChange.bind(this);
     }
+
+    checkFormParams() {
+        let portalString = (this.state.codigoPostal).toString()
+        let postalResult = portalString.match(/\d{5}/);
+        if (this.state.nombre === '' || this.state.apellidos === '' || this.state.direccion === '' ||
+            this.state.ciudad === '' || this.state.pais === '' || this.state.codigoPostal === 0) {
+            return false
+        } else return (this.state.codigoPostal.length < 6 && postalResult !== null);
+    }
+
+    fillAllParamsAlert () {
+        // Use sweetalert2
+        swal('Error', 'In order to continue shopping, all parameters should be\n filled correctly. \n The zip code can only be a five-digit number.', 'error');
+    };
+
+
     continue = e => {
         e.preventDefault();
-        this.props.nextStep();
+        if (this.checkFormParams()) {
+            this.updateStoreInfo();
+            this.props.nextStep();
+        } else {
+            this.fillAllParamsAlert();
+        }
     };
 
     back = e => {
@@ -25,8 +57,27 @@ export default class Shipping extends Component {
         });
     };
 
+    updateStoreInfo() {
+        this.props.values.nombre = this.state.nombre
+        this.props.values.apellidos = this.state.apellidos
+        this.props.values.direccion = this.state.direccion
+        this.props.values.ciudad = this.state.ciudad
+        this.props.values.pais = this.state.pais
+        this.props.values.codigoPostal = this.state.codigoPostal
+        this.props.values.subtotal = this.state.subtotal
+        this.props.values.num_items = this.state.num_items
+        this.setState({
+            [this.props.values]: this.state
+        });
+        this.props.setStore(this.props.values)
+
+    }
+
+
+
     render() {
         const { values, handleChange } = this.props;
+
         return (
             <div>
                 <div className="card">
@@ -70,11 +121,6 @@ export default class Shipping extends Component {
                                     </div>
                                     <br/>
                                     <div className="input-field">
-                                        <input type="email" id="email" onChange={this.handleChange} required/>
-                                        <label htmlFor="email">Email</label>
-                                    </div>
-                                    <br/>
-                                    <div className="input-field">
                                         <input type="text" id="direccion" onChange={this.handleChange} required/>
                                         <label htmlFor="direccion">Dirección</label>
                                     </div>
@@ -90,7 +136,7 @@ export default class Shipping extends Component {
                                     </div>
                                     <br/>
                                     <div className="input-field">
-                                        <input type="number" id="codigoPostal" onChange={this.handleChange} required/>
+                                        <input type="number" id="codigoPostal" maxLength={5} min={0} onChange={this.handleChange} required/>
                                         <label htmlFor="codigoPostal">Código Postal</label>
                                     </div>
                                 </form>
@@ -115,5 +161,3 @@ export default class Shipping extends Component {
         );
     }
 }
-
-

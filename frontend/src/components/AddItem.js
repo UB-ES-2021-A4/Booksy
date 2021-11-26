@@ -7,6 +7,10 @@ import axios from "axios";
 import swal from "sweetalert";
 import {withRouter} from "react-router-dom";
 
+const deploy_url = 'https://booksy.pythonanywhere.com';
+const debug_url = 'http://127.0.0.1:8000';
+const url = deploy_url;
+
 class AddItem extends Component {
     constructor(props) {
         super(props);
@@ -48,7 +52,7 @@ class AddItem extends Component {
         formItem.append('description',this.state.description)
 
         if (this.checkFormParams(formItem)) {
-            axios.post('https://booksy.pythonanywhere.com/api/product/', formItem,
+            axios.post(`${url}/api/product/`, formItem,
                 {headers: {'Authorization': `Token ${window.localStorage.getItem('token')}`}})
                 .then((res) => {
                     console.error(res.data)
@@ -64,18 +68,16 @@ class AddItem extends Component {
     }
 
     checkFormParams (params) {
-        if (params.toString().length === 0) {
-            return false
-        }
-        return true
-
+        return params.toString().length !== 0;
     }
 
     uploadImages(product_id) {
         var imgs = new FormData()
         imgs.append('id', product_id)
         imgs.append('image', this.state.images)
-        axios.post('https://booksy.pythonanywhere.com/api/image/', imgs,
+
+        axios.post(`${url}/api/product/image/`, imgs,
+
             {headers: {'Authorization': `Token ${window.localStorage.getItem('token')}`}})
             .then((res)=> {
                 this.successfulPostAlert()
@@ -84,11 +86,10 @@ class AddItem extends Component {
                 this.noPhotosAlert()
                 console.error(error)
             })
-
     }
 
     getCategories() {
-        axios.get('https://booksy.pythonanywhere.com/api/category/')
+        axios.get(`${url}/api/product/category/`)
             .then((res)=> {
                 this.populateCategories(res.data)
             })
@@ -106,7 +107,7 @@ class AddItem extends Component {
     renderCategories = () => {
         const newCategories = Object.getOwnPropertyNames(this.state.categories);
         return newCategories.map((cat, i) => (
-            <option value={cat}>{this.state.categories[cat]}</option>
+            <option value={cat} key={i}>{this.state.categories[cat]}</option>
         ));
     };
 
@@ -161,7 +162,7 @@ class AddItem extends Component {
                                 <br/>
 
                                 <select className="form-select" id="category" onChange={this.handleChange} >
-                                    <option selected>Selecciona una categoría</option>
+                                    <option defaultValue>Selecciona una categoría</option>
                                         {this.renderCategories()}
                                 </select>
                                 <br/>

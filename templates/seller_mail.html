@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <h2>Dear {{ user }},</h2>
+        <h4>
+            We are glad to inform you that your product {{ product_title }}
+            has been sold.
+            This is the Shipping information you need to know to proceed with
+            this order:
+        </h4>
+        <h5>
+            - Buyer's name: {{ buyer }}
+        </h5>
+        <h5>
+            - Address: {{ address }}
+        </h5>
+        <h5>
+            - City: {{ city }}
+        </h5>
+        <h5>
+            - Country: {{ country }}
+        </h5>
+        <h5>
+            - Zip Code: {{ zip_code }}
+        </h5>
+        <h5>
+            - Product: {{ product_title }}
+
+        </h5>
+        <br/>
+        <h4>
+            Sincerely,
+            <br>
+            Booksy Team
+        </h4>
+    </body>
+</html>

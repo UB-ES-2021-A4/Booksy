@@ -1,14 +1,14 @@
+import operator
 import os
+from functools import reduce
 
-from django.shortcuts import render
+from django.db.models import Q
 from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from accounts.models import UserProfile
-from booksy import settings
 from product.models import ProductModel, Category, Image
 from product.serializers import ProductSerializer, CategorySerializer, ImageSerializer
 
@@ -26,18 +26,26 @@ class ProductView(APIView):
         """
         try:
             # Get the category
+
             product_id = request.GET.get('id')
             category = request.GET.get('category')
-
-            if product_id:
-                product_list = list(ProductModel.objects.filter(id=product_id))
-
-            elif category:
-                category = Category.objects.get(category_name=category)
-                product_list = list(ProductModel.objects.filter(category=category))
-            else:
+            search = request.GET.get('search')
+            seller = request.GET.get('seller_id')
+            qs = [Q(hidden=False)]
+            if category is not None and category != "":
+                qs.append(Q(category__category_name=category))
+            if search is not None and search != "":
+                qs.append(Q(title__icontains=search))
+            if product_id is not None and product_id != "":
+                qs.append(Q(id=product_id))
+            if seller is not None and seller != "":
+                qs.append(Q(seller__id=seller))
+            if len(qs) == 0:
                 product_list = list(ProductModel.objects.all())
-
+            else:
+                product_list = ProductModel.objects.filter(reduce(operator.and_, qs))
+            if len(product_list) == 0:
+                return Response(status=status.HTTP_204_NO_CONTENT)
             serialized_products = [ProductSerializer(prod).data for prod in product_list]
             return Response(serialized_products,
                             status=status.HTTP_200_OK if serialized_products else status.HTTP_204_NO_CONTENT)
@@ -45,22 +53,26 @@ class ProductView(APIView):
             return Response(status=status.HTTP_418_IM_A_TEAPOT)
 
     def post(self, request):
-        print(request.data)
         seller = request.user
         category = Category.objects.get(category_name=request.POST.get('category'))
         product_serialized = ProductSerializer(data=request.data)
-        if (not product_serialized.is_valid()):
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        else:
-            a = ProductModel.objects.create(title=request.POST.get('title'), author=request.POST.get('author'),
-                                            description=request.POST.get('description'),
-                                            price=request.POST.get('price'),
-                                            seller=seller, category=category)
-            try:
-                product = ProductModel.objects.get(id=a.id)
-                return Response(a.id, status=status.HTTP_200_OK if product else status.HTTP_400_BAD_REQUEST)
-            except:
-                return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        try:
+            dic = request.data.dict()
+            dic.update({'category': {'category_name': category.category_name, 'category_description': category.get_category_name_display()}, 'seller': seller.id})
+            product_serialized = ProductSerializer(data=dic)
+            if not product_serialized.is_valid():
+                return Response(product_serialized.errors, status=status.HTTP_400_BAD_REQUEST)
+
+            prod = ProductModel.objects.create(title=request.POST.get('title'), author=request.POST.get('author'),
+                                               description=request.POST.get('description'),
+                                               price=request.POST.get('price'),
+                                               seller=seller, category=category)
+
+            product = ProductModel.objects.get(id=prod.id)
+            return Response(prod.id, status=status.HTTP_200_OK if product else status.HTTP_400_BAD_REQUEST)
+        except:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def delete(self, request):
         product_id = request.GET.get('id')
@@ -85,11 +97,14 @@ class ProductView(APIView):
         try:
             owner = getattr(product, 'seller')
             if seller == owner:
-                product_serialized = ProductSerializer(product, data=request.data)
+                dic = request.data.dict()
+                category = Category.objects.get(category_name=request.POST.get('category'))
+                dic.update({'category': {'category_name': category.category_name, 'category_description': category.get_category_name_display()}, 'seller': seller.id})
+                product_serialized = ProductSerializer(product, data=dic)
                 if product_serialized.is_valid():
                     product_serialized.save()
                     return Response(status=status.HTTP_200_OK)
-                return Response(status=status.HTTP_400_BAD_REQUEST)
+                return Response(product_serialized.errors, status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response(status=status.HTTP_401_UNAUTHORIZED)
         except:
@@ -169,6 +184,8 @@ class ImageView(APIView):
                 serial_img.save()
                 os.remove(orig_path)
                 return Response(status=status.HTTP_200_OK)
+            else:
+                return Response(serial_img.errors, status=status.HTTP_400_BAD_REQUEST)
         except:
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 

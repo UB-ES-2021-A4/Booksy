@@ -13,12 +13,12 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 import accounts.views
-from accounts import views
 
 urlpatterns = [
     path('', accounts.views.index, name='index'),
@@ -28,10 +28,11 @@ urlpatterns = [
     path('additem/', accounts.views.index, name='index'),
 
     path('admin/', admin.site.urls),
-    path('api/', include('accounts.urls')),
+    path('api/account/', include('accounts.urls')),
+    path('api/product/', include('product.urls')),
+    path('api/profile/', include('accounts.profile_urls')),
 
-    path('api/login/', views.UserLoginApiView.as_view()), #TODO should be on accounts.urls
-    path('api/', include('product.urls')),
+    path('api/', include('transaction.urls')),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
   + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

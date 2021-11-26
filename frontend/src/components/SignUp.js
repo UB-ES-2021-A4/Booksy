@@ -15,7 +15,7 @@ class Signup extends Component {
         super(props);
         this.state = {
             email: '',
-            name: '',
+            username: '',
             password: '',
             Repeatpassword: '',
             first_name: '',
@@ -56,14 +56,14 @@ class Signup extends Component {
 
         const user = {
             email: this.state.email,
-            name: this.state.username,
+            username: this.state.username,
             password: this.state.password,
             first_name: this.state.name,
             last_name: this.state.apellidos
         }
         if (this.state.Repeatpassword === this.state.password) {
 
-            axios.post(`${url}/api/signUpaccount/`, user)
+            axios.post(`${url}/api/account/signup/`, user)
                 .then((res) => this.handleClick())
                 .catch((error) => {
                     console.error(error)

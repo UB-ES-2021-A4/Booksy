@@ -5,10 +5,13 @@ import Payment from "./Payment";
 import Shipping from "./Shipping";
 import Checkout from "./Checkout";
 import emptyCart from '../pictures/empty_cart.png'
+import {withRouter} from "react-router-dom";
 
+const deploy_url = 'https://booksy.pythonanywhere.com';
+const debug_url = 'http://127.0.0.1:8000';
+const url = deploy_url;
 
-
-export default class CheckOut extends Component {
+class Cart extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -22,9 +25,11 @@ export default class CheckOut extends Component {
             codigoPostal: 0,
             nombreTarjeta: '',
             numeroTarjeta: 0,
-            expMonth: 0,
-            expYear: 0,
+            expDate: '',
             CVV: 0,
+            subtotal: 0,
+            num_items: 0,
+            items_to_cart: [],
         };
     }
 
@@ -56,20 +61,52 @@ export default class CheckOut extends Component {
         this.setState({ [input]: e.target.value });
     };
 
+    getStore() {
+        return this.state;
+    }
+
+    setStore(store) {
+        this.setState({
+            nombre: store.nombre,
+            apellidos: store.apellidos,
+            direccion: store.direccion,
+            ciudad: store.ciudad,
+            pais: store.pais,
+            codigoPostal: store.codigoPostal,
+            nombreTarjeta: store.nombreTarjeta,
+            numeroTarjeta: store.numeroTarjeta,
+            expDate: store.expDate,
+            CVV: store.CVV,
+            subtotal: store.subtotal,
+            num_items: store.num_items,
+        })
+    }
+
+    componentDidMount() {
+        this.setItems = this.setItems.bind(this);
+        this.setItems()
+    }
+
+    setItems() {
+        if (this.props.location.state) {
+            this.state.items_to_cart = JSON.parse(localStorage.getItem("items_to_cart"));
+        }
+    }
 
     render() {
         const { step } = this.state;
-        const { nombre, apellidos, email, direccion, ciudad, pais, codigoPostal, nombreTarjeta, numerotarjeta, expMonth, expYear, CVV } = this.state;
-        const values = { nombre, apellidos, email, direccion, ciudad, pais, codigoPostal, nombreTarjeta, numerotarjeta, expMonth, expYear, CVV };
+        const { nombre, apellidos, email, direccion, ciudad, pais, codigoPostal, nombreTarjeta, numeroTarjeta, expDate, CVV, subtotal, num_items } = this.state;
+        const values = { nombre, apellidos, email, direccion, ciudad, pais, codigoPostal, nombreTarjeta, numeroTarjeta, expDate, CVV, subtotal, num_items };
 
         switch (step) {
             case 1:
-                console.log(this.props.items)
-                if (this.props.items){
+                if (this.props.location.state.items_to_cart.length > 0){
                     return (
                         <Checkout
                             nextStep={this.nextStep}
-                            handleChange={this.handleChange}
+                            handleChange={() => this.handleChange}
+                            getStore={() => (this.getStore())}
+                            setStore = {(e) => this.setStore(e)}
                             values={values}
                         />
                     );
@@ -81,6 +118,7 @@ export default class CheckOut extends Component {
                                 <br/>
                                 <a href='/home_page'><b>Shop for items now!</b></a>
                             </center>
+                            <br/>
                         </div>
                     );
                 }
@@ -89,7 +127,9 @@ export default class CheckOut extends Component {
                     <Shipping
                         nextStep={this.nextStep}
                         prevStep={this.prevStep}
-                        handleChange={this.handleChange}
+                        getStore={() => (this.getStore())}
+                        setStore = {(e) => this.setStore(e)}
+                        handleChange={() => this.handleChange}
                         values={values}
                     />
                 );
@@ -98,6 +138,9 @@ export default class CheckOut extends Component {
                     <Payment
                         nextStep={this.nextStep}
                         prevStep={this.prevStep}
+                        getStore={() => (this.getStore())}
+                        setStore = {(e) => this.setStore(e)}
+                        handleChange={() => this.handleChange}
                         values={values}
                     />
                 );
@@ -107,6 +150,8 @@ export default class CheckOut extends Component {
                         nextStep={this.nextStep}
                         prevStep={this.prevStep}
                         prev2Steps={this.prev2Steps}
+                        getStore={() => (this.getStore())}
+                        handleChange={() => this.handleChange}
                         values={values}
                     />
                 );
@@ -117,3 +162,5 @@ export default class CheckOut extends Component {
         }
     }
 }
+
+export default withRouter(Cart);
