@@ -1,5 +1,6 @@
 import os
 
+from django.db.models import Q
 from django.shortcuts import render
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.views import ObtainAuthToken
@@ -50,19 +51,23 @@ class UserAccountLogin(ObtainAuthToken):
     permission_classes = (AllowAny,)
 
     def post(self, request, *args, **kwargs):
-        print(request.data)
-        serializer = self.serializer_class(data=request.data,
-                                           context={'request': request})
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        token, created = Token.objects.get_or_create(user=user)
+        username = request.data['username']
+        try:
+            user = models.UserAccount.objects.get(
+                Q(username__iexact=username) | Q(email__iexact=username)
+            )
+        except:
+            return Response('Username or mail was not found', status=status.HTTP_404_NOT_FOUND)
+        if user.check_password(request.data['password']):
+            token, created = Token.objects.get_or_create(user=user)
 
-        return Response({
-            'token': token.key,
-            'user_id': user.pk,
-            'name': user.get_full_name(),
-            'email': user.email
-        })
+            return Response({
+                'token': token.key,
+                'user_id': user.pk,
+                'name': user.get_full_name(),
+                'email': user.email
+            })
+        return Response("Password is incorrect", status=status.HTTP_403_FORBIDDEN)
 
     def get(self, request):
         try:
