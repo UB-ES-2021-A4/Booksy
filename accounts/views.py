@@ -67,7 +67,7 @@ class UserAccountLogin(ObtainAuthToken):
                 'name': user.get_full_name(),
                 'email': user.email
             })
-        return Response("Password is incorrect", status=status.HTTP_403_FORBIDDEN)
+        return Response("Password is incorrect", status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request):
         try:
