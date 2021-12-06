@@ -99,6 +99,10 @@ class UserAccountLogin(ObtainAuthToken):
             )
         except:
             return Response('Username or mail was not found', status=status.HTTP_404_NOT_FOUND)
+
+        if not user.verified:
+            return Response('User not verified', status=status.HTTP_403_FORBIDDEN)
+
         if user.check_password(request.data['password']):
             token, created = Token.objects.get_or_create(user=user)
 
