@@ -123,7 +123,6 @@ class ProductModelTest(TestCase):
             pass
 
 
-'''
 class CategoryModelTest(TestCase):
     def setUp(self):
         user = UserAccount.objects.create(
@@ -137,25 +136,10 @@ class CategoryModelTest(TestCase):
         self.client.force_authenticate(user=user)
         self.url = self.url = '/api/product/category/'
 
-    def test_getContent(self):
-        self.category = Category.objects.create(category_name='JU')
-        self.category.save()
-
-        response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 200)
-
-    def test_getContent(self):
-        # Este no deberia de funcionar pero funciona por el merge de Serializer de Categoria.
-        self.category = Category.objects.create(category_name='UWU')
-        self.category.save()
-
-        response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 200)
-
     def test_getContent_noCategory(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 204)
-'''
+
 
 
 
@@ -346,7 +330,6 @@ class AddProductModelTest(TestCase):
         self.client = APIClient()
         self.client.force_authenticate(user=user)
 
-    '''
     def test_addProduct(self):
         response = self.client.post(self.url,
                                     data={
@@ -391,7 +374,6 @@ class AddProductModelTest(TestCase):
                                         'category': 'JU'
                                     })
         self.assertEqual(response.status_code, 400)
-    '''
 
 
 class UpdateProductModelTest(TestCase):
@@ -464,8 +446,6 @@ class UpdateProductModelTest(TestCase):
                                                  category_id=self.category.id)
         self.book2.save()
 
-                                                
-    '''
     def test_updateProduct_invalidArguments(self):
         response = self.client2.patch(self.url,
                                       {
@@ -526,4 +506,3 @@ class UpdateProductModelTest(TestCase):
                                       })
         self.assertEqual(response.status_code, 400)
 
-    '''
