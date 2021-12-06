@@ -1,16 +1,21 @@
 import os
 
 from django.shortcuts import render
+from django.utils.http import urlsafe_base64_encode
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
+from booksy.email import send_message
+from accounts.token import account_activation_token
 from booksy import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from accounts import models
-
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
+from django.utils.encoding import force_str,force_text,force_bytes
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 
 from accounts.serializers import UserAccountSerializer, UserProfileSerializer
@@ -19,6 +24,29 @@ from accounts.serializers import UserAccountSerializer, UserProfileSerializer
 def index(request):
     return render(request, 'index.html')
 
+
+def send_action_email(acc, request):
+    current_site = get_current_site(request)
+    email_body = render_to_string('templates/activate.html',{
+        'first_name': acc.first_name,
+        'domain': current_site,
+        'uid': urlsafe_base64_encode(force_bytes(acc.id)),
+        'token': account_activation_token.make_token(acc)
+    })
+
+    send_message(acc.email, acc.first_name, email_body)
+
+def activate_user(request, uidb64, token):
+    try:
+        uid=force_text(urlsafe_base64_encode(uidb64))
+        acc = models.UserAccount.objects.get(id = uid)
+    except Exception as e:
+        acc = None
+
+    if acc and account_activation_token(acc, token):
+        acc.verified = True
+        return Response(status=status.HTTP_200_OK)
+    return Response(status=status.HTTP_400_BAD_REQUEST)
 
 class UserAccountSignUp(APIView):
     serializer_class = UserAccountSerializer
@@ -38,7 +66,8 @@ class UserAccountSignUp(APIView):
                 profi = profile.save()
 
                 token, created = Token.objects.get_or_create(user=account)
-                return Response({'token': token.key}, status=status.HTTP_201_CREATED)
+                send_action_email(account, request)
+                return Response(status=status.HTTP_201_CREATED)
             else:
                 return Response(account_serialized.errors, status=status.HTTP_400_BAD_REQUEST)
         except:
