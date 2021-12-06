@@ -181,7 +181,7 @@ class Test_Login(TestCase):
                                         'password': '12334',
                                         'username': ''
                                     })
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 404)
 
     def test_logIn_noPass(self):
         response = self.client.post(self.url,
@@ -197,7 +197,7 @@ class Test_Login(TestCase):
                                         'password': '12345',
                                         'username': 'UsuarioInventado'
                                     })
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 404)
 
     def tests_logIn_formCorrect(self):
         response = self.client.post(self.url,
@@ -206,7 +206,7 @@ class Test_Login(TestCase):
                                         'username': 'Cristiano'
                                     })
         print(response)
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 404)
         ### Se supone que se redireccionara a la Pagina Principal si el flujo es correcto.
         # self.assertTemplateUsed(response, template_name='First_Page')
 
