@@ -1,16 +1,20 @@
 import os
 
+from django.db.models import Q
 from django.shortcuts import render
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.decorators import renderer_classes
+from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework.settings import api_settings
-from booksy import settings
+from booksy.email import send_message
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from accounts import models
-
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 
 from accounts.serializers import UserAccountSerializer, UserProfileSerializer
@@ -18,6 +22,41 @@ from accounts.serializers import UserAccountSerializer, UserProfileSerializer
 
 def index(request):
     return render(request, 'index.html')
+
+
+def send_action_email(acc, request):
+    current_site = get_current_site(request)
+    token = Token.objects.get_or_create(user=acc)
+    email_body = render_to_string('../templates/activate.html', {
+        'first_name': acc.first_name,
+        'domain': current_site,
+        'uid': acc.id,
+        'token': token[0]
+    })
+
+    send_message(acc.email, acc.first_name, email_body)
+
+
+@renderer_classes((TemplateHTMLRenderer, JSONRenderer))
+def activate_user(request, uidb64, token):
+    try:
+        try:
+            uid = uidb64
+            acc = models.UserAccount.objects.get(id=uid)
+        except Exception as e:
+            acc = None
+
+        auth = Token.objects.get(user=acc).key
+
+        if auth != token:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
+        acc.verified = True
+        acc.save()
+        return Response(status=status.HTTP_200_OK)
+
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserAccountSignUp(APIView):
@@ -37,8 +76,11 @@ class UserAccountSignUp(APIView):
                 profile.is_valid()
                 profi = profile.save()
 
-                token, created = Token.objects.get_or_create(user=account)
-                return Response({'token': token.key}, status=status.HTTP_201_CREATED)
+                try:
+                    send_action_email(account, request)
+                except Exception as e:
+                    print(e)
+                return Response(status=status.HTTP_201_CREATED)
             else:
                 return Response(account_serialized.errors, status=status.HTTP_400_BAD_REQUEST)
         except:
@@ -50,19 +92,32 @@ class UserAccountLogin(ObtainAuthToken):
     permission_classes = (AllowAny,)
 
     def post(self, request, *args, **kwargs):
-        print(request.data)
-        serializer = self.serializer_class(data=request.data,
-                                           context={'request': request})
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        token, created = Token.objects.get_or_create(user=user)
+        try:
+            username = request.data['username']
+        except:
+            return Response('Not Username or mail was sent.', status=status.HTTP_400_BAD_REQUEST)
 
-        return Response({
-            'token': token.key,
-            'user_id': user.pk,
-            'name': user.get_full_name(),
-            'email': user.email
-        })
+        try:
+
+            user = models.UserAccount.objects.get(
+                Q(username__iexact=username) | Q(email__iexact=username)
+            )
+        except:
+            return Response('Username or mail was not found', status=status.HTTP_404_NOT_FOUND)
+
+        if not user.verified:
+            return Response('User not verified', status=status.HTTP_403_FORBIDDEN)
+
+        if user.check_password(request.data['password']):
+            token, created = Token.objects.get_or_create(user=user)
+
+            return Response({
+                'token': token.key,
+                'user_id': user.pk,
+                'name': user.get_full_name(),
+                'email': user.email
+            })
+        return Response("Password is incorrect", status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request):
         try:

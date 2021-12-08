@@ -41,6 +41,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=50, default="Doe")
 
     is_active = models.BooleanField(default=True)
+    verified = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=True)
 
     objects = AccountManager()
