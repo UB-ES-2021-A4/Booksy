@@ -92,8 +92,13 @@ class UserAccountLogin(ObtainAuthToken):
     permission_classes = (AllowAny,)
 
     def post(self, request, *args, **kwargs):
-        username = request.data['username']
         try:
+            username = request.data['username']
+        except:
+            return Response('Not Username or mail was sent.', status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+
             user = models.UserAccount.objects.get(
                 Q(username__iexact=username) | Q(email__iexact=username)
             )

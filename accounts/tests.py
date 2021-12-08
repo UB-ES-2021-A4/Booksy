@@ -183,13 +183,30 @@ class Test_Login(TestCase):
                                     })
         self.assertEqual(response.status_code, 404)
 
-    def test_logIn_noPass(self):
+    def test_logIn_noVerified(self):
+        user = UserAccount.objects.create(username='Manolo')
+        user.set_password('TestDjango1!')
+        user.save()
         response = self.client.post(self.url,
                                     {
                                         'password': '',
                                         'username': 'Manolo'
                                     })
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 403)
+
+    def test_logIn_Verified(self):
+        user = UserAccount.objects.create(username='Manolo')
+        user.set_password('TestDjango1!')
+        user.save()
+        # Hace como si le dieras al link
+        user.verified = True
+        user.save()
+        response = self.client.post(self.url,
+                                    {
+                                        'password': 'TestDjango1!',
+                                        'username': 'Manolo'
+                                    })
+        self.assertEqual(response.status_code, 200)
 
     def test_logIn_invalidName(self):
         response = self.client.post(self.url,
