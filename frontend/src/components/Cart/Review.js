@@ -5,7 +5,7 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import axios from "axios";
 import swal from "sweetalert";
 
-const deploy_url = 'https://booksy.pythonanywhere.com';
+const deploy_url = 'https://booksy-es2021.herokuapp.com';
 const debug_url = 'http://127.0.0.1:8000';
 const url = deploy_url;
 
