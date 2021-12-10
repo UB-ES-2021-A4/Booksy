@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 import accounts.views
 
 urlpatterns = [
-    path('/', accounts.views.index, name='index'),
+    path('', accounts.views.index, name='index'),
     path('signup/', accounts.views.index, name='index'),
     path('login/', accounts.views.index, name='index'),
     path('home_page/', accounts.views.index, name='index'),
