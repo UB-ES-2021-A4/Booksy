@@ -11,6 +11,7 @@ import HomePage from "./components/HomePage";
 import AddItem from "./components/AddItem";
 import UpdateItem from "./components/UpdateItem";
 import OpenItem from "./components/OpenItem";
+import Profile from "./components/Profile";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
                 <Route path='/OpenItem/:id' render={()=><OpenItem />}/>
                 {/*<Route exact path='/books' render={()=><Books />}/>*/}
                 <Route path='/cart' render={()=><Cart />}/>
+                <Route path='/profile/:id' render={()=><Profile />}/>
             </Switch>
         </BrowserRouter>
         <Footer />

@@ -1,0 +1,248 @@
+.profile-head {
+    transform: translateY(5rem)
+}
+
+.cover {
+    background-image: url(https://images.unsplash.com/photo-1530305408560-82d13781b33a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1352&q=80);
+    background-size: cover;
+    background-repeat: no-repeat
+}
+
+.bgr_img {
+    background: rgb(1,61,29);
+    height: 250px;
+    background: linear-gradient(180deg, rgba(1,61,29,1) 0%, rgba(2,108,52,1) 50%, rgba(198,231,216,1) 100%);
+}
+
+.emp-profile{
+    margin-bottom: 3%;
+    border-radius: 0.5rem;
+}
+.profile-img{
+    text-align: center;
+}
+.profile-img img{
+    width: 80%;
+    height: 100%;
+}
+.profile-img .file {
+    position: relative;
+    overflow: hidden;
+    margin-top: -16%;
+    width: 80%;
+    border: none;
+    border-radius: 0;
+    font-size: 15px;
+    background: #212529b8;
+}
+.profile-img .file input {
+    position: absolute;
+    opacity: 0;
+    right: 0;
+    top: 0;
+}
+.profile-head h5{
+    font-size: 30px;
+    color: whitesmoke;
+}
+.profile-head h6{
+    color: whitesmoke;
+}
+.profile-edit-btn{
+    border: none;
+    border-radius: 1.5rem;
+    width: 70%;
+    padding: 2%;
+    margin-top: 10%;
+    font-weight: 600;
+    color: #6c757d;
+    cursor: pointer;
+}
+.proile-rating{
+    font-size: 12px;
+    color: whitesmoke;
+    margin-top: 5%;
+}
+.proile-rating span{
+    color: floralwhite;
+    font-size: 15px;
+    font-weight: 600;
+}
+.profile-head .nav-tabs{
+    margin-bottom:5%;
+}
+.profile-head .nav-tabs .nav-link{
+    font-weight:600;
+    border: none;
+}
+.profile-head .nav-tabs .nav-link.active{
+    border: none;
+    border-bottom:2px solid #004B23;
+}
+.profile-work{
+    padding: 0;
+    margin-top: -15%;
+}
+.profile-work p{
+    font-size: 12px;
+    color: #818182;
+    font-weight: 600;
+    margin-top: 10%;
+}
+.profile-work a{
+    text-decoration: none;
+    color: #495057;
+    font-weight: 600;
+    font-size: 14px;
+}
+.profile-work ul{
+    list-style: none;
+}
+
+.profile-tabs {
+    margin-left: -10px;
+    margin-top: 42px;
+}
+
+.profile-tabs TabPanel{
+    width: 100%;
+}
+
+.spaces {
+    height: 350px;
+}
+
+.spaces-small {
+    height: 100px;
+}
+
+.profile-about {
+    font-family: 'Roboto Mono', monospace
+}
+
+
+
+.contenedor {
+    width: 300px;
+    margin-left: -10%;
+    margin-top: 10%;
+}
+
+.contenedor h1 {
+    color: #FCFBFA;
+}
+
+.container_foto {
+    background-color: transparent;
+    margin-left: -10%;
+    height: 100%;
+    overflow: hidden;
+
+}
+
+.container_foto article {
+    padding-left: 10%;
+    padding-bottom: 9%;
+    padding-top: 20%;
+    position: absolute;
+    bottom: 0;
+    z-index: 1;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+.text-height {
+    line-height: 80%;
+}
+
+.container_foto h2 {
+    color: black;
+    font-weight: 800;
+    font-size: 25px;
+    border-bottom: black solid 1px;
+}
+
+.container_foto h4 {
+    font-weight: 300;
+    color: black;
+    font-size: 16px;
+}
+
+
+.ver_mas {
+    background-color: transparent;
+    position: absolute;
+    width: inherit;
+    color: black;
+    bottom: 0;
+    z-index: 1;
+    opacity: 0;
+}
+
+.ver_mas span {
+    font-size: 40px;
+    color: black;
+    position: relative;
+    margin: 0 auto;
+    width: 70%;
+}
+
+
+/*hovers*/
+
+.container_foto:hover {
+    cursor: pointer;
+}
+
+.container_foto:hover img {
+    opacity: 0.1;
+    transform: scale(1.5);
+}
+
+.container_foto:hover article {
+    transform: translate(2px, -30px);
+    -webkit-transform: translate(2px, -30px);
+    -moz-transform: translate(2px, -30px);
+    -o-transform: translate(2px, -30px);
+    -ms-transform: translate(2px, -30px);
+}
+
+.container_foto:hover .ver_mas {
+    transform: translate(0px, 0px);
+    -webkit-transform: translate(0px, 0px);
+    -moz-transform: translate(0px, 0px);
+    -o-transform: translate(0px, 0px);
+    -ms-transform: translate(0px, 0px);
+    opacity: 1;
+    color: black;
+}
+
+.button-row {
+    margin-left: 30%;
+}
+.button-category-profile {
+    padding-bottom: 10px;
+    padding-top: 10px;
+    border-radius: 4px;
+    margin-top: 10%;
+    float: right;
+    background-color: #004B23;
+    border: none;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 10px;
+    width: 100%;
+    transition: all 0.5s;
+}
+
+.checkout_card {
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+
+.item-right {
+    margin-right: 5%;
+    float: right;
+}

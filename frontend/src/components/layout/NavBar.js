@@ -31,8 +31,14 @@ class NavBar extends Component {
         console.log(window.localStorage.getItem('items_to_cart'))
         localStorage.setItem("items_to_cart", JSON.parse(localStorage.getItem("items_to_cart")))
         this.props.history.push('/home_page');
+    }
 
-
+    handleProfile = () => {
+        let user_id = localStorage.getItem("user_id").toString()
+        this.props.history.push({
+            pathname: `/profile/${user_id}`,
+            state: { id: user_id}
+        });
     }
 
     render() {
@@ -44,7 +50,12 @@ class NavBar extends Component {
                     <a href="" className="navbar-item" style={{padding: 15}} id="home_page_link" onClick={this.handleHomepage}>Home page</a>
                 )}
                 <a href="" className="navbar-item" style={{padding: 15}} id="books_link">Books</a>
-                <a href="/login" className="navbar-item" style={{padding: 15}} id="login_link">Log In</a>
+                {this.isNotLogged() ? (
+                    <a href="/login" className="navbar-item" style={{padding: 15}} id="login_link">Log In</a>
+                ) : (
+                    // eslint-disable-next-line jsx-a11y/anchor-is-valid
+                    <a href="" className="navbar-item" style={{padding: 15}} id="profile_link" onClick={this.handleProfile}>Profile</a>
+                )}
             </section>
         )}
 }
