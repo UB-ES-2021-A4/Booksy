@@ -18,8 +18,16 @@ class NavBar extends Component {
 
     }
 
+
     handleNotLogged = () => {
         swal('Something went wrong', 'You are not logged in the web. Try the Login button first, please.', 'warning');
+        this.sleep(6000).then(() => {
+            console.log(window.localStorage.getItem('user_id'))
+        });
+    }
+
+    sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     isNotLogged () {
@@ -28,9 +36,7 @@ class NavBar extends Component {
     }
 
     handleHomepage = () => {
-        console.log(window.localStorage.getItem('items_to_cart'))
-        localStorage.setItem("items_to_cart", JSON.parse(localStorage.getItem("items_to_cart")))
-        this.props.history.push('/home_page');
+        this.props.history.push('/homePage');
     }
 
     handleProfile = () => {
@@ -53,7 +59,6 @@ class NavBar extends Component {
                 {this.isNotLogged() ? (
                     <a href="/login" className="navbar-item" style={{padding: 15}} id="login_link">Log In</a>
                 ) : (
-                    // eslint-disable-next-line jsx-a11y/anchor-is-valid
                     <a href="" className="navbar-item" style={{padding: 15}} id="profile_link" onClick={this.handleProfile}>Profile</a>
                 )}
             </section>

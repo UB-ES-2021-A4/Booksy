@@ -6,9 +6,9 @@ import {withRouter} from "react-router-dom";
 import './OpenItem.css'
 import swal from "sweetalert";
 
-const deploy_url = 'https://booksy.pythonanywhere.com';
+//const deploy_url = 'https://booksy.pythonanywhere.com';
 const debug_url = 'http://127.0.0.1:8000';
-const url = deploy_url;
+const url = debug_url;
 
 class OpenItem extends Component {
     constructor(props) {
@@ -40,7 +40,7 @@ class OpenItem extends Component {
             });
         } else {
             this.props.history.push({
-                pathname: '/home_page',
+                pathname: '/homePage',
                 state: {item_to_cart: this.state.id}
             });
         }
@@ -49,16 +49,16 @@ class OpenItem extends Component {
     getInfoToLoad() {
         axios.get(`${url}/api/product/?id=${this.state.id}`)
             .then((res) => {
-                this.state.title = res.data[0].title
-                this.state.author = res.data[0].author
-                this.state.description = res.data[0].description
-                this.state.price = res.data[0].price
-                this.state.category = res.data[0].category['category_description']
-                this.state.seller_id = res.data[0].seller
+                this.setState({title: res.data[0].title})
+                this.setState({author: res.data[0].author})
+                this.setState({description: res.data[0].description})
+                this.setState({price: res.data[0].price})
+                this.setState({category: res.data[0].category['category_description']})
+                this.setState({seller_id: res.data[0].seller})
 
                 axios.get(`${url}/api/account/login/?id=${res.data[0].seller}`)
                     .then((res) => {
-                        this.state.seller = res.data.username
+                        this.setState({seller: res.data.username})
                         this.setState(this.state)
                     })
                     .catch((error) => {
@@ -104,10 +104,8 @@ class OpenItem extends Component {
     }
 
     refreshPage() {
-        this.props.history.push('/home_page')
+        this.props.history.push('/homePage')
     }
-
-
 
     render () {
         return (
@@ -116,7 +114,7 @@ class OpenItem extends Component {
                     <Row className="justify-content-md-center">
                         <Col md={"auto"}>
                             <br/>
-                            <a className="a_color_black" href='/home_page'>
+                            <a className="a_color_black" href='/homePage'>
                                 <ArrowBackIosNewIcon className="arrowBack"/>
                             </a>
                         </Col>
@@ -124,7 +122,7 @@ class OpenItem extends Component {
                             <br/>
                             <img className="portrait"
                                  src={`${url}${this.state.image}`}
-                                 alt="No image"/>
+                                 alt="NoImage"/>
                             <br/><br/>
                         </Col>
                         <Col xs lg={5}>

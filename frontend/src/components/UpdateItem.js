@@ -7,9 +7,9 @@ import axios from "axios";
 import swal from "sweetalert";
 import { withRouter} from "react-router-dom";
 
-const deploy_url = 'https://booksy.pythonanywhere.com';
+//const deploy_url = 'https://booksy.pythonanywhere.com';
 const debug_url = 'http://127.0.0.1:8000';
-const url = deploy_url;
+const url = debug_url;
 
 class UpdateItem extends Component {
     constructor(props) {
@@ -50,11 +50,11 @@ class UpdateItem extends Component {
     getInfoToUpdate() {
         axios.get(`${url}/api/product/?id=${this.state.id}`)
             .then((res) => {
-                this.state.title = res.data[0].title
-                this.state.author = res.data[0].author
-                this.state.description = res.data[0].description
-                this.state.price = res.data[0].price
-                this.state.category = res.data[0].category['category_name']
+                this.setState({title: res.data[0].title})
+                this.setState({author: res.data[0].author})
+                this.setState({description: res.data[0].description})
+                this.setState({price: res.data[0].price})
+                this.setState({category: res.data[0].category['category_name']})
                 this.setState(this.state)
             })
             .catch((error) => {
@@ -65,7 +65,7 @@ class UpdateItem extends Component {
     getCategory (category_name) {
         axios.get(`${url}/api/product/category/?category=${category_name}`)
             .then((res) => {
-                this.state.category = res.data.category
+                this.setState({category: res.data.category})
             })
     }
 
@@ -83,7 +83,7 @@ class UpdateItem extends Component {
                 {headers: {'Authorization': `Token ${window.localStorage.getItem('token')}`}})
                 .then((res) => {
                     console.error(res.data)
-                    this.uploadImages(res.data)
+                    this.uploadImages()
                 })
                 .catch((error) => {
                     this.errorInPostAlert()
@@ -92,24 +92,21 @@ class UpdateItem extends Component {
         } else {
             this.fillAllParamsAlert();
         }
+        event.preventDefault()
     }
 
     checkFormParams (params) {
-        if (params.toString().length === 0) {
-            return false
-        }
-        return true
-
+        return params.toString().length !== 0;
     }
 
-    uploadImages(product_id) {
-        var imgs = new FormData()
+    uploadImages() {
+        let imgs = new FormData()
         imgs.append('id', this.props.location.state.id)
         imgs.append('image', this.state.images)
         console.log(imgs.get('id'))
         axios.patch(`${url}/api/product/image/`, imgs,
             {headers: {'Authorization': `Token ${window.localStorage.getItem('token')}`}})
-            .then((res)=> {
+            .then(() => {
                 this.successfulPostAlert()
             })
             .catch((error) => {
@@ -127,12 +124,10 @@ class UpdateItem extends Component {
     }
 
     populateCategories = data => {
-        this.state.categories = {}
-        let tmp={}
+        let tmp = {}
         for (let index = 0; index < data.length; index++) {
             tmp[data[index]['category_name']] = data[index]['category_description']
         }
-
         this.setState({categories: tmp});
     }
 
@@ -154,7 +149,7 @@ class UpdateItem extends Component {
 
     successfulPostAlert () {
         swal('Success', 'Item uploaded correctly!', 'success');
-        this.props.history.push('/home_page')
+        this.props.history.push('/homePage')
     }
     noPhotosAlert () {
         swal('Warning', 'The item should, at least, have one photo.', 'warning');
@@ -167,7 +162,7 @@ class UpdateItem extends Component {
                     <Row className="justify-content-md-center">
                         <Col md={"auto"}>
                             <br/>
-                            <a className="a_color_black" href='/home_page'>
+                            <a className="a_color_black" href='/homePage'>
                                 <ArrowBackIosNewIcon className="arrowBack"/>
                             </a>
                         </Col>

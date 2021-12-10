@@ -5,9 +5,9 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import axios from "axios";
 import swal from "sweetalert";
 
-const deploy_url = 'https://booksy.pythonanywhere.com';
+//const deploy_url = 'https://booksy.pythonanywhere.com';
 const debug_url = 'http://127.0.0.1:8000';
-const url = deploy_url;
+const url = debug_url;
 
 export default class Review extends Component {
     constructor(props) {
@@ -78,7 +78,7 @@ export default class Review extends Component {
     }
 
     continue = e => {
-        //e.preventDefault();
+        e.preventDefault();
         this.props.nextStep();
     };
 
@@ -92,7 +92,6 @@ export default class Review extends Component {
     };
 
     render() {
-        const { values, handleChange } = this.props;
         return (
             <div>
                 <div className="card">
@@ -163,10 +162,10 @@ export default class Review extends Component {
                                     <h3 className="review-card-title"><b>Payment Information</b></h3>
                                     <br/>
                                     <body className="card-body review-body">
-                                    <h5  className="spaces"><b>Nombre de la Tarjeta: {this.state.nombreTarjeta}</b></h5>
-                                    <h5  className="spaces"><b>Número de la Tarjeta: {this.state.numeroTarjeta} </b></h5>
-                                    <h5  className="spaces"><b>Fecha de Expiración: {this.state.expDate}</b></h5>
-                                    <h5  className="spaces"><b>CVV:{this.state.CVV} </b></h5>
+                                    <h5  className="spaces_cart"><b>Nombre de la Tarjeta: {this.state.nombreTarjeta}</b></h5>
+                                    <h5  className="spaces_cart"><b>Número de la Tarjeta: {this.state.numeroTarjeta} </b></h5>
+                                    <h5  className="spaces_cart"><b>Fecha de Expiración: {this.state.expDate}</b></h5>
+                                    <h5  className="spaces_cart"><b>CVV:{this.state.CVV} </b></h5>
                                     </body>
                                 </Row>
                                 <Row>

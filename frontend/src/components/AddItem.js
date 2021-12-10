@@ -7,9 +7,9 @@ import axios from "axios";
 import swal from "sweetalert";
 import {withRouter} from "react-router-dom";
 
-const deploy_url = 'https://booksy.pythonanywhere.com';
+//const deploy_url = 'https://booksy.pythonanywhere.com';
 const debug_url = 'http://127.0.0.1:8000';
-const url = deploy_url;
+const url = debug_url;
 
 class AddItem extends Component {
     constructor(props) {
@@ -122,7 +122,7 @@ class AddItem extends Component {
 
     successfulPostAlert () {
         swal('Success', 'Item uploaded correctly!', 'success');
-        this.props.history.push('/home_page')
+        this.props.history.push('/homePage')
     }
     noPhotosAlert () {
         swal('Warning', 'The item should, at least, have one photo.', 'warning');
@@ -135,7 +135,7 @@ class AddItem extends Component {
                     <Row className="justify-content-md-center">
                         <Col md={"auto"}>
                             <br/>
-                            <a className="a_color_black" href='/home_page'>
+                            <a className="a_color_black" href='/homePage'>
                                 <ArrowBackIosNewIcon className="arrowBack"/>
                             </a>
                         </Col>

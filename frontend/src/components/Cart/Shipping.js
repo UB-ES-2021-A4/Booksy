@@ -70,14 +70,10 @@ export default class Shipping extends Component {
             [this.props.values]: this.state
         });
         this.props.setStore(this.props.values)
-
     }
 
 
-
     render() {
-        const { values, handleChange } = this.props;
-
         return (
             <div>
                 <div className="card">

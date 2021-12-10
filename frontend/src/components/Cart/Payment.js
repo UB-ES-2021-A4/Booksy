@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {Col, Container, Row} from "react-bootstrap";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import PaymentPhoto from "../pictures/payment.png";
@@ -82,8 +82,7 @@ export default class Payment extends Component {
     }
 
     getExpDate () {
-        let exp = this.state.expMonth.toString() + '/' + this.state.expYear.toString()
-        return exp
+        return this.state.expMonth.toString() + '/' + this.state.expYear.toString()
     }
 
     back = e => {
@@ -119,7 +118,6 @@ export default class Payment extends Component {
     }
 
     render() {
-        const { values, handleChange } = this.props;
         return (
             <div>
                 <div className="card">

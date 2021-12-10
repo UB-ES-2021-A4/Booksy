@@ -11,6 +11,7 @@
 .bgr_img {
     background: rgb(1,61,29);
     height: 250px;
+    margin-top: -1.2%;
     background: linear-gradient(180deg, rgba(1,61,29,1) 0%, rgba(2,108,52,1) 50%, rgba(198,231,216,1) 100%);
 }
 
@@ -101,7 +102,11 @@
 
 .profile-tabs {
     margin-left: -10px;
-    margin-top: 42px;
+    margin-top: 10%;
+}
+
+.profile-rating {
+    color: whitesmoke;
 }
 
 .profile-tabs TabPanel{
@@ -109,7 +114,7 @@
 }
 
 .spaces {
-    height: 350px;
+    height: 100px;
 }
 
 .spaces-small {
@@ -123,9 +128,7 @@
 
 
 .contenedor {
-    width: 300px;
     margin-left: -10%;
-    margin-top: 10%;
 }
 
 .contenedor h1 {
@@ -137,14 +140,13 @@
     margin-left: -10%;
     height: 100%;
     overflow: hidden;
-
 }
 
 .container_foto article {
-    padding-left: 10%;
+    padding-left: 30%;
     padding-bottom: 9%;
-    padding-top: 20%;
-    position: absolute;
+    padding-top: 10%;
+    position: center;
     bottom: 0;
     z-index: 1;
     -webkit-transition: all 0.5s ease;
@@ -174,7 +176,7 @@
 
 .ver_mas {
     background-color: transparent;
-    position: absolute;
+    position: center;
     width: inherit;
     color: black;
     bottom: 0;
@@ -185,7 +187,7 @@
 .ver_mas span {
     font-size: 40px;
     color: black;
-    position: relative;
+    position: center;
     margin: 0 auto;
     width: 70%;
 }
@@ -199,15 +201,15 @@
 
 .container_foto:hover img {
     opacity: 0.1;
-    transform: scale(1.5);
+    transform: scale(0.5);
 }
 
 .container_foto:hover article {
-    transform: translate(2px, -30px);
-    -webkit-transform: translate(2px, -30px);
-    -moz-transform: translate(2px, -30px);
-    -o-transform: translate(2px, -30px);
-    -ms-transform: translate(2px, -30px);
+    transform: translate(0px, -20px);
+    -webkit-transform: translate(0px, -20px);
+    -moz-transform: translate(0px, -20px);
+    -o-transform: translate(0px, -20px);
+    -ms-transform: translate(0px, -20px);
 }
 
 .container_foto:hover .ver_mas {

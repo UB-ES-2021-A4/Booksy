@@ -121,6 +121,13 @@ if sys.argv[1] == 'test':
 else:
     DATABASES = {
         'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+    '''
+    DATABASES = {
+        'default': {
             'ENGINE': 'django.db.backends.mysql',
             'NAME': 'booksy$d7cm11lo9q6vmh',
             'USER': 'booksy',
@@ -129,6 +136,7 @@ else:
             'PORT': '3306',
         }
     }
+    '''
 
 
 # Media folder

@@ -25,10 +25,10 @@
 .column_small {
     float: left;
     width: 10.0%;
-    padding: 10px;
-    padding-top: 20px;
+    padding: 20px 10px 10px;
 }
 
 .bgr_color {
     background: #C6E7D8;
+    float: bottom;
 }

@@ -7,9 +7,9 @@ import VerifiedSharpIcon from '@mui/icons-material/VerifiedSharp';
 import StoreIcon from "@mui/icons-material/Store";
 import SearchIcon from "@mui/icons-material/Search";
 
-const deploy_url = 'https://booksy.pythonanywhere.com';
+//const deploy_url = 'https://booksy.pythonanywhere.com';
 const debug_url = 'http://127.0.0.1:8000';
-const url = deploy_url;
+const url = debug_url;
 
 class HomePage extends Component {
     constructor(props) {
@@ -75,7 +75,6 @@ class HomePage extends Component {
     };
 
     populateCards = async data => {
-        this.state.cards = []
         let tmp = []
 
         for (let index = 0; index < data.length; index++) {
@@ -86,6 +85,7 @@ class HomePage extends Component {
                 })
                 .catch((error) => {
                     data[index]['images'] = []
+                    console.error(error)
                 })
             tmp.push(data[index])
 
@@ -111,7 +111,7 @@ class HomePage extends Component {
                 <Card className="card-HomePage">
                     <img className="card-img-top image_100"
                          src={`${url}${card['images']}`}
-                         alt="Card image cap"/>
+                         alt="CardNoimage"/>
                     <div className="card-text-left">
                         {this.isOwner(card) ? (
                             <button className="btn-delete"><VerifiedSharpIcon/></button>

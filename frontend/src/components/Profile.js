@@ -17,17 +17,29 @@ class Profile extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            id: this.props.location.state.id,
             card: {
-                id: this.props.location.state,
                 title: '',
                 price: 0,
                 image: '',
                 username: '',
             },
+            name: '',
+            surname: '',
+            email: '',
+            image: '',
+            num_items: '',
             cards: [],
             items_to_cart: [],
         }
         this.handleChange = this.handleChange.bind(this);
+    }
+
+    componentDidMount() {
+        this.getUserInfoToLoad = this.getUserInfoToLoad.bind(this);
+        this.getUserInfoToLoad()
+        this.getCards = this.getCards.bind(this);
+        this.getCards()
     }
 
     handleChange = event => {
@@ -35,11 +47,6 @@ class Profile extends Component {
             [event.target.id]: event.target.value
         });
     };
-
-    componentDidMount() {
-        this.getCards = this.getCards.bind(this);
-        this.getCards()
-    }
 
     handleOpen = (id, image) => {
         this.sleep(700).then(() => {
@@ -58,7 +65,6 @@ class Profile extends Component {
     };
 
     populateCards = async data => {
-        this.state.cards = []
         let tmp_profileCards = []
 
         for (let index = 0; index < data.length; index++) {
@@ -74,9 +80,9 @@ class Profile extends Component {
             tmp_profileCards.push(data[index])
 
         }
-        console.log(tmp_profileCards)
+        let num_cards = tmp_profileCards.length
         this.setState({cards: tmp_profileCards});
-        //setState calls render() when used and is an asynchronous function, care headaches!
+        this.setState({num_items: num_cards});
     }
 
     isOwner (card) {
@@ -145,7 +151,29 @@ class Profile extends Component {
                 </div>
             );
         }
+    }
 
+    getUserInfoToLoad() {
+        console.log(this.state.id)
+        axios.get(`${url}/api/account/login/?id=${this.state.id}`)
+            .then((res) => {
+                console.log(res.data)
+                this.setState({name: res.data.first_name})
+                this.setState({surname: res.data.last_name})
+                this.setState({email: res.data.email})
+                this.setState({username: res.data.username})
+                this.setState({image: res.data.image})
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }
+
+    handleChangePhoto = event => {
+        this.setState({
+            image: event.target.files[0]
+        });
+        //updateInfoUser();
     }
 
 
@@ -157,32 +185,31 @@ class Profile extends Component {
                         <div className="col-md-4">
                             <div className="profile-img">
                                 <img
-                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS52y5aInsxSm31CvHOFHWujqUx_wWTS9iM6s7BAm21oEN_RiGoog"
+                                    src={`${url}${this.state.image}`}
                                     alt=""/>
                                 <div className="file btn btn-lg btn-primary">
                                     Change Photo
-                                    <input type="file" name="file"/>
+                                    <input type="file" name="file" onChange={this.handleChangePhoto}/>
                                 </div>
+                                <br/>
                             </div>
                         </div>
                         <div className="col-md-6">
                             <div className="profile-head">
                                 <h5>
-                                    NAME OF USER
+                                    {this.state.name} {this.state.surname}
                                 </h5>
-                                <p className="proile-rating">Username : <span>abcd</span></p>
+                                <p className="profile-rating">Username : <span>{this.state.username}</span></p>
                                 <Tabs className="profile-tabs">
                                     <TabList>
-                                        <Tab>User's Items</Tab>
+                                        <Tab >User's Items</Tab>
                                         <Tab>History</Tab>
                                         <Tab>Balance</Tab>
                                     </TabList>
 
                                     <TabPanel>
                                         <h2>Available Items this user is currently selling:</h2>
-                                        <br/>
-                                        {this.renderCards()}
-                                        <br/>
+                                        <br/><br/>
                                     </TabPanel>
                                     <TabPanel>
                                         <h2>Any content 3</h2>
@@ -200,7 +227,6 @@ class Profile extends Component {
                                    value="Edit Profile"/>
                         </div>
                     </div>
-                    <div className="spaces"/>
                     <div className="row">
                         <div className="col-md-4">
                             <div className="contenedor">
@@ -210,14 +236,18 @@ class Profile extends Component {
                                         <h4 className="text-left">All you need to know to contact me<br/></h4>
                                         <br/>
                                         <div className="ver_mas text-height">
-                                            <h4><CheckSharpIcon/>Full Name: PONER NOMBRE <br/></h4>
-                                            <h4><CheckSharpIcon/> Email: PONER EMAIL <br/></h4>
-                                            <h4><CheckSharpIcon/> Username: PONER USERNAME <br/></h4>
-                                            <h4><CheckSharpIcon/> Number of items on sales: PONER num <br/></h4>
+                                            <h4><CheckSharpIcon/>Full Name: {this.state.name} {this.state.surname}<br/></h4>
+                                            <h4><CheckSharpIcon/> Email: {this.state.email} <br/></h4>
+                                            <h4><CheckSharpIcon/> Username: {this.state.username} <br/></h4>
+                                            <h4><CheckSharpIcon/> Number of items on sales: {this.state.num_items} <br/></h4>
                                         </div>
                                     </article>
                                 </div>
                             </div>
+                        </div>
+                        <div className="col-md-6">
+                            <br/><br/><br/><br/>
+                            {this.renderCards()}
                         </div>
                     </div>
                 </div>

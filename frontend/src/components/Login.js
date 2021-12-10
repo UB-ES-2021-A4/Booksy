@@ -8,9 +8,9 @@ import swal from "sweetalert";
 import axios from "axios";
 import {withRouter} from "react-router-dom";
 
-const deploy_url = 'https://booksy.pythonanywhere.com';
+//const deploy_url = 'https://booksy.pythonanywhere.com';
 const debug_url = 'http://127.0.0.1:8000';
-const url = deploy_url;
+const url = debug_url;
 
 class Login extends Component {
     constructor(props) {
@@ -23,7 +23,7 @@ class Login extends Component {
 
     }
     handleClick = () => {
-        this.props.history.push('/home_page')
+        this.props.history.push('/homePage')
     }
     handleClickSignUp = () => {
         this.props.history.push('/signup')
@@ -125,7 +125,7 @@ class Login extends Component {
             </section>
         );
     }
-};
+}
 
 export default withRouter(Login);
 

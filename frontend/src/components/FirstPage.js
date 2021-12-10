@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import FirstPageContent from './FirstPageContent';
 
 
-class First_Page extends Component {
+class FirstPage extends Component {
     render(){
         return(
             <section>
@@ -11,4 +11,4 @@ class First_Page extends Component {
         );
     }
 }
-export default First_Page;
+export default FirstPage;
