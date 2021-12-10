@@ -205,3 +205,29 @@ class UserProfileView(APIView):
                 return Response(serial_profi.errors, status=status.HTTP_400_BAD_REQUEST)
         except:
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class UserAccount(APIView):
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    authentication_classes = (TokenAuthentication,)
+
+    def patch(self, request):
+        account_id = request.GET.get('id')
+        if not account_id:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        try:
+            user = request.user
+            if user.id != account_id:
+                return Response(status=status.HTTP_403_FORBIDDEN)
+
+            new_f_name = request.data['first_name']
+            new_l_name = request.data['last_name']
+
+            if len(new_f_name) > 50 or len(new_l_name) > 50:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+
+            user.first_name = new_f_name
+            user.last_name = new_l_name
+            user.save()
+        except:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
