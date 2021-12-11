@@ -74,7 +74,6 @@ class BuyView(APIView):
                     for s in serializers:
                         try:
                             print(s.validated_data)
-                            print(s.id)
                             s.save()
                         except Exception as e:
                             print(e)
