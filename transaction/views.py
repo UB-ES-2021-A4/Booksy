@@ -71,7 +71,11 @@ class BuyView(APIView):
                     # Saving to db
                     for s in serializers:
                         print(s.data)
-                        s.save()
+                        try:
+                            s.save()
+                        except Exception as e:
+                            print(e)
+                            raise ResponseError(message=status.HTTP_403_FORBIDDEN)
                         print('Serializer saved')
 
 
