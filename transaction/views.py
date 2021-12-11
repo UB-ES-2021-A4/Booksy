@@ -74,6 +74,7 @@ class BuyView(APIView):
                     for s in serializers:
                         try:
                             print(s.validated_data)
+                            print(s.id)
                             s.save()
                         except Exception as e:
                             print(e)
@@ -142,6 +143,8 @@ class BuyView(APIView):
             model_info = self.__get_model_info(request, model)
             if model_info.get('transaction') is None:
                 model_info['transaction'] = transaction_id
+            if model_info.get('card_num'):
+                model_info['card_num'] = 1
 
             s = self.__check_model_validation(data=model_info, serializer_class=serializer)
             serializers.append(s)
