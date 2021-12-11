@@ -31,7 +31,7 @@ class Payment(models.Model):
     transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE, default=None)
 
     card_name = models.CharField(max_length=255, null=False, blank=False)
-    card_num = models.IntegerField(null=False, blank=False)
+    card_num = models.BigIntegerField(null=False, blank=False) #Big is needed for postgreSQL
     expiration_card = models.CharField(max_length=5, null=False, blank=False)
     cvv = models.IntegerField(null=False, blank=False)
 

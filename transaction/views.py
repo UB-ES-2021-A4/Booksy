@@ -142,8 +142,6 @@ class BuyView(APIView):
             model_info = self.__get_model_info(request, model)
             if model_info.get('transaction') is None:
                 model_info['transaction'] = transaction_id
-            if model_info.get('card_num'):
-                model_info['card_num'] = 1
 
             s = self.__check_model_validation(data=model_info, serializer_class=serializer)
             serializers.append(s)
@@ -163,7 +161,7 @@ class BuyView(APIView):
             [mail]
         )
         email.attach_alternative(content, 'text/html')
-        # email.send()
+        email.send()
 
     def send_email_buyer(self, mail, buyer, prod_title):
         context = {'user':buyer, 'product_title': prod_title}
@@ -177,7 +175,7 @@ class BuyView(APIView):
             [mail]
         )
         email.attach_alternative(content, 'text/html')
-        # email.send()
+        email.send()
 
 
 class ResponseError(Exception):
