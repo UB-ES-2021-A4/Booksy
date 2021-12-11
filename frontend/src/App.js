@@ -12,6 +12,7 @@ import AddItem from "./components/AddItem";
 import UpdateItem from "./components/UpdateItem";
 import OpenItem from "./components/OpenItem";
 import Profile from "./components/Profile";
+import EditProfile from "./components/EditProfile";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
                 <Route path='/OpenItem/:id' render={()=><OpenItem />}/>
                 <Route path='/cart' render={()=><Cart />}/>
                 <Route path='/profile/:id' render={()=><Profile />}/>
+                <Route path='/editProfile/:id' render={()=><EditProfile />}/>
             </Switch>
         </BrowserRouter>
         <Footer />

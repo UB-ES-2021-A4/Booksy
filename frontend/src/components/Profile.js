@@ -8,6 +8,7 @@ import CheckSharpIcon from '@mui/icons-material/CheckSharp';
 import empty from "./pictures/empty_profile.png";
 import './Profile.css'
 import 'react-tabs/style/react-tabs.css';
+import swal from "sweetalert";
 
 //const deploy_url = 'https://booksy.pythonanywhere.com';
 const debug_url = 'http://127.0.0.1:8000';
@@ -33,6 +34,7 @@ class Profile extends Component {
             items_to_cart: [],
         }
         this.handleChange = this.handleChange.bind(this);
+        this.editProfile = this.editProfile.bind(this);
     }
 
     componentDidMount() {
@@ -171,9 +173,42 @@ class Profile extends Component {
 
     handleChangePhoto = event => {
         this.setState({
-            image: event.target.files[0]
+            [event.target.id]: event.target.files[0]
         });
-        //updateInfoUser();
+        this.updatePhoto();
+    }
+
+    updatePhoto () {
+        let imgs = new FormData()
+        console.log(this.state.image)
+        imgs.append('id', this.props.location.state.id)
+        imgs.append('image', this.state.image)
+        console.log(imgs.get('id'))
+        axios.patch(`${url}/api/account/profile/?id=${this.state.id}`, imgs,
+            {headers: {'Authorization': `Token ${window.localStorage.getItem('token')}`}})
+            .then(() => {
+                this.successfulPostAlert()
+            })
+            .catch((error) => {
+                this.noPhotosAlert()
+                console.error(error)
+            })
+    }
+
+    successfulPostAlert () {
+        swal('Success', 'Photo updated correctly!', 'success');
+    }
+
+    noPhotosAlert () {
+        swal('Error', 'The has been some problems. Check it later.', 'error');
+    }
+
+    editProfile(){
+        let user_id = localStorage.getItem("user_id").toString()
+        this.props.history.push({
+            pathname: `/editProfile/${user_id}`,
+            state: { id: user_id}
+        });
     }
 
 
@@ -187,9 +222,9 @@ class Profile extends Component {
                                 <img
                                     src={`${url}${this.state.image}`}
                                     alt=""/>
-                                <div className="file btn btn-lg btn-primary">
+                                <div className="file btn btn-lg btn-primary input-field">
                                     Change Photo
-                                    <input type="file" name="file" onChange={this.handleChangePhoto}/>
+                                    <input type="file" name="image" id="image" onChange={this.handleChangePhoto}/>
                                 </div>
                                 <br/>
                             </div>
@@ -223,8 +258,9 @@ class Profile extends Component {
                             </div>
                         </div>
                         <div className="col-md-2">
-                            <input type="submit" className="profile-edit-btn" name="btnAddMore"
-                                   value="Edit Profile"/>
+                            <button className="profile-edit-btn" onClick={this.editProfile}>
+                                Edit Profile
+                            </button>
                         </div>
                     </div>
                     <div className="row">

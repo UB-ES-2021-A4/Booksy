@@ -1,0 +1,14 @@
+.button_edit_profile {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 4px;
+    background-color: #004B23;
+    border: none;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 15px;
+    width: 355px;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin-top: 25px;
+}
