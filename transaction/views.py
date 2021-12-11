@@ -65,15 +65,15 @@ class BuyView(APIView):
 
                     print('Hidden True')
 
+                    booksBought.save()
+                    print('booksBought saved')
+
                     # Saving to db
                     for s in serializers:
                         print(s.data)
                         s.save()
                         print('Serializer saved')
 
-
-                    booksBought.save()
-                    print('booksBought saved')
 
                     product.save()
 
