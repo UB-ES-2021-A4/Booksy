@@ -70,7 +70,6 @@ class BuyView(APIView):
 
                     # Saving to db
                     for s in serializers:
-                        print(s.data)
                         try:
                             s.save()
                         except Exception as e:
