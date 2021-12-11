@@ -1,3 +1,5 @@
+import sys
+
 from django.shortcuts import render
 
 # Create your views here.
@@ -67,7 +69,7 @@ class BuyView(APIView):
 
                     booksBought.save()
                     print('booksBought saved')
-
+                    print('max int', sys.maxsize)
                     # Saving to db
                     for s in serializers:
                         try:
