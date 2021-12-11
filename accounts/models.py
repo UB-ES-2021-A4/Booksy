@@ -18,6 +18,7 @@ class AccountManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(email=email, username=username, first_name=first_name, last_name=last_name)
 
+        user.is_verified = True
         user.set_password(password)
         user.save(using=self._db)
 
@@ -28,6 +29,7 @@ class AccountManager(BaseUserManager):
 
         user.is_superuser = True
         user.is_staff = True
+        user.is_verified = True
         user.save(using=self._db)
 
         return user
