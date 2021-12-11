@@ -30,15 +30,11 @@ class BuyView(APIView):
         try:
             with tsn.atomic():
 
-                print(request.data)
-
                 for id in request.data.getlist('id'):
                     id = int(id)
 
                     try:
-                        print('Try Before')
                         product = ProductModel.objects.get(id=id)  # Front end should have the product id
-                        print('Try Before')
                         if product.hidden:
                             raise  # Product is already bought
 
@@ -48,13 +44,9 @@ class BuyView(APIView):
                     if product.seller == request.user:
                         raise ResponseError(message=status.HTTP_403_FORBIDDEN)  # You can't buy your own product
 
-                    print(' Product not Hiden')
-
                     transaction_info = {'buyer': request.user.id, 'datetime': datetime.now()}
                     transaction = self.__check_model_validation(transaction_info, TransactionSerializer)
                     transaction = transaction.save()
-
-                    print('Transaction saved')
 
                     books_info = {'transaction': transaction.id, 'product': product.id, 'seller': product.seller.id}
                     booksBought = self.__check_model_validation(books_info, BooksBoughtSerializer)
@@ -65,25 +57,11 @@ class BuyView(APIView):
 
                     product.hidden = True  # Product is bought
 
-                    print('Hidden True')
-
-                    booksBought.save()
-                    print('booksBought saved')
-                    print('max int', sys.maxsize)
                     # Saving to db
                     for s in serializers:
-                        try:
-                            print(s.validated_data)
-                            s.save()
-                        except Exception as e:
-                            print(e)
-                            raise ResponseError(message=status.HTTP_403_FORBIDDEN)
-                        print('Serializer saved')
-
-
+                        s.save()
                     product.save()
-
-                    print('Product saved')
+                    booksBought.save()
 
                     self.send_email_seller(product.seller.email,
                                            product.seller.get_full_name(),
@@ -94,13 +72,11 @@ class BuyView(APIView):
                                            serializers[0].data['country'],
                                            serializers[0].data['zip_code']
                                            )
-                    print('Email seller')
+
                     self.send_email_buyer(request.user.email,
                                           request.user.get_full_name(),
                                           product.title
                                           )
-                    print('Email buyer')
-
         except ResponseError as e:
             return Response(status=e.message)
 
@@ -161,7 +137,7 @@ class BuyView(APIView):
             [mail]
         )
         email.attach_alternative(content, 'text/html')
-        email.send()
+        #email.send()
 
     def send_email_buyer(self, mail, buyer, prod_title):
         context = {'user':buyer, 'product_title': prod_title}
@@ -175,7 +151,7 @@ class BuyView(APIView):
             [mail]
         )
         email.attach_alternative(content, 'text/html')
-        email.send()
+        #email.send()
 
 
 class ResponseError(Exception):
