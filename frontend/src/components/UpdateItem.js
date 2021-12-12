@@ -96,7 +96,9 @@ class UpdateItem extends Component {
     }
 
     checkFormParams (params) {
-        return params.toString().length !== 0;
+        return !(params.get('title').length === 0 || params.get('price').length === 0
+                || params.get('author').length === 0 || params.get('category').length === 0
+                || params.get('description').length === 0);
     }
 
     uploadImages() {

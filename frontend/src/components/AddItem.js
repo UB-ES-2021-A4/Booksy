@@ -15,12 +15,11 @@ class AddItem extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            item: {
-                title: '',
-                price: 0,
-                category: '',
-                description: '',
-            },
+            title: '',
+            price: 0,
+            category: '',
+            description: '',
+            author: '',
             categories: {}
         }
         this.getCategories()
@@ -68,7 +67,7 @@ class AddItem extends Component {
     }
 
     checkFormParams (params) {
-        return params.toString().length !== 0;
+        return !(params.get('title').length === 0 || params.get('price').length === 0 || params.get('author').length === 0 || params.get('category').length === 0 || params.get('description').length === 0);
     }
 
     uploadImages(product_id) {
@@ -77,7 +76,6 @@ class AddItem extends Component {
         imgs.append('image', this.state.images)
 
         axios.post(`${url}/api/product/image/`, imgs,
-
             {headers: {'Authorization': `Token ${window.localStorage.getItem('token')}`}})
             .then((res)=> {
                 this.successfulPostAlert()

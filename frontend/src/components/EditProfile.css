@@ -7,8 +7,16 @@
     color: #FFFFFF;
     text-align: center;
     font-size: 15px;
-    width: 355px;
+    width: 700px;
     transition: all 0.5s;
     cursor: pointer;
     margin-top: 25px;
+}
+
+
+.input-field-profile {
+    position: relative;
+    width: 700px;
+    height: 44px;
+    line-height: 14px;
 }

@@ -18,6 +18,7 @@ class EditProfile extends Component {
             first_name: '',
             last_name: '',
         }
+        this.editProfile = this.editProfile.bind(this);
     }
 
     componentDidMount() {
@@ -53,7 +54,8 @@ class EditProfile extends Component {
     }
 
     checkFormParams (params) {
-        return params.toString().length !== 0;
+        return !(params.get('first_name').length === 0 || params.get('last_name').length === 0);
+
     }
 
     updateSuccessfulAlert () {
@@ -81,27 +83,29 @@ class EditProfile extends Component {
         return (
                 <Container>
                     <Row className="justify-content-md-center">
-                        <Col md={3}></Col>
-                        <Col>
+                        <Col md={3}/>
+                        <Col >
                             <br/><br/>
                             <h1>ACTUALIZA TUS DATOS
                             DE USUARIO</h1>
                             <h5>Por favor, rellena todos los campos</h5>
                             <br/><br/>
                             <form action="">
-                                <div className="input-field">
+                                <div className="input-field-profile">
                                     <input type="text" id="first_name" onChange={this.handleChange} required/>
                                     <label htmlFor="Name">First Name</label>
                                 </div>
                                 <br/>
-                                <div className="input-field">
+                                <div className="input-field-profile">
                                     <input type="text" id="last_name" onChange={this.handleChange} required/>
                                     <label htmlFor="Surname">Last Name</label>
                                 </div>
                             </form>
                             <button className="button_edit_profile" id="button_edit_profile" onClick={this.editProfile}>UPDATE PROFILE</button>
                         </Col>
+                        <Col md={1}/>
                     </Row>
+                    <br/>
                     <br/>
                 </Container>
         );
