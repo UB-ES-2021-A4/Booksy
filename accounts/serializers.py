@@ -32,7 +32,6 @@ class UserAccountSerializer(serializers.ModelSerializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    image = serializers.ImageField(required=False, allow_null=True)
 
     class Meta:
         model = models.UserProfile
