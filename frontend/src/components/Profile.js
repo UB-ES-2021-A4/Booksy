@@ -156,10 +156,8 @@ class Profile extends Component {
     }
 
     getUserInfoToLoad() {
-        console.log(this.state.id)
         axios.get(`${url}/api/account/login/?id=${this.state.id}`)
             .then((res) => {
-                console.log(res.data)
                 this.setState({name: res.data.first_name})
                 this.setState({surname: res.data.last_name})
                 this.setState({email: res.data.email})

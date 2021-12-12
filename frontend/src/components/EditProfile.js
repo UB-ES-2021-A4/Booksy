@@ -39,8 +39,8 @@ class EditProfile extends Component {
         if (this.checkFormParams(formItem)) {
             axios.patch(`${url}/api/account/?id=${this.state.id}`, formItem,
                 {headers: {'Authorization': `Token ${window.localStorage.getItem('token')}`}})
-                .then((res) => {
-                    console.error(res.data)
+                .then(() => {
+                    this.updateSuccessfulAlert();
                     this.moveToProfile()
                 })
                 .catch((error) => {
@@ -56,6 +56,10 @@ class EditProfile extends Component {
         return params.toString().length !== 0;
     }
 
+    updateSuccessfulAlert () {
+        swal('Success', 'Profile updated correctly!', 'success');
+    }
+
     fillAllParamsAlert () {
         // Use sweetalert2
         swal('Error', 'In order to update the profile,\n all parameters should be filled.', 'error');
@@ -66,7 +70,11 @@ class EditProfile extends Component {
     }
 
     moveToProfile () {
-        this.props.history.push(`/profile/${this.state.id}`)
+        let user_id = localStorage.getItem("user_id").toString()
+        this.props.history.push({
+            pathname: `/profile/${user_id}`,
+            state: { id: user_id}
+        });
     }
 
     render () {
