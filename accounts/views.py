@@ -217,7 +217,7 @@ class UserAccount(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         try:
             user = request.user
-            if user.id != account_id:
+            if user.id != int(account_id):
                 return Response(status=status.HTTP_403_FORBIDDEN)
 
             new_f_name = request.data['first_name']
@@ -229,5 +229,6 @@ class UserAccount(APIView):
             user.first_name = new_f_name
             user.last_name = new_l_name
             user.save()
+            return Response("User updated", status=status.HTTP_200_OK)
         except:
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
