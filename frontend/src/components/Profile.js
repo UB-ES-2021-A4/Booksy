@@ -170,18 +170,11 @@ class Profile extends Component {
     }
 
     handleChangePhoto = event => {
-        this.setState({
-            [event.target.id]: event.target.files[0]
-        });
-        this.updatePhoto();
-    }
-
-    updatePhoto () {
         let imgs = new FormData()
-        console.log(this.state.image)
-        imgs.append('id', this.props.location.state.id)
-        imgs.append('image', this.state.image)
-        console.log(imgs.get('id'))
+        imgs.append('account_id', this.props.location.state.id)
+        imgs.append('image', event.target.files[0])
+        console.log(imgs.get('image'))
+
         axios.patch(`${url}/api/account/profile/?id=${this.state.id}`, imgs,
             {headers: {'Authorization': `Token ${window.localStorage.getItem('token')}`}})
             .then(() => {
@@ -222,7 +215,7 @@ class Profile extends Component {
                                     alt=""/>
                                 <div className="file btn btn-lg btn-primary input-field">
                                     Change Photo
-                                    <input type="file" name="image" id="image" onChange={this.handleChangePhoto}/>
+                                    <input type="file" name="myfile" id="images" onChange={this.handleChangePhoto}/>
                                 </div>
                                 <br/>
                             </div>
