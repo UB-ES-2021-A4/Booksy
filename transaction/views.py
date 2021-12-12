@@ -17,7 +17,7 @@ from product.models import ProductModel
 from transaction.models import Transaction, ShippingInfo, Payment, BooksBought
 from transaction.serializers import TransactionSerializer, ShippingInfoSerializer, PaymentSerializer, \
     BooksBoughtSerializer
-
+from booksy.lock import lock
 
 class BuyView(APIView):
     permission_classes = (IsAuthenticatedOrReadOnly,)
@@ -47,47 +47,47 @@ class BuyView(APIView):
                         raise ResponseError(message=status.HTTP_403_FORBIDDEN)  # You can't buy your own product
 
                     print(' Product not Hiden')
+                    with lock.lock:
+                        transaction_info = {'buyer': request.user.id, 'datetime': datetime.now()}
+                        transaction = self.__check_model_validation(transaction_info, TransactionSerializer)
+                        transaction = transaction.save()
 
-                    transaction_info = {'buyer': request.user.id, 'datetime': datetime.now()}
-                    transaction = self.__check_model_validation(transaction_info, TransactionSerializer)
-                    transaction = transaction.save()
+                        print('Transaction saved')
 
-                    print('Transaction saved')
+                        books_info = {'transaction': transaction.id, 'product': product.id, 'seller': product.seller.id}
+                        booksBought = self.__check_model_validation(books_info, BooksBoughtSerializer)
 
-                    books_info = {'transaction': transaction.id, 'product': product.id, 'seller': product.seller.id}
-                    booksBought = self.__check_model_validation(books_info, BooksBoughtSerializer)
+                        serializers = self.__info_and_validate((ShippingInfo, ShippingInfoSerializer),
+                                                               (Payment, PaymentSerializer),
+                                                               request=request, transaction_id=transaction.id)
 
-                    serializers = self.__info_and_validate((ShippingInfo, ShippingInfoSerializer),
-                                                           (Payment, PaymentSerializer),
-                                                           request=request, transaction_id=transaction.id)
+                        product.hidden = True  # Product is bought
 
-                    product.hidden = True  # Product is bought
+                        print('Hiden True')
 
-                    print('Hiden True')
+                        # Saving to db
+                        for s in serializers:
+                            s.save()
+                        booksBought.save()
+                        product.save()
 
-                    # Saving to db
-                    for s in serializers:
-                        s.save()
-                    booksBought.save()
-                    product.save()
+                        print('Product saved')
 
-                    print('Product saved')
-
-                    self.send_email_seller(product.seller.email,
-                                           product.seller.get_full_name(),
-                                           request.user.get_full_name(),
-                                           product.title,
-                                           serializers[0].data['direction'],
-                                           serializers[0].data['city'],
-                                           serializers[0].data['country'],
-                                           serializers[0].data['zip_code']
-                                           )
-                    print('Email seller')
-                    self.send_email_buyer(request.user.email,
-                                          request.user.get_full_name(),
-                                          product.title
-                                          )
-                    print('Email buyer')
+                        self.send_email_seller(product.seller.email,
+                                               product.seller.get_full_name(),
+                                               request.user.get_full_name(),
+                                               product.title,
+                                               serializers[0].data['direction'],
+                                               serializers[0].data['city'],
+                                               serializers[0].data['country'],
+                                               serializers[0].data['zip_code']
+                                               )
+                        print('Email seller')
+                        self.send_email_buyer(request.user.email,
+                                              request.user.get_full_name(),
+                                              product.title
+                                              )
+                        print('Email buyer')
 
         except ResponseError as e:
             return Response(status=e.message)
