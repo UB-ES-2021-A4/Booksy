@@ -128,6 +128,14 @@ class HomePage extends Component {
         );
     }
 
+    handleSearch  = event =>  {
+        let string_search =  event.target.value
+        axios.get(`${url}/api/product/?search=${string_search}`)
+            .then((res)=> {
+                this.populateCards(res.data)
+            })
+    }
+
     render () {
         return (
             <div>
@@ -144,7 +152,7 @@ class HomePage extends Component {
                             <a className="navbar-item-right" >
                                 <div className="search-box">
                                     <button className="btn-search"><SearchIcon/></button>
-                                    <input type="text" className="input-search" id="search_input" placeholder="Type to Search..."/>
+                                    <input type="text" className="input-search" id="search_input" placeholder="Type to Search..." onChange={this.handleSearch}/>
                                 </div>
                             </a>
                         </Col>
