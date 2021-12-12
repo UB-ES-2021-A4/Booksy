@@ -29,6 +29,7 @@ class OpenItem extends Component {
 
     componentDidMount() {
         this.getInfoToLoad = this.getInfoToLoad.bind(this);
+        this.refreshPage = this.refreshPage.bind(this);
         this.getInfoToLoad()
     }
 
@@ -104,8 +105,12 @@ class OpenItem extends Component {
     }
 
     refreshPage() {
-        this.props.history.push('/homePage')
+        this.props.history.push({
+            pathname: '/homePage',
+            state: { menu: false}
+        });
     }
+
 
     render () {
         return (
@@ -114,8 +119,8 @@ class OpenItem extends Component {
                     <Row className="justify-content-md-center">
                         <Col md={"auto"}>
                             <br/>
-                            <a className="a_color_black" href='/homePage'>
-                                <ArrowBackIosNewIcon className="arrowBack"/>
+                            <a className="a_color_black" >
+                                <ArrowBackIosNewIcon className="arrowBack" onClick={this.refreshPage}/>
                             </a>
                         </Col>
                         <Col xs lg="5">

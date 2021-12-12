@@ -13,6 +13,7 @@ import UpdateItem from "./components/UpdateItem";
 import OpenItem from "./components/OpenItem";
 import Profile from "./components/Profile";
 import EditProfile from "./components/EditProfile";
+import Books from "./components/Books";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
                 <Route path='/updateItems/:id' render={()=><UpdateItem />}/>
                 <Route path='/OpenItem/:id' render={()=><OpenItem />}/>
                 <Route path='/cart' render={()=><Cart />}/>
+                <Route path='/books' render={()=><Books />}/>
                 <Route path='/profile/:id' render={()=><Profile />}/>
                 <Route path='/editProfile/:id' render={()=><EditProfile />}/>
             </Switch>

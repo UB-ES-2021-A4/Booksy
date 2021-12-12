@@ -36,7 +36,17 @@ class NavBar extends Component {
     }
 
     handleHomepage = () => {
-        this.props.history.push('/homePage');
+        this.props.history.push({
+            pathname: '/homePage',
+            state: { menu: false}
+        });
+    }
+
+    handleBooksHomepage = () => {
+        this.props.history.push({
+            pathname: '/homePage',
+            state: { menu: true}
+        });
     }
 
     handleProfile = () => {
@@ -47,6 +57,9 @@ class NavBar extends Component {
         });
     }
 
+
+
+
     render() {
         return (
             <section className="navbar">
@@ -55,7 +68,7 @@ class NavBar extends Component {
                 ) : (
                     <a href="" className="navbar-item" style={{padding: 15}} id="home_page_link" onClick={this.handleHomepage}>Home page</a>
                 )}
-                <a href="" className="navbar-item" style={{padding: 15}} id="books_link">Books</a>
+                <a href="" className="navbar-item" style={{padding: 15}} id="books_link" onClick={this.handleBooksHomepage}>Books</a>
                 {this.isNotLogged() ? (
                     <a href="/login" className="navbar-item" style={{padding: 15}} id="login_link">Log In</a>
                 ) : (

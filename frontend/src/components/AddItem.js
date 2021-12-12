@@ -24,6 +24,7 @@ class AddItem extends Component {
         }
         this.getCategories()
         this.handleChange = this.handleChange.bind(this);
+        this.handleHomePage = this.handleHomePage.bind(this);
     }
 
     handleChange = event => {
@@ -120,10 +121,20 @@ class AddItem extends Component {
 
     successfulPostAlert () {
         swal('Success', 'Item uploaded correctly!', 'success');
-        this.props.history.push('/homePage')
+        this.props.history.push({
+            pathname: '/homePage',
+            state: { menu: false}
+        });
     }
     noPhotosAlert () {
         swal('Warning', 'The item should, at least, have one photo.', 'warning');
+    }
+
+    handleHomePage = () => {
+        this.props.history.push({
+            pathname: '/homePage',
+            state: { menu: false}
+        });
     }
 
     render () {
@@ -133,8 +144,8 @@ class AddItem extends Component {
                     <Row className="justify-content-md-center">
                         <Col md={"auto"}>
                             <br/>
-                            <a className="a_color_black" href='/homePage'>
-                                <ArrowBackIosNewIcon className="arrowBack"/>
+                            <a className="a_color_black" onClick={this.handleHomePage}>
+                                <ArrowBackIosNewIcon className="arrowBack" onClick={this.handleHomePage}/>
                             </a>
                         </Col>
                         <Col  xs lg="5">

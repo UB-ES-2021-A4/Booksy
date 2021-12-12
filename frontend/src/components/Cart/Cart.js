@@ -112,7 +112,7 @@ class Cart extends Component {
                             <center>
                                 <img className="align-content-center" style={{width:'450px', height:'375px'}} src={emptyCart} alt="emptyCart" /><br/>
                                 <br/>
-                                <a href='/homePage'><b>Shop for items now!</b></a>
+                                <p><b>Shop for items now!</b></p>
                             </center>
                             <br/>
                         </div>

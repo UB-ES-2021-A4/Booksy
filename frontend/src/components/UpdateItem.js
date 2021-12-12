@@ -30,6 +30,7 @@ class UpdateItem extends Component {
     componentDidMount() {
         this.getInfoToUpdate = this.getInfoToUpdate.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.refreshPage = this.refreshPage.bind(this);
         this.getCategories()
         this.getInfoToUpdate()
     }
@@ -151,10 +152,20 @@ class UpdateItem extends Component {
 
     successfulPostAlert () {
         swal('Success', 'Item uploaded correctly!', 'success');
-        this.props.history.push('/homePage')
+        this.props.history.push({
+            pathname: '/homePage',
+            state: { menu: false}
+        });
     }
     noPhotosAlert () {
         swal('Warning', 'The item should, at least, have one photo.', 'warning');
+    }
+
+    refreshPage() {
+        this.props.history.push({
+            pathname: '/homePage',
+            state: { menu: false}
+        });
     }
 
     render () {
@@ -164,8 +175,8 @@ class UpdateItem extends Component {
                     <Row className="justify-content-md-center">
                         <Col md={"auto"}>
                             <br/>
-                            <a className="a_color_black" href='/homePage'>
-                                <ArrowBackIosNewIcon className="arrowBack"/>
+                            <a className="a_color_black" onClick={this.refreshPage}>
+                                <ArrowBackIosNewIcon className="arrowBack" onClick={this.refreshPage}/>
                             </a>
                         </Col>
                         <Col  xs lg="5">
@@ -215,10 +226,6 @@ class UpdateItem extends Component {
                                 <br/><br/>
                                 <div className="input-field">
                                     <textarea name="the-textarea" id="description" maxLength="300" defaultValue={this.state.description} placeholder="Write your description" autoFocus onChange={this.handleChange} required/>
-                                    <div id="the-count">
-                                        <span id="current">0</span>
-                                        <span id="maximum">/ 300</span>
-                                    </div>
                                 </div>
                             </form>
                         </Col>

@@ -23,8 +23,11 @@ class HomePage extends Component {
             },
             cards: [],
             items_to_cart: [],
+            menu: this.props.location.state.menu,
         }
         this.getCards = this.getCards.bind(this);
+        this.normalRender = this.normalRender.bind(this);
+        this.booksRender = this.booksRender.bind(this);
     }
 
     isOwner (card) {
@@ -127,6 +130,91 @@ class HomePage extends Component {
             </Col>
         );
     }
+    renderMenu () {
+        return (
+            <div className="menu-category">
+                <Container>
+                    <Row>
+                        <Col sm={2}>
+                            <br/><br/>
+                            <h1>BOOKS</h1>
+                        </Col>
+                        <Col sm={1}>
+                            <div className="vertical-line"/>
+                        </Col>
+                        <Col lg={3}>
+                            <Row>
+                                <div>
+                                    <h4 className="menu-options">Humanidades</h4>
+                                </div>
+                            </Row>
+                            <Row>
+                                <div>
+                                    <h4 className="menu-options">Técnico y Formación</h4>
+                                </div>
+                            </Row>
+                            <Row>
+                                <div>
+                                    <h4 className="menu-options">Métodos de Idiomas</h4>
+                                </div>
+                            </Row>
+                        </Col>
+                        <Col lg={3}>
+                            <Row>
+                                <div>
+                                    <h4 className="menu-options">Literatura</h4>
+                                </div>
+                            </Row>
+                            <Row>
+                                <div>
+                                    <h4 className="menu-options">Comic y Manga</h4>
+                                </div>
+                            </Row>
+                            <Row>
+                                <div>
+                                    <h4 className="menu-options">Misterio y Thriller</h4>
+                                </div>
+                            </Row>
+                        </Col>
+                        <Col>
+                            <Row>
+                                <div>
+                                    <h4 className="menu-options">Artes</h4>
+                                </div>
+                            </Row>
+                            <Row>
+                                <div>
+                                    <h4 className="menu-options">Filología</h4>
+                                </div>
+                            </Row>
+                            <Row>
+                                <div>
+                                    <h4 className="menu-options">Juvenil</h4>
+                                </div>
+                            </Row>
+                        </Col>
+                        <Col>
+                            <Row>
+                                <div>
+                                    <h4 className="menu-options">Cocina</h4>
+                                </div>
+                            </Row>
+                            <Row>
+                                <div>
+                                    <h4 className="menu-options">Fantasía</h4>
+                                </div>
+                            </Row>
+                            <Row>
+                                <div>
+                                    <h4 className="menu-options">Ocio</h4>
+                                </div>
+                            </Row>
+                        </Col>
+                    </Row>
+                </Container>
+            </div>
+        );
+    }
 
     handleSearch  = event =>  {
         let string_search =  event.target.value
@@ -136,32 +224,76 @@ class HomePage extends Component {
             })
     }
 
+
+    normalRender () {
+        return (
+            <Container>
+                <br/>
+                <Row>
+                    <Col className="col-sm-2">
+                        <h1>All books</h1>
+                        <br/>
+                    </Col>
+                    <Col>
+                        <StoreIcon className="position-right" onClick={this.addToCart}/>
+                        <button className="button button-add-item" onClick={this.handleClick}>Add Item</button>
+                        <a className="navbar-item-right" >
+                            <div className="search-box">
+                                <button className="btn-search"><SearchIcon/></button>
+                                <input type="text" className="input-search" id="search_input" placeholder="Type to Search..." onChange={this.handleSearch}/>
+                            </div>
+                        </a>
+                    </Col>
+                </Row>
+                <Row className="wrapper">
+                    {this.renderCards()}
+                </Row>
+                <br/>
+            </Container>
+        );
+    }
+
+    booksRender () {
+        return (
+            <Container>
+                {this.renderMenu()}
+                <br/>
+                <Row>
+                    <Col className="col-sm-2">
+                        <h1>All books</h1>
+                        <br/>
+                    </Col>
+                    <Col>
+                        <StoreIcon className="position-right" onClick={this.addToCart}/>
+                        <button className="button button-add-item" onClick={this.handleClick}>Add Item</button>
+                        <a className="navbar-item-right" >
+                            <div className="search-box">
+                                <button className="btn-search"><SearchIcon/></button>
+                                <input type="text" className="input-search" id="search_input" placeholder="Type to Search..." onChange={this.handleSearch}/>
+                            </div>
+                        </a>
+                    </Col>
+                </Row>
+                <Row className="wrapper">
+                    {this.renderCards()}
+                </Row>
+                <br/>
+            </Container>
+        );
+    }
+
+    isMenuDisplayed () {
+        return this.state.menu
+    }
+
     render () {
         return (
             <div>
-                <Container>
-                    <br/>
-                    <Row>
-                        <Col className="col-sm-2">
-                            <h1>All books</h1>
-                            <br/>
-                        </Col>
-                        <Col>
-                            <StoreIcon className="position-right" onClick={this.addToCart}/>
-                            <button className="button button-add-item" onClick={this.handleClick}>Add Item</button>
-                            <a className="navbar-item-right" >
-                                <div className="search-box">
-                                    <button className="btn-search"><SearchIcon/></button>
-                                    <input type="text" className="input-search" id="search_input" placeholder="Type to Search..." onChange={this.handleSearch}/>
-                                </div>
-                            </a>
-                        </Col>
-                    </Row>
-                    <Row className="wrapper">
-                        {this.renderCards()}
-                    </Row>
-                    <br/>
-                </Container>
+                {this.isMenuDisplayed() ? (
+                    this.booksRender()
+                ) : (
+                    this.normalRender()
+                )}
             </div>
         );
     }

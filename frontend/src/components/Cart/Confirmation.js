@@ -29,7 +29,7 @@ export default class Confirmation extends Component {
                     <img src={ConfirmationGif} alt="order-done" />
                     <br/><br/>
                     <h1>You have officially completed your order!!</h1>
-                    <h5 className="subtext-confirmation" >Would you like to continue shopping? Go to <a href='/homePage'>Home page</a> and enjoy.</h5>
+                    <h5 className="subtext-confirmation" >Would you like to continue shopping? Go to Home page and enjoy.</h5>
                     <br/>
                 </center>
             </div>

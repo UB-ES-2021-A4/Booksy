@@ -23,7 +23,10 @@ class Login extends Component {
 
     }
     handleClick = () => {
-        this.props.history.push('/homePage')
+        this.props.history.push({
+            pathname: '/homePage',
+            state: { menu: false}
+        });
     }
     handleClickSignUp = () => {
         this.props.history.push('/signup')
