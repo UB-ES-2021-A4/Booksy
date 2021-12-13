@@ -8,7 +8,6 @@ import VerifiedSharpIcon from '@mui/icons-material/VerifiedSharp';
 import StoreIcon from "@mui/icons-material/Store";
 import SearchIcon from "@mui/icons-material/Search";
 import noItems from '../pictures/no-cards.jpg'
-import emptyCart from "../pictures/empty_cart.png";
 
 //const deploy_url = 'https://booksy.pythonanywhere.com';
 const debug_url = 'http://127.0.0.1:8000';
@@ -32,6 +31,7 @@ class HomePage extends Component {
                         ["Misterio y Thriller", "MT"]],
             cards: [],
             items_to_cart: [],
+            header: 'All Books',
         }
         this.getCards = this.getCards.bind(this);
         this.showAllBooks = this.showAllBooks.bind(this);
@@ -243,6 +243,7 @@ class HomePage extends Component {
     showAllBooks () {
         axios.get(`${url}/api/product/`)
             .then((res)=> {
+                this.setState({header: 'All Books'})
                 this.populateCards(res.data)
             })
     }
@@ -268,7 +269,7 @@ class HomePage extends Component {
         console.log(category_search)
         axios.get(`${url}/api/product/?category=${category_search}`)
             .then((res)=> {
-                console.log("he llegado")
+                this.setState({header: category})
                 this.populateCards(res.data)
             })
     }
@@ -283,7 +284,7 @@ class HomePage extends Component {
                     <br/>
                     <Row>
                         <Col className="col-sm-2">
-                            <h1>All books</h1>
+                            <h1>{this.state.header}</h1>
                             <br/>
                         </Col>
                         <Col>
