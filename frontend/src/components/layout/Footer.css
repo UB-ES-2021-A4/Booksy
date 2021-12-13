@@ -1,6 +1,6 @@
 
 .footer {
-    position: center;
+    position: sticky;
     left: 0;
     bottom: 0;
     right: 0;
@@ -8,6 +8,7 @@
     background: #C6E7D8;
     color: #004B23;
     text-align: center;
+
 }
 
 .row-title {

@@ -8,6 +8,7 @@
     padding-top: 1%;
     transition: top 300ms cubic-bezier(0.17, 0.04, 0.03, 0.94);
     overflow: hidden;
+    box-shadow: 5px 10px 18px #888888;
 }
 
 .message h1 {
@@ -51,6 +52,10 @@
     color: black;
     transition:all 500ms ease;
 }
+
+#toggle + label:hover {
+    background-color: #A3CFBB;
+}
 #toggle + label ~ .message {
     display: none;
 }
@@ -64,6 +69,7 @@
 }
 
 #toggle:checked ~ .message {
+    line-height: 1.6;
     top: 0;
 }
 
@@ -73,6 +79,10 @@
 
 #toggle:checked ~ .message {
     display: revert;
+}
+
+#toggle:checked + label:hover {
+    background-color: #A3CFBB;
 }
 
 #toggle:checked + label {
@@ -126,10 +136,45 @@
 }
 
 .menu-options {
-    line-height: 175%;
+    line-height: 185%;
+    padding-top: 3%;
+    font-family: "Source Code Pro", serif;
+    font-size: 25px;
+    color: black;
+    text-decoration:none;
+    cursor: pointer;
+}
+
+.allBooks {
+    font-family: "Source Code Pro", serif;
+    line-height: 100%;
+    font-size: 45px;
+    color: black;
+    text-decoration:none;
+    cursor: pointer;
+}
+
+.top-pad {
+    margin-top: 3%;
+}
+
+.left-pad {
+    margin-left: -3%;
 }
 
 .text-right {
     float: right;
+}
+
+
+.img-no-items {
+    position: relative;
+    margin-top: -5%;
+    margin-left: 50%;
+}
+
+.text-relative {
+    position: relative;
+    margin-left: 70%;
 }
 
