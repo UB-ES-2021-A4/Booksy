@@ -40,8 +40,12 @@ class HomePage extends Component {
 
 
     isOwner (card) {
-        let owner = (window.localStorage.getItem('user_id')).toString()
-        return (card.seller).toString() === owner;
+        if (window.localStorage.getItem('user_id') === null) {
+            this.props.history.push('/')
+        } else {
+            let owner = (window.localStorage.getItem('user_id')).toString()
+            return (card.seller).toString() === owner;
+        }
     }
 
 
@@ -252,6 +256,7 @@ class HomePage extends Component {
         let string_search =  event.target.value
         axios.get(`${url}/api/product/?search=${string_search}`)
             .then((res)=> {
+                console.log(localStorage)
                 this.populateCards(res.data)
             })
     }

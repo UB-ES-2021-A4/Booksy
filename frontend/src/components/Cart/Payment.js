@@ -24,6 +24,19 @@ export default class Payment extends Component {
             num_items: props.getStore().num_items,
         };
         this.handleChange = this.handleChange.bind(this);
+        this.makeTimer()
+    }
+
+    makeTimer(){
+        setInterval(() => {
+            if (window.localStorage.getItem('user_id') === null) {
+                this.logOut()
+            }
+        }, 750)
+    }
+
+    logOut()  {
+        this.props.history.push('/');
     }
 
     continue = e => {

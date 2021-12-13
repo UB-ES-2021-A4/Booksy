@@ -39,7 +39,14 @@ class Login extends Component {
 
     successAlert () {
         // Use sweetalert2
-        swal("Success", "You are logged in!", "success");
+        swal({
+            title: "Success",
+            text: "You are logged in!",
+            icon: "success",
+        })
+            .then(() => {
+                window.location.reload(false);
+            });
     };
 
     errorInLogInAlert () {
@@ -57,12 +64,12 @@ class Login extends Component {
 
         axios.post(`${url}/api/account/login/`, parameters)
             .then((res) => {
-                this.successAlert()
                 // We are saving the token in the localStorage(not very secure), django's token do not expire.
                 localStorage.setItem('token', res.data.token)
                 localStorage.setItem('user_id', res.data.user_id)
                 localStorage.setItem('username', this.state.username)
                 this.handleClick()
+                this.successAlert()
             })
             .catch((error) => {
                 this.errorInLogInAlert()

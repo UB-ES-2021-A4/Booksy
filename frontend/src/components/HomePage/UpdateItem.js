@@ -25,7 +25,21 @@ class UpdateItem extends Component {
             categories: {},
             card_id: props.id
         }
+        this.makeTimer();
     }
+
+    makeTimer(){
+        setInterval(() => {
+            if (window.localStorage.getItem('user_id') === null) {
+                this.logOut()
+            }
+        }, 750)
+    }
+
+    logOut()  {
+        this.props.history.push('/');
+    }
+
 
     componentDidMount() {
         this.getInfoToUpdate = this.getInfoToUpdate.bind(this);

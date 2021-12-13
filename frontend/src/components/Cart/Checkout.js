@@ -18,7 +18,21 @@ export default class Checkout extends Component {
             subtotal: props.getStore().subtotal,
             num_items: props.getStore().num_items,
         }
+        this.makeTimer()
     }
+
+    makeTimer(){
+        setInterval(() => {
+            if (window.localStorage.getItem('user_id') === null) {
+                this.logOut()
+            }
+        }, 750)
+    }
+
+    logOut()  {
+        this.props.history.push('/');
+    }
+
     componentDidMount() {
         this.getCards = this.getCards.bind(this);
         this.getCards()

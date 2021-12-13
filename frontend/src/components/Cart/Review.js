@@ -28,6 +28,19 @@ export default class Review extends Component {
             shipping: 0,
             orderTotal: 0,
         };
+        this.makeTimer();
+    }
+
+    makeTimer(){
+        setInterval(() => {
+            if (window.localStorage.getItem('user_id') === null) {
+                this.logOut()
+            }
+        }, 750)
+    }
+
+    logOut()  {
+        this.props.history.push('/');
     }
 
     componentWillMount() {

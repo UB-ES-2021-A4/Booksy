@@ -15,20 +15,24 @@ class NavBar extends Component {
             },
             cards: [],
         }
-
+        this.loggedRender = this.loggedRender.bind(this);
+        this.notLoggedRender = this.notLoggedRender.bind(this);
+        this.handleLogOut = this.handleLogOut.bind(this);
     }
 
 
     handleNotLogged = () => {
-        swal('Something went wrong', 'You are not logged in the web. Try the Login button first, please.', 'warning');
-        this.sleep(6000).then(() => {
-            console.log(window.localStorage.getItem('user_id'))
-        });
+        swal({
+            title: "Something went wrong",
+            text: 'You are not logged in the web. Try the Login button first, please.',
+            icon: "warning",
+        })
+            .then(() => {
+                this.props.history.push('/login',);
+                window.location.reload(false);
+            });
     }
 
-    sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
 
     isNotLogged () {
         let user = (window.localStorage.getItem('user_id'))
@@ -55,24 +59,39 @@ class NavBar extends Component {
         });
     }
 
+    handleLogOut () {
+        localStorage.clear()
+        this.props.history.push('/');
+        window.location.reload(false);
+    }
 
+    loggedRender () {
+        return (
+            <section className="navbar">
+                <a className="navbar-item" style={{padding: 15}} id="home_page_link" onClick={this.handleHomepage}>Home page</a>
+                <a className="navbar-item" style={{padding: 15}} id="profile_link" onClick={this.handleProfile}>Profile</a>
+                <a className="navbar-item" style={{padding: 15}} id="profile_link" onClick={this.handleLogOut}>Log Out</a>
+            </section>
+        );
+    }
+
+    notLoggedRender () {
+        return (
+            <section className="navbar">
+                <a className="navbar-item" style={{padding: 15}} id="home_page_link" onClick={this.handleNotLogged}>Home page</a>
+                <a href="/login" className="navbar-item" style={{padding: 15}} id="login_link">Log In</a>
+            </section>
+        );
+    }
 
 
     render() {
         return (
-            <section className="navbar">
-                {this.isNotLogged() ? (
-                    <a href="/" className="navbar-item" style={{padding: 15}} id="home_page_link" onClick={this.handleNotLogged}>Home page</a>
-                ) : (
-                    <a href="" className="navbar-item" style={{padding: 15}} id="home_page_link" onClick={this.handleHomepage}>Home page</a>
-                )}
-                {this.isNotLogged() ? (
-                    <a href="/login" className="navbar-item" style={{padding: 15}} id="login_link">Log In</a>
-                ) : (
-                    <a href="" className="navbar-item" style={{padding: 15}} id="profile_link" onClick={this.handleProfile}>Profile</a>
-                    )}
-                <a href="" className="navbar-item" style={{padding: 15}} id="profile_link" >Log Out</a>
-            </section>
+            this.isNotLogged() ? (
+                this.notLoggedRender()
+            ) : (
+                this.loggedRender()
+            )
         )}
 }
 

@@ -3,6 +3,23 @@ import ConfirmationGif from '../pictures/confrimation.gif'
 import './Cart.css'
 
 export default class Confirmation extends Component {
+    constructor(props) {
+        super(props);
+        this.makeTimer()
+    }
+
+    makeTimer(){
+        setInterval(() => {
+            if (window.localStorage.getItem('user_id') === null) {
+                this.logOut()
+            }
+        }, 750)
+    }
+
+    logOut()  {
+        this.props.history.push('/');
+    }
+
     back = e => {
         e.preventDefault();
         this.props.prevStep();
