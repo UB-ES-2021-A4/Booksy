@@ -65,15 +65,6 @@ export default class Footer extends Component {
                                 <h6 id="align_left">Versions</h6>
                             </div>
                         </div>
-                        <div className="column_big">
-                            <div className="box">
-                                <select>
-                                    <option value="0">Currency</option>
-                                    <option value="1">Euro €</option>
-                                    <option value="2">Dollar $</option>
-                                </select>
-                            </div>
-                        </div>
                     </div>
                 </footer>
             </section>
