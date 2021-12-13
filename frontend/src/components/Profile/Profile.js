@@ -5,7 +5,7 @@ import {Card, Col, Row} from "react-bootstrap";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 import CheckSharpIcon from '@mui/icons-material/CheckSharp';
-import empty from "./pictures/empty_profile.png";
+import empty from "../pictures/empty_profile.png";
 import './Profile.css'
 import 'react-tabs/style/react-tabs.css';
 import swal from "sweetalert";
@@ -187,7 +187,13 @@ class Profile extends Component {
     }
 
     successfulPostAlert () {
+        this.refreshPage()
         swal('Success', 'Photo updated correctly!', 'success');
+
+    }
+
+    refreshPage () {
+        window.location.reload(false);
     }
 
     noPhotosAlert () {
@@ -212,9 +218,10 @@ class Profile extends Component {
                             <div className="profile-img">
                                 <img
                                     src={`${url}${this.state.image}`}
+                                    style={{width:'300px', height:'250px'}}
                                     alt=""/>
-                                <div className="file btn btn-lg btn-primary input-field">
-                                    Change Photo
+                                <div className="file btn btn-primary input-field-profile" style={{width:'300px', height:'50px'}}>
+                                    <p className="input-profile-text">Change Photo</p>
                                     <input type="file" name="myfile" id="images" onChange={this.handleChangePhoto}/>
                                 </div>
                                 <br/>
@@ -228,21 +235,11 @@ class Profile extends Component {
                                 <p className="profile-rating">Username : <span>{this.state.username}</span></p>
                                 <Tabs className="profile-tabs">
                                     <TabList>
-                                        <Tab >User's Items</Tab>
-                                        <Tab>History</Tab>
-                                        <Tab>Balance</Tab>
+                                        <Tab aria-selected="true">User's Items</Tab>
                                     </TabList>
 
                                     <TabPanel>
                                         <h2>Available Items this user is currently selling:</h2>
-                                        <br/><br/>
-                                    </TabPanel>
-                                    <TabPanel>
-                                        <h2>Any content 3</h2>
-                                        <br/><br/>
-                                    </TabPanel>
-                                    <TabPanel>
-                                        <h2>Any content 4</h2>
                                         <br/><br/>
                                     </TabPanel>
                                 </Tabs>

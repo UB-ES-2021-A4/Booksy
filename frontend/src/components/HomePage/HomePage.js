@@ -7,8 +7,8 @@ import {withRouter} from "react-router-dom";
 import VerifiedSharpIcon from '@mui/icons-material/VerifiedSharp';
 import StoreIcon from "@mui/icons-material/Store";
 import SearchIcon from "@mui/icons-material/Search";
-import noItems from './pictures/no-cards.jpg'
-import emptyCart from "./pictures/empty_cart.png";
+import noItems from '../pictures/no-cards.jpg'
+import emptyCart from "../pictures/empty_cart.png";
 
 //const deploy_url = 'https://booksy.pythonanywhere.com';
 const debug_url = 'http://127.0.0.1:8000';

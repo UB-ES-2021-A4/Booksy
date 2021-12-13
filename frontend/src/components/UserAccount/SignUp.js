@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import axios from 'axios';
 import {Col, Container, Row} from "react-bootstrap";
 import './SignUp.css'
-import Libro_SignUp from "./pictures/theSunAndHerFlowers.jpg";
+import Libro_SignUp from "../pictures/theSunAndHerFlowers.jpg";
 import { withRouter } from "react-router-dom";
 import swal from 'sweetalert';
 

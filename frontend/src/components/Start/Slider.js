@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Carousel, Col, Row,  Container } from 'react-bootstrap';
 import './Slider.css'
-import Main from './pictures/mainPhoto.jpg';
-import Main_2 from './pictures/mainPhoto2.jpg';
-import Main_3 from './pictures/mainPhoto3.jpg';
+import Main from '../pictures/mainPhoto.jpg';
+import Main_2 from '../pictures/mainPhoto2.jpg';
+import Main_3 from '../pictures/mainPhoto3.jpg';
 import {withRouter} from "react-router-dom";
 
 class Slider extends Component {

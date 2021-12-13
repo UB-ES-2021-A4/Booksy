@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {Col, Container, Row} from "reactstrap";
-import Autor from "./pictures/autor.PNG";
-import Genero from "./pictures/genero.PNG";
-import Rating from "./pictures/rating.jpg";
-import Cercania from "./pictures/Cercania.PNG";
+import Autor from "../pictures/autor.PNG";
+import Genero from "../pictures/genero.PNG";
+import Rating from "../pictures/rating.jpg";
+import Cercania from "../pictures/Cercania.PNG";
 import "./Categories.css"
 
 export default class Categories extends Component {
