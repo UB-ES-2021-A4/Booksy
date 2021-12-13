@@ -123,7 +123,6 @@ class AddItem extends Component {
         swal('Success', 'Item uploaded correctly!', 'success');
         this.props.history.push({
             pathname: '/homePage',
-            state: { menu: false}
         });
     }
     noPhotosAlert () {
@@ -133,7 +132,6 @@ class AddItem extends Component {
     handleHomePage = () => {
         this.props.history.push({
             pathname: '/homePage',
-            state: { menu: false}
         });
     }
 

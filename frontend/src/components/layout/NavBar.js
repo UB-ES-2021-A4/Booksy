@@ -38,14 +38,12 @@ class NavBar extends Component {
     handleHomepage = () => {
         this.props.history.push({
             pathname: '/homePage',
-            state: { menu: false}
         });
     }
 
     handleBooksHomepage = () => {
         this.props.history.push({
             pathname: '/homePage',
-            state: { menu: true}
         });
     }
 
@@ -68,12 +66,12 @@ class NavBar extends Component {
                 ) : (
                     <a href="" className="navbar-item" style={{padding: 15}} id="home_page_link" onClick={this.handleHomepage}>Home page</a>
                 )}
-                <a href="" className="navbar-item" style={{padding: 15}} id="books_link" onClick={this.handleBooksHomepage}>Books</a>
                 {this.isNotLogged() ? (
                     <a href="/login" className="navbar-item" style={{padding: 15}} id="login_link">Log In</a>
                 ) : (
                     <a href="" className="navbar-item" style={{padding: 15}} id="profile_link" onClick={this.handleProfile}>Profile</a>
-                )}
+                    )}
+                <a href="" className="navbar-item" style={{padding: 15}} id="profile_link" >Log Out</a>
             </section>
         )}
 }

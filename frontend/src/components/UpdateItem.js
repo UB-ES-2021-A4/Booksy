@@ -154,7 +154,6 @@ class UpdateItem extends Component {
         swal('Success', 'Item uploaded correctly!', 'success');
         this.props.history.push({
             pathname: '/homePage',
-            state: { menu: false}
         });
     }
     noPhotosAlert () {
@@ -164,7 +163,6 @@ class UpdateItem extends Component {
     refreshPage() {
         this.props.history.push({
             pathname: '/homePage',
-            state: { menu: false}
         });
     }
 

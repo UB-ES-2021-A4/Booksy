@@ -107,7 +107,6 @@ class OpenItem extends Component {
     refreshPage() {
         this.props.history.push({
             pathname: '/homePage',
-            state: { menu: false}
         });
     }
 

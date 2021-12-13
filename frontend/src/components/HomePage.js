@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Col, Container, Row, Card} from "react-bootstrap";
 import './HomePage.css'
+import './HomePage-Books.css'
 import axios from "axios";
 import {withRouter} from "react-router-dom";
 import VerifiedSharpIcon from '@mui/icons-material/VerifiedSharp';
@@ -23,11 +24,8 @@ class HomePage extends Component {
             },
             cards: [],
             items_to_cart: [],
-            menu: this.props.location.state.menu,
         }
         this.getCards = this.getCards.bind(this);
-        this.normalRender = this.normalRender.bind(this);
-        this.booksRender = this.booksRender.bind(this);
     }
 
     isOwner (card) {
@@ -133,11 +131,11 @@ class HomePage extends Component {
     renderMenu () {
         return (
             <div className="menu-category">
-                <Container>
+                <div className="container-fluid">
                     <Row>
                         <Col sm={2}>
                             <br/><br/>
-                            <h1>BOOKS</h1>
+                            <h1 className="text-right">BOOKS</h1>
                         </Col>
                         <Col sm={1}>
                             <div className="vertical-line"/>
@@ -211,7 +209,7 @@ class HomePage extends Component {
                             </Row>
                         </Col>
                     </Row>
-                </Container>
+                </div>
             </div>
         );
     }
@@ -225,76 +223,38 @@ class HomePage extends Component {
     }
 
 
-    normalRender () {
-        return (
-            <Container>
-                <br/>
-                <Row>
-                    <Col className="col-sm-2">
-                        <h1>All books</h1>
-                        <br/>
-                    </Col>
-                    <Col>
-                        <StoreIcon className="position-right" onClick={this.addToCart}/>
-                        <button className="button button-add-item" onClick={this.handleClick}>Add Item</button>
-                        <a className="navbar-item-right" >
-                            <div className="search-box">
-                                <button className="btn-search"><SearchIcon/></button>
-                                <input type="text" className="input-search" id="search_input" placeholder="Type to Search..." onChange={this.handleSearch}/>
-                            </div>
-                        </a>
-                    </Col>
-                </Row>
-                <Row className="wrapper">
-                    {this.renderCards()}
-                </Row>
-                <br/>
-            </Container>
-        );
-    }
-
-    booksRender () {
-        return (
-            <Container>
-                {this.renderMenu()}
-                <br/>
-                <Row>
-                    <Col className="col-sm-2">
-                        <h1>All books</h1>
-                        <br/>
-                    </Col>
-                    <Col>
-                        <StoreIcon className="position-right" onClick={this.addToCart}/>
-                        <button className="button button-add-item" onClick={this.handleClick}>Add Item</button>
-                        <a className="navbar-item-right" >
-                            <div className="search-box">
-                                <button className="btn-search"><SearchIcon/></button>
-                                <input type="text" className="input-search" id="search_input" placeholder="Type to Search..." onChange={this.handleSearch}/>
-                            </div>
-                        </a>
-                    </Col>
-                </Row>
-                <Row className="wrapper">
-                    {this.renderCards()}
-                </Row>
-                <br/>
-            </Container>
-        );
-    }
-
-    isMenuDisplayed () {
-        return this.state.menu
-    }
-
     render () {
         return (
-            <div>
-                {this.isMenuDisplayed() ? (
-                    this.booksRender()
-                ) : (
-                    this.normalRender()
-                )}
-            </div>
+            <section>
+                <input type="checkbox" name="toggle" id="toggle" className="toggle-right"/>
+                <label htmlFor="toggle"/>
+                <Container className="container-menu">
+                    <br/>
+                    <Row>
+                        <Col className="col-sm-2">
+                            <h1>All books</h1>
+                            <br/>
+                        </Col>
+                        <Col>
+                            <StoreIcon className="position-right" onClick={this.addToCart}/>
+                            <button className="button button-add-item" onClick={this.handleClick}>Add Item</button>
+                            <a className="navbar-item-right" >
+                                <div className="search-box">
+                                    <button className="btn-search"><SearchIcon/></button>
+                                    <input type="text" className="input-search" id="search_input" placeholder="Type to Search..." onChange={this.handleSearch}/>
+                                </div>
+                            </a>
+                        </Col>
+                    </Row>
+                    <Row className="wrapper">
+                        {this.renderCards()}
+                    </Row>
+                    <br/>
+                </Container>
+                <div className="message">
+                    {this.renderMenu()}
+                </div>
+            </section>
         );
     }
 }
