@@ -43,12 +43,7 @@ class NavBar extends Component {
         this.props.history.push({
             pathname: '/homePage',
         });
-    }
-
-    handleBooksHomepage = () => {
-        this.props.history.push({
-            pathname: '/homePage',
-        });
+        window.location.reload(false);
     }
 
     handleProfile = () => {
@@ -57,6 +52,8 @@ class NavBar extends Component {
             pathname: `/profile/${user_id}`,
             state: { id: user_id}
         });
+        window.location.reload(false);
+
     }
 
     handleLogOut () {
