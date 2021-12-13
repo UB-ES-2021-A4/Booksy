@@ -18,6 +18,7 @@ from django.template.loader import render_to_string
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 
 from accounts.serializers import UserAccountSerializer, UserProfileSerializer
+from booksy.lock import lock
 
 
 def index(request):
@@ -65,24 +66,26 @@ class UserAccountSignUp(APIView):
 
     def post(self, request):
         try:
-            account_serialized = UserAccountSerializer(data=request.data)
-            if account_serialized.is_valid():
-                account = account_serialized.save()
-                account = models.UserAccount.objects.get(id=account.id)
+            with lock.lock:
+                account_serialized = UserAccountSerializer(data=request.data)
 
-                # Create userProfile from account
-                data = {'account_id': account.id}
-                profile = UserProfileSerializer(data=data)
-                profile.is_valid()
-                profi = profile.save()
+                if account_serialized.is_valid():
+                    account = account_serialized.save()
+                    account = models.UserAccount.objects.get(id=account.id)
 
-                try:
-                    send_action_email(account, request)
-                except Exception as e:
-                    print(e)
-                return Response(status=status.HTTP_201_CREATED)
-            else:
-                return Response(account_serialized.errors, status=status.HTTP_400_BAD_REQUEST)
+                    # Create userProfile from account
+                    data = {'account_id': account.id}
+                    profile = UserProfileSerializer(data=data)
+                    profile.is_valid()
+                    profi = profile.save()
+
+                    try:
+                        send_action_email(account, request)
+                    except Exception as e:
+                        print(e)
+                    return Response(status=status.HTTP_201_CREATED)
+                else:
+                    return Response(account_serialized.errors, status=status.HTTP_400_BAD_REQUEST)
         except:
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -109,7 +112,9 @@ class UserAccountLogin(ObtainAuthToken):
             return Response('User not verified', status=status.HTTP_403_FORBIDDEN)
 
         if user.check_password(request.data['password']):
-            token, created = Token.objects.get_or_create(user=user)
+
+            with lock.lock:
+                token, created = Token.objects.get_or_create(user=user)
 
             return Response({
                 'token': token.key,
@@ -196,10 +201,11 @@ class UserProfileView(APIView):
             orig_img_path = profi.image.file.name
             serial_profi = UserProfileSerializer(profi, data=request.data)
             if serial_profi.is_valid():
-                serial_profi.save()
-                # Check if the image path is NOT the one of the original path
-                if os.path.normpath("media/default.jpg") not in orig_img_path:
-                    os.remove(orig_img_path)
+                with lock.lock:
+                    serial_profi.save()
+                    # Check if the image path is NOT the one of the original path
+                    if os.path.normpath("media/default.jpg") not in orig_img_path:
+                        os.remove(orig_img_path)
                 return Response(serial_profi.data, status=status.HTTP_200_OK)
             else:
                 print(serial_profi.errors)
