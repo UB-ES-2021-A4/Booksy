@@ -50,7 +50,6 @@ export default class Shipping extends Component {
 
 
     continue = e => {
-        e.preventDefault();
         if (this.checkFormParams()) {
             this.updateStoreInfo();
             this.props.nextStep();
@@ -60,7 +59,6 @@ export default class Shipping extends Component {
     };
 
     back = e => {
-        e.preventDefault();
         this.props.prevStep();
     };
 

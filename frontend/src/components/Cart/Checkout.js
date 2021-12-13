@@ -131,7 +131,6 @@ export default class Checkout extends Component {
     }
 
     continue = e => {
-        e.preventDefault();
         this.updateStoreInfo();
         this.props.nextStep();
 

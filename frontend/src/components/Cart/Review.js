@@ -76,13 +76,12 @@ export default class Review extends Component {
 
         axios.post(`${url}/api/buy/`, formItem,
             {headers: {'Authorization': `Token ${window.localStorage.getItem('token')}`}})
-            .then((res) => {
-                console.error(res.data)
+            .then(() => {
                 this.continue()
             })
             .catch((error) => {
-                this.errorInPostAlert()
                 console.error(error)
+                this.errorInPostAlert()
             })
     }
 
@@ -91,16 +90,13 @@ export default class Review extends Component {
     }
 
     continue = e => {
-        e.preventDefault();
         this.props.nextStep();
     };
 
     back = e => {
-        e.preventDefault();
         this.props.prevStep();
     };
     back2 = e => {
-        e.preventDefault();
         this.props.prev2Steps();
     };
 

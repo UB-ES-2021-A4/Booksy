@@ -21,7 +21,6 @@ export default class Confirmation extends Component {
     }
 
     back = e => {
-        e.preventDefault();
         this.props.prevStep();
     };
 

@@ -40,7 +40,6 @@ export default class Payment extends Component {
     }
 
     continue = e => {
-        e.preventDefault();
         if (this.checkFormParams()) {
             this.updateStoreInfo();
             this.props.nextStep();
@@ -99,7 +98,6 @@ export default class Payment extends Component {
     }
 
     back = e => {
-        e.preventDefault();
         this.updateStoreInfo();
         this.props.prevStep();
     };
