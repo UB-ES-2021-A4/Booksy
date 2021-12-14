@@ -27,6 +27,7 @@ urlpatterns = [
     path('homePage/', accounts.views.index, name='index'),
     path('additem/', accounts.views.index, name='index'),
     path('profile/<int:id>/', accounts.views.profile, name='profile'),
+    path('OpenItem/<int:id>/', accounts.views.profile, name='profile'),
 
     path('admin/', admin.site.urls),
     path('api/account/', include('accounts.urls')),

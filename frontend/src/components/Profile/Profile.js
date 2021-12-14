@@ -18,7 +18,7 @@ class Profile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            id: 3,
+            id: -1,
             card: {
                 title: '',
                 price: 0,
@@ -36,10 +36,16 @@ class Profile extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.editProfile = this.editProfile.bind(this);
     }
-
+    checkIfUser () {
+        if (window.localStorage.getItem('user_id') !== null) {
+            window.location.assign("/homePage")
+        } else {
+            this.state.id = window.localStorage.getItem('user_id')
+        }
+    }
     componentDidMount() {
-        console.error('i did mount!')
-        console.error(this.state.id)
+        this.checkIfUser = this.getUserInfoToLoad.bind(this)
+        this.checkIfUser()
         this.getUserInfoToLoad = this.getUserInfoToLoad.bind(this);
         this.getUserInfoToLoad()
         this.getCards = this.getCards.bind(this);

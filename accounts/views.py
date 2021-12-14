@@ -19,6 +19,7 @@ from accounts import models
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
+from django.http import Http404
 
 from accounts.serializers import UserAccountSerializer, UserProfileSerializer
 from booksy.lock import lock
@@ -28,18 +29,8 @@ def index(request):
     return render(request, 'index.html')
 
 def profile(request, id):
-    req = GetFakeRequest('profile/', user=request.user)
-    return render(req, 'index.html')
+    return render(request, 'index.html')
 
-def GetFakeRequest(path='/', user=None):
-  """ Construct a fake request(WSGIRequest) object"""
-  req = WSGIRequest({
-          'REQUEST_METHOD': 'GET',
-          'PATH_INFO': path,
-          'wsgi.input': StringIO()})
-
-  req.user = AnonymousUser() if user is None else user
-  return req
 
 def send_action_email(acc, request):
     current_site = get_current_site(request)
