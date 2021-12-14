@@ -184,7 +184,7 @@ class Profile extends Component {
 
     handleChangePhoto = event => {
         let imgs = new FormData()
-        imgs.append('account_id', this.props.location.state.id)
+        imgs.append('account_id', this.state.id)
         imgs.append('image', event.target.files[0])
         console.log(imgs.get('image'))
 
