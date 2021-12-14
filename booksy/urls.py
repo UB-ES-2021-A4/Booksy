@@ -26,7 +26,7 @@ urlpatterns = [
     path('login/', accounts.views.index, name='index'),
     path('homePage/', accounts.views.index, name='index'),
     path('additem/', accounts.views.index, name='index'),
-    path('profile/(?P<userid>\d+)/$', accounts.views.index, name='index'),
+    path('profile/', accounts.views.index, name='index'),
 
     path('admin/', admin.site.urls),
     path('api/account/', include('accounts.urls')),
