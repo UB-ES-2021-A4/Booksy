@@ -5,9 +5,9 @@ import './wizard-stepper.css'
 import axios from "axios";
 import emptyCart from "../pictures/empty_cart.png";
 
-const deploy_url = 'https://booksy.pythonanywhere.com';
+//const deploy_url = 'https://booksy.pythonanywhere.com';
 const debug_url = 'http://127.0.0.1:8000';
-const url = deploy_url;
+const url = debug_url;
 
 export default class Checkout extends Component {
     constructor(props) {
@@ -18,7 +18,21 @@ export default class Checkout extends Component {
             subtotal: props.getStore().subtotal,
             num_items: props.getStore().num_items,
         }
+        this.makeTimer()
     }
+
+    makeTimer(){
+        setInterval(() => {
+            if (window.localStorage.getItem('user_id') === null) {
+                this.logOut()
+            }
+        }, 750)
+    }
+
+    logOut()  {
+        this.props.history.push('/');
+    }
+
     componentDidMount() {
         this.getCards = this.getCards.bind(this);
         this.getCards()
@@ -68,7 +82,7 @@ export default class Checkout extends Component {
                                     <img width={175}
                                          height={250}
                                          src={`${url}${card['images']}`}
-                                         alt="No image"
+                                         alt="NoImage"
                                     />
                                 </center>
                                 <br/>
@@ -107,7 +121,7 @@ export default class Checkout extends Component {
                     <center>
                         <img className="align-content-center" style={{width:'450px', height:'375px'}} src={emptyCart} alt="emptyCart" /><br/>
                         <br/>
-                        <a href='/home_page'><b>Shop for items now!</b></a>
+                        <p><b>Shop for items now!</b></p>
                     </center>
                     <br/>
                 </div>
@@ -117,7 +131,6 @@ export default class Checkout extends Component {
     }
 
     continue = e => {
-        e.preventDefault();
         this.updateStoreInfo();
         this.props.nextStep();
 
@@ -210,7 +223,6 @@ export default class Checkout extends Component {
     }
 
     render() {
-        const { values, handleChange } = this.props;
         return (
             <div className="checkout">
                 {this.thereAreItems() ? (

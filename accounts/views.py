@@ -193,10 +193,10 @@ class UserProfileView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         try:
             user = request.user
-            profi = models.UserProfile.objects.get(id=account_id)
+            profi = models.UserProfile.objects.get(account_id=int(account_id))
             if not profi:
                 return Response(status=status.HTTP_404_NOT_FOUND)
-            if profi != user:
+            if profi.account_id_id != user.id:
                 return Response(status=status.HTTP_401_UNAUTHORIZED)
             orig_img_path = profi.image.file.name
             serial_profi = UserProfileSerializer(profi, data=request.data)
@@ -208,6 +208,34 @@ class UserProfileView(APIView):
                         os.remove(orig_img_path)
                 return Response(serial_profi.data, status=status.HTTP_200_OK)
             else:
+                print(serial_profi.errors)
                 return Response(serial_profi.errors, status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class UserAccount(APIView):
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    authentication_classes = (TokenAuthentication,)
+
+    def patch(self, request):
+        account_id = request.GET.get('id')
+        if not account_id:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        try:
+            user = request.user
+            if user.id != int(account_id):
+                return Response(status=status.HTTP_403_FORBIDDEN)
+
+            new_f_name = request.data['first_name']
+            new_l_name = request.data['last_name']
+
+            if len(new_f_name) > 50 or len(new_l_name) > 50:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+
+            user.first_name = new_f_name
+            user.last_name = new_l_name
+            user.save()
+            return Response("User updated", status=status.HTTP_200_OK)
         except:
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)

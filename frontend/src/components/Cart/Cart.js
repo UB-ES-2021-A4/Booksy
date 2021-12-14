@@ -7,10 +7,6 @@ import Checkout from "./Checkout";
 import emptyCart from '../pictures/empty_cart.png'
 import {withRouter} from "react-router-dom";
 
-const deploy_url = 'https://booksy.pythonanywhere.com';
-const debug_url = 'http://127.0.0.1:8000';
-const url = deploy_url;
-
 class Cart extends Component {
     constructor(props) {
         super(props);
@@ -116,7 +112,7 @@ class Cart extends Component {
                             <center>
                                 <img className="align-content-center" style={{width:'450px', height:'375px'}} src={emptyCart} alt="emptyCart" /><br/>
                                 <br/>
-                                <a href='/home_page'><b>Shop for items now!</b></a>
+                                <p><b>Shop for items now!</b></p>
                             </center>
                             <br/>
                         </div>
