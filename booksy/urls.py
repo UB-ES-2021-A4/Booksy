@@ -26,8 +26,8 @@ urlpatterns = [
     path('login/', accounts.views.index, name='index'),
     path('homePage/', accounts.views.index, name='index'),
     path('additem/', accounts.views.index, name='index'),
-    re_path(r'^profile/(?P<id>\d+)/$', accounts.views.profile, name='profile'),
-    re_path(r'^OpenItem/(?P<id>\d+)/$', accounts.views.profile, name='profile'),
+    re_path(r'^profile/(?P<id>\d+)/$', accounts.views.index, name='index'),
+    re_path(r'^OpenItem/(?P<id>\d+)/$', accounts.views.index, name='index'),
 
     path('admin/', admin.site.urls),
     path('api/account/', include('accounts.urls')),

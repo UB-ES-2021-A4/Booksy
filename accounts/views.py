@@ -24,10 +24,6 @@ from booksy.lock import lock
 def index(request):
     return render(request, 'index.html')
 
-def profile(request, id):
-    print('Im printing', request, id)
-    return render(request, 'index.html', context={'id': id})
-
 
 def send_action_email(acc, request):
     current_site = get_current_site(request)
