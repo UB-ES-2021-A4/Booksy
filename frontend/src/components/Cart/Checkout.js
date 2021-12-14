@@ -5,9 +5,9 @@ import './wizard-stepper.css'
 import axios from "axios";
 import emptyCart from "../pictures/empty_cart.png";
 
-//const deploy_url = 'https://booksy.pythonanywhere.com';
+const deploy_url = 'https://booksy-es2021.herokuapp.com';
 const debug_url = 'http://127.0.0.1:8000';
-const url = debug_url;
+const url = deploy_url;
 
 export default class Checkout extends Component {
     constructor(props) {
