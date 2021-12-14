@@ -40,7 +40,7 @@ class Profile extends Component {
         if (window.localStorage.getItem('user_id') !== null) {
             window.location.assign("/homePage")
         } else {
-            this.state.id = window.localStorage.getItem('user_id')
+            this.setState({'id': window.localStorage.getItem('user_id') })
         }
     }
     componentDidMount() {
