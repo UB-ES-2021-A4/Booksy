@@ -24,7 +24,8 @@ from booksy.lock import lock
 def index(request):
     return render(request, 'index.html')
 
-def index(request, id):
+def profile(request, id):
+    print('Im printing', request, id)
     return render(request, 'index.html')
 
 
