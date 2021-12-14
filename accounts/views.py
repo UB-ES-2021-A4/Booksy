@@ -1,5 +1,7 @@
 import os
+from io import StringIO
 
+from django.contrib.auth.models import AnonymousUser
 from django.core.handlers.wsgi import WSGIRequest
 from django.db.models import Q
 from django.shortcuts import render
@@ -26,13 +28,18 @@ def index(request):
     return render(request, 'index.html')
 
 def profile(request, id):
-    print('Im printing', request, id)
-    req = WSGIRequest({
-        'REQUEST_METHOD':'GET',
-        'PATH_INFO': 'OpenItem/'})
-
+    req = GetFakeRequest('OpenItem/',user=request.user)
     return render(req, 'index.html')
 
+def GetFakeRequest(path='/', user=None):
+  """ Construct a fake request(WSGIRequest) object"""
+  req = WSGIRequest({
+          'REQUEST_METHOD': 'GET',
+          'PATH_INFO': path,
+          'wsgi.input': StringIO()})
+
+  req.user = AnonymousUser() if user is None else user
+  return req
 
 def send_action_email(acc, request):
     current_site = get_current_site(request)
