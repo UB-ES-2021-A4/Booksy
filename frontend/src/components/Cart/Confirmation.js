@@ -3,13 +3,28 @@ import ConfirmationGif from '../pictures/confrimation.gif'
 import './Cart.css'
 
 export default class Confirmation extends Component {
+    constructor(props) {
+        super(props);
+        this.makeTimer()
+    }
+
+    makeTimer(){
+        setInterval(() => {
+            if (window.localStorage.getItem('user_id') === null) {
+                this.logOut()
+            }
+        }, 750)
+    }
+
+    logOut()  {
+        this.props.history.push('/');
+    }
+
     back = e => {
-        e.preventDefault();
         this.props.prevStep();
     };
 
     render() {
-        const { values, handleChange } = this.props;
         return (
             <div>
                 <div className="card">
@@ -30,7 +45,7 @@ export default class Confirmation extends Component {
                     <img src={ConfirmationGif} alt="order-done" />
                     <br/><br/>
                     <h1>You have officially completed your order!!</h1>
-                    <h5 className="subtext-confirmation" >Would you like to continue shopping? Go to <a href='/home_page'>Home page</a> and enjoy.</h5>
+                    <h5 className="subtext-confirmation" >Would you like to continue shopping? Go to Home page and enjoy.</h5>
                     <br/>
                 </center>
             </div>

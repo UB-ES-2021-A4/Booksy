@@ -5,9 +5,9 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import axios from "axios";
 import swal from "sweetalert";
 
-const deploy_url = 'https://booksy-es2021.herokuapp.com';
+//const deploy_url = 'https://booksy.pythonanywhere.com';
 const debug_url = 'http://127.0.0.1:8000';
-const url = deploy_url;
+const url = debug_url;
 
 export default class Review extends Component {
     constructor(props) {
@@ -28,6 +28,19 @@ export default class Review extends Component {
             shipping: 0,
             orderTotal: 0,
         };
+        this.makeTimer();
+    }
+
+    makeTimer(){
+        setInterval(() => {
+            if (window.localStorage.getItem('user_id') === null) {
+                this.logOut()
+            }
+        }, 750)
+    }
+
+    logOut()  {
+        this.props.history.push('/');
     }
 
     componentWillMount() {
@@ -63,13 +76,12 @@ export default class Review extends Component {
 
         axios.post(`${url}/api/buy/`, formItem,
             {headers: {'Authorization': `Token ${window.localStorage.getItem('token')}`}})
-            .then((res) => {
-                console.error(res.data)
+            .then(() => {
                 this.continue()
             })
             .catch((error) => {
-                this.errorInPostAlert()
                 console.error(error)
+                this.errorInPostAlert()
             })
     }
 
@@ -78,21 +90,17 @@ export default class Review extends Component {
     }
 
     continue = e => {
-        //e.preventDefault();
         this.props.nextStep();
     };
 
     back = e => {
-        e.preventDefault();
         this.props.prevStep();
     };
     back2 = e => {
-        e.preventDefault();
         this.props.prev2Steps();
     };
 
     render() {
-        const { values, handleChange } = this.props;
         return (
             <div>
                 <div className="card">
@@ -163,10 +171,10 @@ export default class Review extends Component {
                                     <h3 className="review-card-title"><b>Payment Information</b></h3>
                                     <br/>
                                     <body className="card-body review-body">
-                                    <h5  className="spaces"><b>Nombre de la Tarjeta: {this.state.nombreTarjeta}</b></h5>
-                                    <h5  className="spaces"><b>Número de la Tarjeta: {this.state.numeroTarjeta} </b></h5>
-                                    <h5  className="spaces"><b>Fecha de Expiración: {this.state.expDate}</b></h5>
-                                    <h5  className="spaces"><b>CVV:{this.state.CVV} </b></h5>
+                                    <h5  className="spaces_cart"><b>Nombre de la Tarjeta: {this.state.nombreTarjeta}</b></h5>
+                                    <h5  className="spaces_cart"><b>Número de la Tarjeta: {this.state.numeroTarjeta} </b></h5>
+                                    <h5  className="spaces_cart"><b>Fecha de Expiración: {this.state.expDate}</b></h5>
+                                    <h5  className="spaces_cart"><b>CVV:{this.state.CVV} </b></h5>
                                     </body>
                                 </Row>
                                 <Row>
