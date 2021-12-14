@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 import accounts.views
@@ -26,7 +26,7 @@ urlpatterns = [
     path('login/', accounts.views.index, name='index'),
     path('homePage/', accounts.views.index, name='index'),
     path('additem/', accounts.views.index, name='index'),
-    path(r'^profile/(?P<id>\d+)/$', accounts.views.index, name='index'),
+    re_path(r'^profile/(?P<id>\d+)/$', accounts.views.profile, name='profile'),
 
     path('admin/', admin.site.urls),
     path('api/account/', include('accounts.urls')),
