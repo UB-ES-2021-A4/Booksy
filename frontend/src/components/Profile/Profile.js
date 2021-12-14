@@ -38,6 +38,8 @@ class Profile extends Component {
     }
 
     componentDidMount() {
+        console.error('i did mount!')
+        console.error(this.state.id)
         this.getUserInfoToLoad = this.getUserInfoToLoad.bind(this);
         this.getUserInfoToLoad()
         this.getCards = this.getCards.bind(this);
