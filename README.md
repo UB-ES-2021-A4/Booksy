@@ -31,7 +31,7 @@
     <a href="https://github.com/UB-ES-2021-A4/Booksy/wiki"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://booksy.pythonanywhere.com/">View Demo</a>
+    <a href="https://booksy-es2021.herokuapp.com/">View Demo</a>
     ·
     <a href="https://github.com/UB-ES-2021-A4/Booksy/issues">Report Bug</a>
     ·
