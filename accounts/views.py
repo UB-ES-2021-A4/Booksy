@@ -26,7 +26,7 @@ def index(request):
 
 def profile(request, id):
     print('Im printing', request, id)
-    return render(request, 'index.html')
+    return render(request, 'index.html', context={'id': id})
 
 
 def send_action_email(acc, request):
