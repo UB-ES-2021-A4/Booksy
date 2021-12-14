@@ -1,5 +1,6 @@
 import os
 
+from django.core.handlers.wsgi import WSGIRequest
 from django.db.models import Q
 from django.shortcuts import render
 from rest_framework.authentication import TokenAuthentication
@@ -26,8 +27,11 @@ def index(request):
 
 def profile(request, id):
     print('Im printing', request, id)
-    print(request)
-    return render(request, 'index.html')
+    req = WSGIRequest({
+        'REQUEST_METHOD':'GET',
+        'PATH_INFO': 'OpenItem/'})
+
+    return render(req, 'index.html')
 
 
 def send_action_email(acc, request):
