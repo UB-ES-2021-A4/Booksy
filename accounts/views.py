@@ -26,6 +26,7 @@ def index(request):
 
 def profile(request, id):
     print('Im printing', request, id)
+    print(request)
     return render(request, 'index.html')
 
 
