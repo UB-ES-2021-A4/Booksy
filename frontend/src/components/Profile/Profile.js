@@ -18,7 +18,7 @@ class Profile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            id: this.props.location.state.id,
+            id: 3,
             card: {
                 title: '',
                 price: 0,

@@ -28,7 +28,7 @@ def index(request):
     return render(request, 'index.html')
 
 def profile(request, id):
-    req = GetFakeRequest('OpenItem/',user=request.user)
+    req = GetFakeRequest('profile/', user=request.user)
     return render(req, 'index.html')
 
 def GetFakeRequest(path='/', user=None):
