@@ -9,7 +9,7 @@ import {withRouter} from "react-router-dom";
 
 const deploy_url = 'https://booksy-es2021.herokuapp.com';
 const debug_url = 'http://127.0.0.1:8000';
-const url = deploy_url;
+const url = debug_url;
 
 class AddItem extends Component {
     constructor(props) {
@@ -55,7 +55,6 @@ class AddItem extends Component {
             axios.post(`${url}/api/product/`, formItem,
                 {headers: {'Authorization': `Token ${window.localStorage.getItem('token')}`}})
                 .then((res) => {
-                    console.error(res.data)
                     this.uploadImages(res.data)
                 })
                 .catch((error) => {
@@ -68,7 +67,7 @@ class AddItem extends Component {
     }
 
     checkFormParams (params) {
-        return !(params.get('title').length === 0 || params.get('price').length === 0 || params.get('author').length === 0 || params.get('category').length === 0 || params.get('description').length === 0);
+        return !(params.get('title').length === 0 || params.get('price').length === 0 || params.get('author').length === 0 || params.get('category').length === 0 || params.get('description').length === 0 || this.state.images === undefined);
     }
 
     uploadImages(product_id) {

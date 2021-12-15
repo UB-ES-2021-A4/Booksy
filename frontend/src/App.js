@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
-import Header from "./components/layout/Header";
-import Footer from "./components/layout/Footer";
+import Header from "./components/Layout/Header";
+import Footer from "./components/Layout/Footer";
 import FirstPage from "./components/Start/FirstPage"
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import Login from "./components/UserAccount/Login";
