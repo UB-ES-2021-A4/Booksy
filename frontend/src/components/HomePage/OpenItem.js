@@ -7,7 +7,7 @@ import './OpenItem.css'
 import swal from "sweetalert";
 
 const deploy_url = 'https://booksy-es2021.herokuapp.com';
-const debug_url = 'http://127.0.0.1:8000';
+//const debug_url = 'http://127.0.0.1:8000';
 const url = deploy_url;
 
 
@@ -24,11 +24,20 @@ class OpenItem extends Component {
             category: '',
             description: '',
             image: this.props.location.state.image[0],
-            card_id: props.id
+            card_id: props.id,
+            items: [],
         }
     }
 
     componentDidMount() {
+        if ([localStorage.getItem('items_to_cart')][0] !== "") {
+            let splitted_text = (JSON.stringify(localStorage.getItem('items_to_cart'))).split(",");
+            splitted_text[0] = splitted_text[0].substr(1)
+            let last_word = splitted_text[splitted_text.length - 1]
+            last_word = last_word.substr(0, last_word.length - 1)
+            splitted_text[splitted_text.length - 1] = last_word
+            this.setState({items : splitted_text})
+        }
         this.getInfoToLoad = this.getInfoToLoad.bind(this);
         this.refreshPage = this.refreshPage.bind(this);
         this.getInfoToLoad()
@@ -41,10 +50,11 @@ class OpenItem extends Component {
                 state: { id: this.state.id}
             });
         } else {
-            this.props.history.push({
-                pathname: '/homePage',
-                state: {item_to_cart: this.state.id}
-            });
+            let items = this.state.items
+            items.push((this.state.id).toString())
+            items = Array.from(new Set(items))
+            localStorage.setItem('items_to_cart',  items)
+            this.props.history.push('/homePage');
         }
     }
 
@@ -93,7 +103,7 @@ class OpenItem extends Component {
                 if (willDelete) {
                     axios.delete(`${url}/api/product/?id=${id}`,
                         {headers: {'Authorization': `Token ${window.localStorage.getItem('token')}`}})
-                        .then((res) => {
+                        .then(() => {
                             swal("Poof! Your item has been deleted!", {
                                 icon: "success",
                             });

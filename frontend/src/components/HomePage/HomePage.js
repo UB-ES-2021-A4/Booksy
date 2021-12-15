@@ -10,10 +10,8 @@ import SearchIcon from "@mui/icons-material/Search";
 import noItems from '../pictures/no-cards.jpg'
 
 const deploy_url = 'https://booksy-es2021.herokuapp.com';
-const debug_url = 'http://127.0.0.1:8000';
+//const debug_url = 'http://127.0.0.1:8000';
 const url = deploy_url;
-
-
 
 class HomePage extends Component {
     constructor(props) {
@@ -30,7 +28,7 @@ class HomePage extends Component {
                         ["Artes", "AR"], ["Ocio", "OC"], ["Cocina", "CO"], ["Fantasía", "FA"],
                         ["Misterio y Thriller", "MT"]],
             cards: [],
-            items_to_cart: [],
+            items_to_cart:  [],
             header: 'All Books',
         }
         this.getCards = this.getCards.bind(this);
@@ -60,7 +58,6 @@ class HomePage extends Component {
         });
     }
     handleOpen = (id, image) => {
-        localStorage.setItem("items_to_cart", JSON.stringify(this.state.items_to_cart));
         this.sleep(700).then(() => {
             this.props.history.push({
                 pathname: `/OpenItem/${id}`,
@@ -74,16 +71,27 @@ class HomePage extends Component {
     }
 
     componentDidMount() {
+        if ([localStorage.getItem('items_to_cart')][0] !== "") {
+            let cart_items = (JSON.stringify(localStorage.getItem('items_to_cart'))).split(",");
+            if (cart_items.length > 1) {
+                cart_items[0] = cart_items[0].substr(1)
+                let last_word = cart_items[cart_items.length-1]
+                last_word = last_word.substr(0, last_word.length-1)
+                cart_items[cart_items.length -1] = last_word
+            } else {
+                cart_items[0] = cart_items[0].substr(1, cart_items[0].length-2)
+            }
+
+            cart_items = Array.from(new Set(cart_items))
+            this.setState({items_to_cart : cart_items})
+        }
+
         this.getCards = this.getCards.bind(this);
         this.addToCart = this.addToCart.bind(this);
         this.getCards()
     }
 
     getCards() {
-        if (this.props.location.state) {
-            this.state.items_to_cart = JSON.parse(localStorage.getItem("items_to_cart"));
-            this.state.items_to_cart.push(this.props.location.state.item_to_cart)
-        }
         axios.get(`${url}/api/product/`)
             .then((res)=> {
                 this.populateCards(res.data)
@@ -111,13 +119,7 @@ class HomePage extends Component {
     }
 
     addToCart () {
-        if (this.state.items_to_cart !== []) {
-            localStorage.setItem("items_to_cart", JSON.stringify(this.state.items_to_cart));
-        }
-        this.props.history.push({
-            pathname: '/cart',
-            state: { items_to_cart: this.state.items_to_cart}
-        });
+        this.props.history.push('/cart');
     }
 
     renderCards() {

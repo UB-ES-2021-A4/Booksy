@@ -34,9 +34,7 @@ class BuyView(APIView):
                     id = int(id)
 
                     try:
-                        print('Try Before')
                         product = ProductModel.objects.get(id=id)  # Front end should have the product id
-                        print('Try Before')
                         if product.hidden:
                             raise  # Product is already bought
 
@@ -46,13 +44,10 @@ class BuyView(APIView):
                     if product.seller == request.user:
                         raise ResponseError(message=status.HTTP_403_FORBIDDEN)  # You can't buy your own product
 
-                    print(' Product not Hiden')
                     with lock.lock:
                         transaction_info = {'buyer': request.user.id, 'datetime': datetime.now()}
                         transaction = self.__check_model_validation(transaction_info, TransactionSerializer)
                         transaction = transaction.save()
-
-                        print('Transaction saved')
 
                         books_info = {'transaction': transaction.id, 'product': product.id, 'seller': product.seller.id}
                         booksBought = self.__check_model_validation(books_info, BooksBoughtSerializer)
@@ -63,15 +58,11 @@ class BuyView(APIView):
 
                         product.hidden = True  # Product is bought
 
-                        print('Hiden True')
-
                         # Saving to db
                         for s in serializers:
                             s.save()
                         booksBought.save()
                         product.save()
-
-                        print('Product saved')
 
                         self.send_email_seller(product.seller.email,
                                                product.seller.get_full_name(),
@@ -82,12 +73,10 @@ class BuyView(APIView):
                                                serializers[0].data['country'],
                                                serializers[0].data['zip_code']
                                                )
-                        print('Email seller')
                         self.send_email_buyer(request.user.email,
                                               request.user.get_full_name(),
                                               product.title
                                               )
-                        print('Email buyer')
 
         except ResponseError as e:
             return Response(status=e.message)

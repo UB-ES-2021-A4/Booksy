@@ -9,7 +9,7 @@ import axios from "axios";
 import {withRouter} from "react-router-dom";
 
 const deploy_url = 'https://booksy-es2021.herokuapp.com';
-const debug_url = 'http://127.0.0.1:8000';
+//const debug_url = 'http://127.0.0.1:8000';
 const url = deploy_url;
 
 
@@ -69,6 +69,9 @@ class Login extends Component {
                 localStorage.setItem('token', res.data.token)
                 localStorage.setItem('user_id', res.data.user_id)
                 localStorage.setItem('username', this.state.username)
+
+                let items = []
+                localStorage.setItem('items_to_cart', items)
                 this.handleClick()
                 this.successAlert()
             })
