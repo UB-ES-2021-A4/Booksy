@@ -36,6 +36,11 @@ export default class Checkout extends Component {
     }
 
     componentDidMount() {
+        this.getCards = this.getCards.bind(this);
+        this.getCards()
+    }
+
+    getCards = async data => {
         if ([localStorage.getItem('items_to_cart')][0] !== "") {
             let splitted_text = (JSON.stringify(localStorage.getItem('items_to_cart'))).split(",");
             splitted_text[0] = parseInt(splitted_text[0].substr(1))
@@ -47,12 +52,7 @@ export default class Checkout extends Component {
             splitted_text[splitted_text.length - 1] = parseInt(last_word)
             this.setState({items_to_cart : splitted_text})
         }
-        this.getCards = this.getCards.bind(this);
-        this.getCards()
-    }
-
-    getCards() {
-        axios.get(`${url}/api/product/`)
+        await axios.get(`${url}/api/product/`)
             .then((res)=> {
                 this.populateCards(res.data)
             })
@@ -166,7 +166,11 @@ export default class Checkout extends Component {
                 new_items_list.push(this.state.items_to_cart[idx]);
             }
         }
+        console.log(localStorage.getItem('items_to_cart'))
+        new_items_list = Array.from(new Set(new_items_list))
         localStorage.setItem('items_to_cart', new_items_list)
+        console.log(localStorage.getItem('items_to_cart'))
+
         this.props.values.items_to_cart = new_items_list
         this.setState({
             [this.props.values]: this.state

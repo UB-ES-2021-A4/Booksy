@@ -73,13 +73,13 @@ class HomePage extends Component {
     }
 
     componentDidMount() {
-        console.log(localStorage.getItem("items_to_cart"))
         if ([localStorage.getItem('items_to_cart')][0] !== "") {
             let splitted_text = (JSON.stringify(localStorage.getItem('items_to_cart'))).split(",");
             splitted_text[0] = splitted_text[0].substr(1)
             let last_word = splitted_text[splitted_text.length-1]
             last_word = last_word.substr(0, last_word.length-1)
             splitted_text[splitted_text.length -1] = last_word
+            splitted_text = Array.from(new Set(splitted_text))
             this.setState({items_to_cart : splitted_text})
         }
 

@@ -51,9 +51,9 @@ class OpenItem extends Component {
             });
         } else {
             let items = this.state.items
-            items.push(this.state.id)
-            localStorage.setItem('items_to_cart', items)
-            console.log(localStorage.getItem('items_to_cart'))
+            items.push((this.state.id).toString())
+            items = Array.from(new Set(items))
+            localStorage.setItem('items_to_cart',  items)
             this.props.history.push('/homePage');
         }
     }
