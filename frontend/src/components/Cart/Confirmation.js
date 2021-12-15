@@ -6,6 +6,12 @@ export default class Confirmation extends Component {
     constructor(props) {
         super(props);
         this.makeTimer()
+        this.clearLocalStorage()
+    }
+
+
+    clearLocalStorage() {
+        localStorage.setItem('items_to_cart', [])
     }
 
     makeTimer(){

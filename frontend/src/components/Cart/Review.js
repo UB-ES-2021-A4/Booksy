@@ -45,6 +45,7 @@ export default class Review extends Component {
     }
 
     componentWillMount() {
+        this.getItemsIDS = this.getItemsIDS.bind(this);
         this.calculateShipping = this.calculateShipping.bind(this);
         this.calculateShipping();
     }
@@ -55,12 +56,34 @@ export default class Review extends Component {
         this.setState({shipping: ship, orderTotal: total})
     }
 
+    getItemsIDS () {
+        let items = (JSON.stringify(localStorage.getItem('items_to_cart'))).split(",");
+        if (items.length > 1) {
+            items[0] = parseInt(items[0].substr(1))
+
+            for (let idx = 1; idx < items.length - 1; idx ++) {
+                items[idx] = parseInt(items[idx])
+            }
+
+            let last_word = items[items.length - 1]
+            last_word = last_word.substr(0, last_word.length - 1)
+            items[items.length - 1] = parseInt(last_word)
+
+        } else {
+            items[0] = parseInt(items[0].substr(1, items[0].length - 2))
+        }
+
+        return items
+
+    }
+
     order = event => {
         event.preventDefault()
 
         //We are using FormData because the backend needs a form-encoded data (request.POST)
         let formItem = new FormData()
-        let ids = [JSON.parse(localStorage.getItem('items_to_cart'))]
+        let ids = this.getItemsIDS()
+
         for (let i=0; i < ids.length; i++){
             formItem.append('id', ids[i])
         }

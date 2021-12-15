@@ -43,13 +43,21 @@ export default class Checkout extends Component {
     getCards = async data => {
         if ([localStorage.getItem('items_to_cart')][0] !== "") {
             let splitted_text = (JSON.stringify(localStorage.getItem('items_to_cart'))).split(",");
-            splitted_text[0] = parseInt(splitted_text[0].substr(1))
-            for(let idx = 1; idx < splitted_text.length - 1; idx ++) {
-                splitted_text[idx] = parseInt(splitted_text[idx])
+
+            if (splitted_text.length > 1) {
+                splitted_text[0] = parseInt(splitted_text[0].substr(1))
+
+                for (let idx = 1; idx < splitted_text.length - 1; idx ++) {
+                    splitted_text[idx] = parseInt(splitted_text[idx])
+                }
+
+                let last_word = splitted_text[splitted_text.length - 1]
+                last_word = last_word.substr(0, last_word.length - 1)
+                splitted_text[splitted_text.length - 1] = parseInt(last_word)
+
+            } else {
+                splitted_text[0] = parseInt(splitted_text[0].substr(1, splitted_text[0].length - 2))
             }
-            let last_word = splitted_text[splitted_text.length - 1]
-            last_word = last_word.substr(0, last_word.length - 1)
-            splitted_text[splitted_text.length - 1] = parseInt(last_word)
             this.setState({items_to_cart : splitted_text})
         }
         await axios.get(`${url}/api/product/`)
@@ -166,10 +174,8 @@ export default class Checkout extends Component {
                 new_items_list.push(this.state.items_to_cart[idx]);
             }
         }
-        console.log(localStorage.getItem('items_to_cart'))
         new_items_list = Array.from(new Set(new_items_list))
         localStorage.setItem('items_to_cart', new_items_list)
-        console.log(localStorage.getItem('items_to_cart'))
 
         this.props.values.items_to_cart = new_items_list
         this.setState({

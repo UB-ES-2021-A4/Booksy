@@ -74,13 +74,18 @@ class HomePage extends Component {
 
     componentDidMount() {
         if ([localStorage.getItem('items_to_cart')][0] !== "") {
-            let splitted_text = (JSON.stringify(localStorage.getItem('items_to_cart'))).split(",");
-            splitted_text[0] = splitted_text[0].substr(1)
-            let last_word = splitted_text[splitted_text.length-1]
-            last_word = last_word.substr(0, last_word.length-1)
-            splitted_text[splitted_text.length -1] = last_word
-            splitted_text = Array.from(new Set(splitted_text))
-            this.setState({items_to_cart : splitted_text})
+            let cart_items = (JSON.stringify(localStorage.getItem('items_to_cart'))).split(",");
+            if (cart_items.length > 1) {
+                cart_items[0] = cart_items[0].substr(1)
+                let last_word = cart_items[cart_items.length-1]
+                last_word = last_word.substr(0, last_word.length-1)
+                cart_items[cart_items.length -1] = last_word
+            } else {
+                cart_items[0] = cart_items[0].substr(1, cart_items[0].length-2)
+            }
+
+            cart_items = Array.from(new Set(cart_items))
+            this.setState({items_to_cart : cart_items})
         }
 
         this.getCards = this.getCards.bind(this);
