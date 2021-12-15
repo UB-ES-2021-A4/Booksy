@@ -60,7 +60,7 @@ export default class Review extends Component {
 
         //We are using FormData because the backend needs a form-encoded data (request.POST)
         let formItem = new FormData()
-        let ids = Object.values(this.props.getStore().items_to_cart)
+        let ids = [JSON.parse(localStorage.getItem('items_to_cart'))]
         for (let i=0; i < ids.length; i++){
             formItem.append('id', ids[i])
         }

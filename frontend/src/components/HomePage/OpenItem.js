@@ -24,11 +24,20 @@ class OpenItem extends Component {
             category: '',
             description: '',
             image: this.props.location.state.image[0],
-            card_id: props.id
+            card_id: props.id,
+            items: [],
         }
     }
 
     componentDidMount() {
+        if ([localStorage.getItem('items_to_cart')][0] !== "") {
+            let splitted_text = (JSON.stringify(localStorage.getItem('items_to_cart'))).split(",");
+            splitted_text[0] = splitted_text[0].substr(1)
+            let last_word = splitted_text[splitted_text.length - 1]
+            last_word = last_word.substr(0, last_word.length - 1)
+            splitted_text[splitted_text.length - 1] = last_word
+            this.setState({items : splitted_text})
+        }
         this.getInfoToLoad = this.getInfoToLoad.bind(this);
         this.refreshPage = this.refreshPage.bind(this);
         this.getInfoToLoad()
@@ -41,10 +50,11 @@ class OpenItem extends Component {
                 state: { id: this.state.id}
             });
         } else {
-            this.props.history.push({
-                pathname: '/homePage',
-                state: {item_to_cart: this.state.id}
-            });
+            let items = this.state.items
+            items.push(this.state.id)
+            localStorage.setItem('items_to_cart', items)
+            console.log(localStorage.getItem('items_to_cart'))
+            this.props.history.push('/homePage');
         }
     }
 

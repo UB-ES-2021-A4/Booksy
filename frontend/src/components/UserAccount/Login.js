@@ -69,6 +69,9 @@ class Login extends Component {
                 localStorage.setItem('token', res.data.token)
                 localStorage.setItem('user_id', res.data.user_id)
                 localStorage.setItem('username', this.state.username)
+
+                let items = []
+                localStorage.setItem('items_to_cart', items)
                 this.handleClick()
                 this.successAlert()
             })

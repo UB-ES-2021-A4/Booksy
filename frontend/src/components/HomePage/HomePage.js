@@ -30,7 +30,7 @@ class HomePage extends Component {
                         ["Artes", "AR"], ["Ocio", "OC"], ["Cocina", "CO"], ["Fantasía", "FA"],
                         ["Misterio y Thriller", "MT"]],
             cards: [],
-            items_to_cart: [],
+            items_to_cart:  [],
             header: 'All Books',
         }
         this.getCards = this.getCards.bind(this);
@@ -60,7 +60,6 @@ class HomePage extends Component {
         });
     }
     handleOpen = (id, image) => {
-        localStorage.setItem("items_to_cart", JSON.stringify(this.state.items_to_cart));
         this.sleep(700).then(() => {
             this.props.history.push({
                 pathname: `/OpenItem/${id}`,
@@ -74,16 +73,22 @@ class HomePage extends Component {
     }
 
     componentDidMount() {
+        console.log(localStorage.getItem("items_to_cart"))
+        if ([localStorage.getItem('items_to_cart')][0] !== "") {
+            let splitted_text = (JSON.stringify(localStorage.getItem('items_to_cart'))).split(",");
+            splitted_text[0] = splitted_text[0].substr(1)
+            let last_word = splitted_text[splitted_text.length-1]
+            last_word = last_word.substr(0, last_word.length-1)
+            splitted_text[splitted_text.length -1] = last_word
+            this.setState({items_to_cart : splitted_text})
+        }
+
         this.getCards = this.getCards.bind(this);
         this.addToCart = this.addToCart.bind(this);
         this.getCards()
     }
 
     getCards() {
-        if (this.props.location.state) {
-            this.state.items_to_cart = JSON.parse(localStorage.getItem("items_to_cart"));
-            this.state.items_to_cart.push(this.props.location.state.item_to_cart)
-        }
         axios.get(`${url}/api/product/`)
             .then((res)=> {
                 this.populateCards(res.data)
@@ -111,13 +116,7 @@ class HomePage extends Component {
     }
 
     addToCart () {
-        if (this.state.items_to_cart !== []) {
-            localStorage.setItem("items_to_cart", JSON.stringify(this.state.items_to_cart));
-        }
-        this.props.history.push({
-            pathname: '/cart',
-            state: { items_to_cart: this.state.items_to_cart}
-        });
+        this.props.history.push('/cart');
     }
 
     renderCards() {
