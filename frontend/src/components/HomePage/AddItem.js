@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Col, Container, Row, Card} from "react-bootstrap";
+import {Col, Container, Row} from "react-bootstrap";
 import './HomePage.css'
 import './AddItem.css'
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
@@ -8,8 +8,8 @@ import swal from "sweetalert";
 import {withRouter} from "react-router-dom";
 
 const deploy_url = 'https://booksy-es2021.herokuapp.com';
-const debug_url = 'http://127.0.0.1:8000';
-const url = debug_url;
+//const debug_url = 'http://127.0.0.1:8000';
+const url = deploy_url;
 
 class AddItem extends Component {
     constructor(props) {
@@ -77,7 +77,7 @@ class AddItem extends Component {
 
         axios.post(`${url}/api/product/image/`, imgs,
             {headers: {'Authorization': `Token ${window.localStorage.getItem('token')}`}})
-            .then((res)=> {
+            .then(() => {
                 this.successfulPostAlert()
             })
             .catch((error) => {
@@ -94,7 +94,6 @@ class AddItem extends Component {
     }
 
     populateCategories = data => {
-        this.state.categories = {}
         let tmp={}
         for (let index = 0; index < data.length; index++) {
             tmp[data[index]['category_name']] = data[index]['category_description']
