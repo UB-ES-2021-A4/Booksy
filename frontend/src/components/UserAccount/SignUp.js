@@ -6,9 +6,9 @@ import Libro_SignUp from "../pictures/theSunAndHerFlowers.jpg";
 import { withRouter } from "react-router-dom";
 import swal from 'sweetalert';
 
-//const deploy_url = 'https://booksy.pythonanywhere.com';
-const debug_url = 'http://127.0.0.1:8000';
-const url = debug_url;
+const deploy_url = 'https://booksy-es2021.herokuapp.com';
+//const debug_url = 'http://127.0.0.1:8000';
+const url = deploy_url;
 
 class Signup extends Component {
     constructor(props) {

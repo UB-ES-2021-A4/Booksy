@@ -1,5 +1,8 @@
 import os
+from io import StringIO
 
+from django.contrib.auth.models import AnonymousUser
+from django.core.handlers.wsgi import WSGIRequest
 from django.db.models import Q
 from django.shortcuts import render
 from rest_framework.authentication import TokenAuthentication
@@ -16,12 +19,16 @@ from accounts import models
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
+from django.http import Http404
 
 from accounts.serializers import UserAccountSerializer, UserProfileSerializer
 from booksy.lock import lock
 
 
 def index(request):
+    return render(request, 'index.html')
+
+def profile(request, id):
     return render(request, 'index.html')
 
 

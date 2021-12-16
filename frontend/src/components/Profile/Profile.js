@@ -10,15 +10,16 @@ import './Profile.css'
 import 'react-tabs/style/react-tabs.css';
 import swal from "sweetalert";
 
-//const deploy_url = 'https://booksy.pythonanywhere.com';
-const debug_url = 'http://127.0.0.1:8000';
-const url = debug_url;
+const deploy_url = 'https://booksy-es2021.herokuapp.com';
+//const debug_url = 'http://127.0.0.1:8000';
+const url = deploy_url;
+
 
 class Profile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            id: this.props.location.state.id,
+            id: window.localStorage.getItem('user_id'),
             card: {
                 title: '',
                 price: 0,
@@ -36,12 +37,25 @@ class Profile extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.editProfile = this.editProfile.bind(this);
     }
-
-    componentDidMount() {
+    async checkIfUser () {
+        if (window.localStorage.getItem('user_id') !== null) {
+            window.location.assign("/homePage")
+        } else {
+           await this.setState({'id': window.localStorage.getItem('user_id') })
+        }
+    }
+    async initialize() {
+        this.checkIfUser = this.getUserInfoToLoad.bind(this)
+        await this.checkIfUser()
+        console.error(this.state)
         this.getUserInfoToLoad = this.getUserInfoToLoad.bind(this);
         this.getUserInfoToLoad()
         this.getCards = this.getCards.bind(this);
         this.getCards()
+    }
+    componentDidMount() {
+        this.initialize = this.initialize.bind(this)
+        this.initialize()
     }
 
     handleChange = event => {
@@ -58,9 +72,8 @@ class Profile extends Component {
             });
         });
     }
-
     getCards() {
-        axios.get(`${url}/api/product/`)
+        axios.get(`${url}/api/product/?seller_id=${window.localStorage.getItem('user_id')}`)
             .then((res)=> {
                 this.populateCards(res.data)
             })
@@ -171,7 +184,7 @@ class Profile extends Component {
 
     handleChangePhoto = event => {
         let imgs = new FormData()
-        imgs.append('account_id', this.props.location.state.id)
+        imgs.append('account_id', this.state.id)
         imgs.append('image', event.target.files[0])
         console.log(imgs.get('image'))
 

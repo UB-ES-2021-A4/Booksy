@@ -1,5 +1,4 @@
 /db.sqlite3
-/accounts/migrations/
-/product/migrations/
-/transaction/migrations/
-/media
+/media/account
+/media/images
+/media/product

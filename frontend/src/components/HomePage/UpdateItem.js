@@ -7,9 +7,10 @@ import axios from "axios";
 import swal from "sweetalert";
 import { withRouter} from "react-router-dom";
 
-//const deploy_url = 'https://booksy.pythonanywhere.com';
-const debug_url = 'http://127.0.0.1:8000';
-const url = debug_url;
+const deploy_url = 'https://booksy-es2021.herokuapp.com';
+//const debug_url = 'http://127.0.0.1:8000';
+const url = deploy_url;
+
 
 class UpdateItem extends Component {
     constructor(props) {
@@ -96,8 +97,7 @@ class UpdateItem extends Component {
         if (this.checkFormParams(formItem)) {
             axios.patch(`${url}/api/product/?id=${this.state.id}`, formItem,
                 {headers: {'Authorization': `Token ${window.localStorage.getItem('token')}`}})
-                .then((res) => {
-                    console.error(res.data)
+                .then(() => {
                     this.uploadImages()
                 })
                 .catch((error) => {
@@ -113,7 +113,7 @@ class UpdateItem extends Component {
     checkFormParams (params) {
         return !(params.get('title').length === 0 || params.get('price').length === 0
                 || params.get('author').length === 0 || params.get('category').length === 0
-                || params.get('description').length === 0);
+                || params.get('description').length === 0 || this.state.images === undefined);
     }
 
     uploadImages() {
