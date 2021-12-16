@@ -129,7 +129,7 @@ npm start
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-_For more examples of how the web is used, please refer to the [Documentation]https://github.com/UB-ES-2021-A4/Booksy/wiki)_
+_For more examples of how the web is used, please refer to the [Documentation](https://github.com/UB-ES-2021-A4/Booksy/wiki)_
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -165,7 +165,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Contact us [Booksy member](https://github.com/UB-ES-2021-A4/Booksy/graphs/contributors)
+Contact us [Booksy members](https://github.com/UB-ES-2021-A4/Booksy/graphs/contributors)
 
 Project Link: [Booksy](https://github.com/UB-ES-2021-A4/Booksy)
 
