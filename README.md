@@ -74,7 +74,6 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://user-images.githubusercontent.com/57969201/138903406-bef79f12-fb9a-46bb-87ce-48af8ef7c6a8.png)
 
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email`, `email_client`, `project_title`, `project_description`
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -82,38 +81,27 @@ Here's a blank template to get started: To avoid retyping too much info. Do a se
 
 ### Built With
 
-* [Next.js](https://nextjs.org/)
+* [Node.js](https://nextjs.org/)
 * [React.js](https://reactjs.org/)
 * [Bootstrap](https://getbootstrap.com)
+* [Material UI](https://mui.com/)
 * [Django](https://www.djangoproject.com/)
 * [SQLite](https://www.sqlite.org/index.html)
+* [PostGreSQL](https://www.postgresql.org/)
+* [Heroku](https://www.heroku.com)
+* [PythonAnywhere](https://www.pythonanywhere.com/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
+### Installation and initialization
 
-<!-- GETTING STARTED -->
-## Getting Started
-
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
-
-### Prerequisites
-
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
-
-### Installation
-
-1. Get a free API Key at [https://example.com](https://example.com)
+1. Download free version IDE's Webstorm (for [FrontEnd development](https://www.jetbrains.com/webstorm/promo/?source=google&medium=cpc&campaign=9641686281&gclid=Cj0KCQiA5OuNBhCRARIsACgaiqXr0BSmyGqFTP-DPPLxGKPytlIGUslCjV0FwmomHdCbeadpHMX2MW0aAtBgEALw_wcB)) and PyCharm (for [BackEnd development](https://www.jetbrains.com/es-es/pycharm/))
 2. Clone the repo
    ```sh
    git clone https://github.com/UB-ES-2021-A4/Booksy.git
    ```
-3. Install NPM packages
+3. Install NPM packages in `frontend`
    ```sh
    npm install
    ```
@@ -121,6 +109,18 @@ This is an example of how to list things you need to use the software and how to
    ```js
    const API_KEY = 'ENTER YOUR API';
    ```
+5. Change the URLs in all the FrontEnd file to `debug_url` instead of `deploy_url`
+   ```js
+   const urls = debug_url;
+   ```
+6. Run the server on the BackEnd
+```sh
+python manage.py runserver
+```
+7. Run the web on the FrontEnd
+```sh
+npm start
+```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -129,23 +129,7 @@ This is an example of how to list things you need to use the software and how to
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- ROADMAP -->
-## Roadmap
-
-- [] Feature 1
-- [] Feature 2
-- [] Feature 3
-    - [] Nested Feature
-
-See the [open issues](https://github.com/github_username/repo_name/issues) for a full list of proposed features (and known issues).
+_For more examples of how the web is used, please refer to the [Documentation]https://github.com/UB-ES-2021-A4/Booksy/wiki)_
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -154,7 +138,7 @@ See the [open issues](https://github.com/github_username/repo_name/issues) for a
 <!-- CONTRIBUTING -->
 ## Contributing
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+Any contributions you make are **greatly appreciated**.
 
 If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
 Don't forget to give the project a star! Thanks again!
@@ -181,22 +165,13 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
+Contact us [Booksy member](https://github.com/UB-ES-2021-A4/Booksy/graphs/contributors)
 
-Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name)
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
-
-* []()
-* []()
-* []()
+Project Link: [Booksy](https://github.com/UB-ES-2021-A4/Booksy)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
+
+
 
 
 
