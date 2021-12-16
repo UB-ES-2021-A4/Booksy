@@ -1,0 +1,31 @@
+.navbar {
+    display: inline-block;
+    margin: 0;
+    flex-direction: row;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 15px;
+    padding-left: 195px;
+}
+
+.navbar-item {
+    display:inline-block;
+    float: none;
+    justify-content: center;
+    align-items: center;
+    padding-right: 35px;
+    color: inherit;
+    text-decoration: inherit;
+    text-transform: uppercase;
+    text-align:center;
+    outline: none;
+    cursor: pointer;
+    margin-left: 90px;
+}
+
+#padding_top {
+    padding-top: 15px;
+}
+
+*{
+    box-sizing: border-box;
+}

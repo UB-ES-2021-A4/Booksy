@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {Col, Container, Row} from "react-bootstrap";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import PaymentPhoto from "../pictures/payment.png";
@@ -24,10 +24,22 @@ export default class Payment extends Component {
             num_items: props.getStore().num_items,
         };
         this.handleChange = this.handleChange.bind(this);
+        this.makeTimer()
+    }
+
+    makeTimer(){
+        setInterval(() => {
+            if (window.localStorage.getItem('user_id') === null) {
+                this.logOut()
+            }
+        }, 750)
+    }
+
+    logOut()  {
+        this.props.history.push('/');
     }
 
     continue = e => {
-        e.preventDefault();
         if (this.checkFormParams()) {
             this.updateStoreInfo();
             this.props.nextStep();
@@ -82,12 +94,10 @@ export default class Payment extends Component {
     }
 
     getExpDate () {
-        let exp = this.state.expMonth.toString() + '/' + this.state.expYear.toString()
-        return exp
+        return this.state.expMonth.toString() + '/' + this.state.expYear.toString()
     }
 
     back = e => {
-        e.preventDefault();
         this.updateStoreInfo();
         this.props.prevStep();
     };
@@ -119,7 +129,6 @@ export default class Payment extends Component {
     }
 
     render() {
-        const { values, handleChange } = this.props;
         return (
             <div>
                 <div className="card">

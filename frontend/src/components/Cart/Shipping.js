@@ -19,6 +19,19 @@ export default class Shipping extends Component {
             num_items: props.getStore().num_items,
         };
         this.handleChange = this.handleChange.bind(this);
+        this.makeTimer();
+    }
+
+    makeTimer(){
+        setInterval(() => {
+            if (window.localStorage.getItem('user_id') === null) {
+                this.logOut()
+            }
+        }, 750)
+    }
+
+    logOut()  {
+        this.props.history.push('/');
     }
 
     checkFormParams() {
@@ -37,7 +50,6 @@ export default class Shipping extends Component {
 
 
     continue = e => {
-        e.preventDefault();
         if (this.checkFormParams()) {
             this.updateStoreInfo();
             this.props.nextStep();
@@ -47,7 +59,6 @@ export default class Shipping extends Component {
     };
 
     back = e => {
-        e.preventDefault();
         this.props.prevStep();
     };
 
@@ -70,14 +81,10 @@ export default class Shipping extends Component {
             [this.props.values]: this.state
         });
         this.props.setStore(this.props.values)
-
     }
 
 
-
     render() {
-        const { values, handleChange } = this.props;
-
         return (
             <div>
                 <div className="card">

@@ -11,7 +11,7 @@ from rest_framework.views import APIView
 
 from product.models import ProductModel, Category, Image
 from product.serializers import ProductSerializer, CategorySerializer, ImageSerializer
-
+from booksy.lock import lock
 
 # Create your views here.
 
@@ -64,10 +64,11 @@ class ProductView(APIView):
             if not product_serialized.is_valid():
                 return Response(product_serialized.errors, status=status.HTTP_400_BAD_REQUEST)
 
-            prod = ProductModel.objects.create(title=request.POST.get('title'), author=request.POST.get('author'),
-                                               description=request.POST.get('description'),
-                                               price=request.POST.get('price'),
-                                               seller=seller, category=category)
+            with lock.lock:
+                prod = ProductModel.objects.create(title=request.POST.get('title'), author=request.POST.get('author'),
+                                                   description=request.POST.get('description'),
+                                                   price=request.POST.get('price'),
+                                                   seller=seller, category=category)
 
             product = ProductModel.objects.get(id=prod.id)
             return Response(prod.id, status=status.HTTP_200_OK if product else status.HTTP_400_BAD_REQUEST)
@@ -81,7 +82,8 @@ class ProductView(APIView):
             prod = ProductModel.objects.filter(id=product_id)
             owner = str(prod.values('seller').first()['seller'])
             if owner == seller:  # If same user can be deleted
-                ProductModel.objects.filter(id=product_id).delete()
+                with lock.lock:
+                    ProductModel.objects.filter(id=product_id).delete()
             return Response(status=status.HTTP_200_OK)
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
@@ -100,11 +102,12 @@ class ProductView(APIView):
                 dic = request.data.dict()
                 category = Category.objects.get(category_name=request.POST.get('category'))
                 dic.update({'category': {'category_name': category.category_name, 'category_description': category.get_category_name_display()}, 'seller': seller.id})
-                product_serialized = ProductSerializer(product, data=dic)
-                if product_serialized.is_valid():
-                    product_serialized.save()
-                    return Response(status=status.HTTP_200_OK)
-                return Response(product_serialized.errors, status=status.HTTP_400_BAD_REQUEST)
+                with lock.lock:
+                    product_serialized = ProductSerializer(product, data=dic)
+                    if product_serialized.is_valid():
+                        product_serialized.save()
+                        return Response(status=status.HTTP_200_OK)
+                    return Response(product_serialized.errors, status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response(status=status.HTTP_401_UNAUTHORIZED)
         except:
@@ -161,8 +164,9 @@ class ImageView(APIView):
         try:
             if Image.objects.filter(product=request.POST.get('id')):
                 return Response(status=status.HTTP_409_CONFLICT)  # There's already an image
-            img = Image.objects.create(image=request.FILES['image'],
-                                       product=product)
+            with lock.lock:
+                img = Image.objects.create(image=request.FILES['image'],
+                                           product=product)
             if Image.objects.get(id=img.id):
                 return Response(status=status.HTTP_200_OK)
             else:
@@ -177,22 +181,24 @@ class ImageView(APIView):
             if ProductModel.objects.get(id=product_id).seller != user:
                 return Response(status=status.HTTP_401_UNAUTHORIZED)
 
-            img = Image.objects.get(product=product_id)
-            orig_path = img.image.file.name
-            serial_img = ImageSerializer(img, data=request.data)
-            if serial_img.is_valid():
-                serial_img.save()
-                os.remove(orig_path)
-                return Response(status=status.HTTP_200_OK)
-            else:
-                return Response(serial_img.errors, status=status.HTTP_400_BAD_REQUEST)
+            with lock.lock:
+                img = Image.objects.get(product=product_id)
+                orig_path = img.image.file.name
+                serial_img = ImageSerializer(img, data=request.data)
+                if serial_img.is_valid():
+                    serial_img.save()
+                    os.remove(orig_path)
+                    return Response(status=status.HTTP_200_OK)
+                else:
+                    return Response(serial_img.errors, status=status.HTTP_400_BAD_REQUEST)
         except:
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def delete(self, request):
-        try:
-            image_id = request.GET.get('id')
-            Image.objects.filter(product=image_id).delete()
-            return Response(status=status.HTTP_200_OK)
-        except:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            try:
+                image_id = request.GET.get('id')
+                with lock.lock:
+                    Image.objects.filter(product=image_id).delete()
+                return Response(status=status.HTTP_200_OK)
+            except:
+                return Response(status=status.HTTP_404_NOT_FOUND)

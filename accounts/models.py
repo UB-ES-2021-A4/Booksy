@@ -17,7 +17,7 @@ class AccountManager(BaseUserManager):
 
         email = self.normalize_email(email)
         user = self.model(email=email, username=username, first_name=first_name, last_name=last_name)
-
+        user.verified = True
         user.set_password(password)
         user.save(using=self._db)
 
@@ -28,6 +28,7 @@ class AccountManager(BaseUserManager):
 
         user.is_superuser = True
         user.is_staff = True
+        user.verified = True
         user.save(using=self._db)
 
         return user
@@ -41,6 +42,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=50, default="Doe")
 
     is_active = models.BooleanField(default=True)
+    verified = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=True)
 
     objects = AccountManager()

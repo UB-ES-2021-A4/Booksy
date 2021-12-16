@@ -5,9 +5,10 @@ import './wizard-stepper.css'
 import axios from "axios";
 import emptyCart from "../pictures/empty_cart.png";
 
-const deploy_url = 'https://booksy.pythonanywhere.com';
-const debug_url = 'http://127.0.0.1:8000';
+const deploy_url = 'https://booksy-es2021.herokuapp.com';
+//const debug_url = 'http://127.0.0.1:8000';
 const url = deploy_url;
+
 
 export default class Checkout extends Component {
     constructor(props) {
@@ -15,19 +16,51 @@ export default class Checkout extends Component {
         this.state = {
             cards: [],
             items_to_cart: [],
+            sellers: [],
             subtotal: props.getStore().subtotal,
             num_items: props.getStore().num_items,
         }
+        this.makeTimer()
     }
+
+    makeTimer(){
+        setInterval(() => {
+            if (window.localStorage.getItem('user_id') === null) {
+                this.logOut()
+            }
+        }, 750)
+    }
+
+    logOut()  {
+        this.props.history.push('/');
+    }
+
     componentDidMount() {
         this.getCards = this.getCards.bind(this);
         this.getCards()
     }
 
-    getCards() {
-        this.state.items_to_cart = JSON.parse(localStorage.getItem("items_to_cart"));
+    getCards = async data => {
+        if ([localStorage.getItem('items_to_cart')][0] !== "") {
+            let splitted_text = (JSON.stringify(localStorage.getItem('items_to_cart'))).split(",");
 
-        axios.get(`${url}/api/product/`)
+            if (splitted_text.length > 1) {
+                splitted_text[0] = parseInt(splitted_text[0].substr(1))
+
+                for (let idx = 1; idx < splitted_text.length - 1; idx ++) {
+                    splitted_text[idx] = parseInt(splitted_text[idx])
+                }
+
+                let last_word = splitted_text[splitted_text.length - 1]
+                last_word = last_word.substr(0, last_word.length - 1)
+                splitted_text[splitted_text.length - 1] = parseInt(last_word)
+
+            } else {
+                splitted_text[0] = parseInt(splitted_text[0].substr(1, splitted_text[0].length - 2))
+            }
+            this.setState({items_to_cart : splitted_text})
+        }
+        await axios.get(`${url}/api/product/`)
             .then((res)=> {
                 this.populateCards(res.data)
             })
@@ -39,7 +72,18 @@ export default class Checkout extends Component {
         for (let index = 0; index < data.length; index++) {
             if (this.state.items_to_cart.includes(data[index]['id'])) {
                 data[index]['images'] = []
+                data[index]['seller_username'] = ''
                 total += data[index]['price']
+
+                await axios.get(`${url}/api/account/login/?id=${data[index]['seller']}`)
+                    .then((res) => {
+                        data[index]['seller_username'] = res.data.username
+                    })
+                    .catch((error) => {
+                        data[index]['seller_username'] = ''
+                        console.error(error)
+                    })
+
                 await axios.get(`${url}/api/product/image/?id=${data[index]['id']}`)
                     .then((res) => {
                         data[index]['images'].push(res.data['image'])
@@ -55,6 +99,7 @@ export default class Checkout extends Component {
         this.setState({cards: tmp, subtotal: total, num_items: items_num});
     }
 
+
     renderCards() {
         const allCards = this.state.cards
         if (this.state.items_to_cart.length > 0){
@@ -68,7 +113,7 @@ export default class Checkout extends Component {
                                     <img width={175}
                                          height={250}
                                          src={`${url}${card['images']}`}
-                                         alt="No image"
+                                         alt="NoImage"
                                     />
                                 </center>
                                 <br/>
@@ -80,7 +125,7 @@ export default class Checkout extends Component {
                                     <h1>{card['title']}</h1>
                                 </Row>
                                 <Row>
-                                    <p><b>Sold by username1234</b></p>
+                                    <p><b>Sold by {card['seller_username']}</b></p>
                                 </Row>
                                 <br/>
                                 <Row>
@@ -107,7 +152,7 @@ export default class Checkout extends Component {
                     <center>
                         <img className="align-content-center" style={{width:'450px', height:'375px'}} src={emptyCart} alt="emptyCart" /><br/>
                         <br/>
-                        <a href='/home_page'><b>Shop for items now!</b></a>
+                        <p><b>Shop for items now!</b></p>
                     </center>
                     <br/>
                 </div>
@@ -117,7 +162,6 @@ export default class Checkout extends Component {
     }
 
     continue = e => {
-        e.preventDefault();
         this.updateStoreInfo();
         this.props.nextStep();
 
@@ -130,8 +174,9 @@ export default class Checkout extends Component {
                 new_items_list.push(this.state.items_to_cart[idx]);
             }
         }
-        this.setState({items_to_cart : new_items_list})
-        localStorage.setItem("items_to_cart", JSON.stringify(new_items_list));
+        new_items_list = Array.from(new Set(new_items_list))
+        localStorage.setItem('items_to_cart', new_items_list)
+
         this.props.values.items_to_cart = new_items_list
         this.setState({
             [this.props.values]: this.state
@@ -210,7 +255,6 @@ export default class Checkout extends Component {
     }
 
     render() {
-        const { values, handleChange } = this.props;
         return (
             <div className="checkout">
                 {this.thereAreItems() ? (
